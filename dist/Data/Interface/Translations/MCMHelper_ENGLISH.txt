@@ -1,0 +1,2 @@
+$KeyAlreadyMapped{}	This key is already mapped to:\n"{}"\n\nAre you sure you want to continue?
+$KeyAlreadyMappedByMod{}{}	This key is already mapped to:\n"{}"\n({})\n\nAre you sure you want to continue?
