@@ -1,0 +1,15 @@
+{
+  "name": "mcmhelper",
+  "version-string": "1.0.0",
+  "description": "A framework for simplifying the creation of Mod Configuration Menus for SkyUI",
+  "homepage": "https://github.com/Exit-9B/MCM-Helper",
+  "license": "MIT",
+  "dependencies": [
+    "span-lite",
+    "spdlog",
+    "boost-stl-interfaces",
+    "simpleini",
+    "nlohmann-json",
+    "tsl-ordered-map"
+  ]
+}
