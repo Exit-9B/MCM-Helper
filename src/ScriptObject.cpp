@@ -81,7 +81,7 @@ void ScriptObject::RegisterForModEvent(
 	if (vm)
 	{
 		auto args = RE::MakeFunctionArguments(std::move(a_eventName), std::move(a_callbackName));
-		RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor> nullCallback;
+		ScriptCallbackPtr nullCallback;
 		vm->DispatchMethodCall1(a_object, "RegisterForModEvent", args, nullCallback);
 		delete args;
 	}
@@ -97,7 +97,7 @@ void ScriptObject::UnregisterForModEvent(
 	if (vm)
 	{
 		auto args = RE::MakeFunctionArguments(std::move(a_eventName));
-		RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor> nullCallback;
+		ScriptCallbackPtr nullCallback;
 		vm->DispatchMethodCall1(a_object, "UnregisterForModEvent", args, nullCallback);
 		delete args;
 	}

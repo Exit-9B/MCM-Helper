@@ -504,9 +504,9 @@ namespace Papyrus
 	{
 		assert(a_vm);
 
-		RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor> result;
+		ScriptCallbackPtr nullCallback;
 		auto args = RE::MakeFunctionArguments(std::move(a_ID));
-		a_vm->DispatchMethodCall1(a_object, "OnSettingChange"sv, args, result);
+		a_vm->DispatchMethodCall1(a_object, "OnSettingChange"sv, args, nullCallback);
 		delete args;
 	}
 

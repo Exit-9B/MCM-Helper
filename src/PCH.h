@@ -17,5 +17,6 @@ namespace logger = SKSE::log;
 
 using ScriptObjectPtr = RE::BSTSmartPointer<RE::BSScript::Object>;
 using ScriptArrayPtr = RE::BSTSmartPointer<RE::BSScript::Array>;
+using ScriptCallbackPtr = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>;
 
 #define DLLEXPORT __declspec(dllexport)

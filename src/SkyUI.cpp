@@ -688,9 +688,7 @@ namespace SkyUI
 						return;
 					}
 
-					auto loopCallback = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>{
-						new Awaiter{self, callback}
-					};
+					auto loopCallback = ScriptCallbackPtr{ new Awaiter{self, callback} };
 
 					if (vm)
 					{
@@ -703,9 +701,7 @@ namespace SkyUI
 				virtual void SetObject([[maybe_unused]] const ScriptObjectPtr& a_object) override {}
 			};
 
-			auto waitCallback = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>{
-				new Awaiter{a_object, a_callback}
-			};
+			auto waitCallback = ScriptCallbackPtr{ new Awaiter{a_object, a_callback} };
 
 			if (vm)
 			{

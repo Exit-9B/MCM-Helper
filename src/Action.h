@@ -4,7 +4,6 @@ class Action
 {
 public:
 	using VM = RE::BSScript::IVirtualMachine;
-	using ResultPtr = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>;
 
 	class FunctionArguments : public RE::BSScript::IFunctionArguments
 	{

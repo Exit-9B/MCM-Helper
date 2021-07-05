@@ -82,8 +82,8 @@ void CallFunction::Invoke(VM* a_vm, T a_value)
 	{
 		auto args = FunctionArguments::Make<T>(Params, a_value);
 
-		ResultPtr result;
-		a_vm->DispatchMethodCall1(object, Function, args.get(), result);
+		ScriptCallbackPtr nullCallback;
+		a_vm->DispatchMethodCall1(object, Function, args.get(), nullCallback);
 	}
 }
 
@@ -98,7 +98,7 @@ void CallGlobalFunction::Invoke(VM* a_vm, T a_value)
 	{
 		auto args = FunctionArguments::Make<T>(Params, a_value);
 
-		ResultPtr result;
-		a_vm->DispatchStaticCall(scriptName, Function, args.get(), result);
+		ScriptCallbackPtr nullCallback;
+		a_vm->DispatchStaticCall(scriptName, Function, args.get(), nullCallback);
 	}
 }
