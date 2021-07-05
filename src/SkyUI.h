@@ -1,9 +1,13 @@
 #pragma once
 
+#include "ScriptObject.h"
+
 #define MENU_ROOT "_root.ConfigPanelFader.configPanel"
 
 namespace SkyUI
 {
+	using namespace ScriptObject;
+
 	constexpr std::string_view PluginName = "SkyUI_SE.esp"sv;
 
 	enum class Flags : std::int32_t
@@ -56,78 +60,19 @@ namespace SkyUI
 	class Config
 	{
 	public:
+
 		Config() = delete;
 
-		// Papyrus helpers
-		static auto GetBool(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName)
-			-> bool;
-
-		static void SetBool(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName,
-			bool a_value);
-
-		static auto GetInt(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName)
-			-> std::int32_t;
-
-		static void SetInt(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName,
-			std::int32_t a_value);
-
-		static auto GetFloat(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName)
-			-> float;
-
-		static void SetFloat(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName,
-			float a_value);
-
-		static auto GetString(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName)
-			-> std::string;
-
-		static void SetString(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName,
-			std::string_view a_value);
-
-		static auto GetArray(
-			ScriptObjectPtr a_object,
-			std::string_view a_variableName)
-			-> ScriptArrayPtr;
-
-		static void RegisterForModEvent(
-			ScriptObjectPtr a_object,
-			RE::BSFixedString a_eventName,
-			RE::BSFixedString a_callbackName);
-
-		static void UnregisterForModEvent(
-			ScriptObjectPtr a_object,
-			RE::BSFixedString a_eventName);
-
-		// Utility
 		static void ForcePageReset();
 
-		// Title text
 		static void SetTitleText(ScriptObjectPtr a_object, std::string_view a_text);
 
-		// Info text
 		static void SetInfoText(ScriptObjectPtr a_object, std::string_view a_text);
 
-		// Cursor
 		static void SetCursorPosition(ScriptObjectPtr a_object, std::int32_t a_position);
 
 		static void SetCursorFillMode(ScriptObjectPtr a_object, CursorFillMode a_fillMode);
 
-		// Add options
 		static auto AddEmptyOption(ScriptObjectPtr a_object) -> std::int32_t;
 
 		static auto AddHeaderOption(
@@ -186,7 +131,6 @@ namespace SkyUI
 			Flags a_flags = Flags::None)
 			-> std::int32_t;
 
-		// Custom content
 		static void LoadCustomContent(
 			std::string_view a_source,
 			float a_x = 0.0f,
@@ -194,7 +138,6 @@ namespace SkyUI
 
 		static void UnloadCustomContent();
 
-		// Set option data
 		static void SetOptionFlags(
 			ScriptObjectPtr a_object,
 			std::int32_t a_option,
@@ -278,6 +221,13 @@ namespace SkyUI
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			std::string_view a_acceptLabel,
+			std::function<void(bool)> a_callback);
+
+		static void ShowMessage(
+			ScriptObjectPtr a_object,
+			std::string_view a_message,
+			std::string_view a_acceptLabel,
+			std::string_view a_cancelLabel,
 			std::function<void(bool)> a_callback);
 
 		static void ShowMessage(

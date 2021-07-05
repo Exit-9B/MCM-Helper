@@ -3,6 +3,7 @@ set(headers ${headers}
 
     src/ColorUtil.h
     src/Utils.h
+    src/ScriptObject.h
     src/SkyUI.h
     src/SettingStore.h
 

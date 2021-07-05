@@ -4,6 +4,7 @@ set(sources ${sources}
 
     src/Utils.cpp
     src/SkyUI.cpp
+    src/ScriptObject.cpp
     src/SettingStore.cpp
 
     src/Config.cpp
