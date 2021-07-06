@@ -217,7 +217,7 @@ namespace SkyUI
 		std::int32_t index = a_option % 0x100;
 
 		std::int32_t oldFlags = 0;
-		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"))
+		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			oldFlags = optionFlagsBuf->data()[index].GetSInt();
 		oldFlags %= 0x100;
 		oldFlags += static_cast<std::int32_t>(a_flags) * 0x100;
@@ -693,7 +693,7 @@ namespace SkyUI
 					if (vm)
 					{
 						auto args = RE::MakeFunctionArguments(0.1f);
-						vm->DispatchStaticCall("Utility", "WaitMenuMode", args, loopCallback);
+						vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args, loopCallback);
 						delete args;
 					}
 				}
@@ -706,7 +706,7 @@ namespace SkyUI
 			if (vm)
 			{
 				auto args = RE::MakeFunctionArguments(0.1f);
-				vm->DispatchStaticCall("Utility", "WaitMenuMode", args, waitCallback);
+				vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args, waitCallback);
 				delete args;
 			}
 		}
@@ -727,7 +727,7 @@ namespace SkyUI
 		Flags a_flags)
 		-> std::int32_t
 	{
-		if (GetInt(a_object, "_state") != static_cast<std::int32_t>(State::Reset))
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Reset))
 		{
 			std::ostringstream error;
 			error << "Cannot add option " << a_text << " outside of OnPageReset()";
@@ -775,7 +775,7 @@ namespace SkyUI
 		std::string_view a_strValue,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state") == static_cast<std::int32_t>(State::Reset))
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
 		{
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
@@ -799,7 +799,7 @@ namespace SkyUI
 		float a_numValue,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state") == static_cast<std::int32_t>(State::Reset))
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
 		{
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
@@ -824,7 +824,7 @@ namespace SkyUI
 		float a_numValue,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state") == static_cast<std::int32_t>(State::Reset))
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
 		{
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
