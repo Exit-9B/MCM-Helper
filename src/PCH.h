@@ -2,6 +2,8 @@
 
 #include "RE/Skyrim.h"
 #include "SKSE/SKSE.h"
+#include <unordered_set>
+#include <tsl/ordered_map.h>
 
 constexpr std::int32_t PLUGIN_VERSION = 0; // Pre-release
 

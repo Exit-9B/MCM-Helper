@@ -20,7 +20,12 @@ void Control::InvokeAction(VM* a_vm)
 
 auto Control::GetFlags() -> SkyUI::Flags
 {
-	return ConfigPageCache::GetInstance().GetGroupFlags(GroupCondition);
+	if (GroupCondition && !GroupCondition->GetIsActive())
+	{
+		return GroupBehavior;
+	}
+
+	return SkyUI::Flags::None;
 }
 
 void Control::RefreshFlags(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)

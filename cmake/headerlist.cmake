@@ -15,6 +15,7 @@ set(headers ${headers}
     src/Action.inl
     src/ConfigStore.h
     src/ConfigPageCache.h
+    src/GroupConditionTree.h
 
     src/Papyrus.h
     src/Papyrus/MCM.h

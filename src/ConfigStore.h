@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Config.h"
+#include "GroupConditionTree.h"
 #include "Action.h"
 #include <nlohmann/json.hpp>
 
@@ -43,6 +44,8 @@ private:
 		const std::string& a_ID,
 		const json& a_valueOptions)
 		-> std::shared_ptr<ValueSource>;
+
+	auto ReadGroupCondition(const json& a_groupCondition) -> std::shared_ptr<GroupConditionTree>;
 
 	auto ReadAction(const json& a_action) -> std::shared_ptr<Action>;
 

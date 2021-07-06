@@ -31,7 +31,9 @@ public:
 
 	auto GetCurrentScriptName() const -> const char*;
 
-	auto GetGroupFlags(std::uint32_t a_groupID) const -> SkyUI::Flags;
+	auto GetGroups() const -> std::unordered_set<std::uint32_t>;
+
+	auto IsGroupActive(std::uint32_t a_groupID) const -> bool;
 
 	auto GetPropertyVariable(
 		RE::TESForm* a_form,

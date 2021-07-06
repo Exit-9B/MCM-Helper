@@ -12,6 +12,7 @@ void ConfigPageCache::ClearCache()
 	_currentScript = ""s;
 	_pageCache.clear();
 	_menuOptions.clear();
+	_groupControls.clear();
 }
 
 void ConfigPageCache::SetCurrentScript(RE::TESForm* a_form, const std::string& a_scriptName)
@@ -48,16 +49,22 @@ auto ConfigPageCache::GetCurrentScriptName() const -> const char*
 	return !_currentScript.empty() ? _currentScript.c_str() : nullptr;
 }
 
-auto ConfigPageCache::GetGroupFlags(std::uint32_t a_groupID) const -> SkyUI::Flags
+auto ConfigPageCache::GetGroups() const -> std::unordered_set<std::uint32_t>
+{
+	std::unordered_set<std::uint32_t> groups;
+	for (auto& [group, control] : _groupControls)
+	{
+		groups.insert(group);
+	}
+
+	return groups;
+}
+
+auto ConfigPageCache::IsGroupActive(std::uint32_t a_groupID) const -> bool
 {
 	auto it = _groupControls.find(a_groupID);
 	auto control = it != _groupControls.end() ? it->second : nullptr;
-	if (control && !control->GetValue())
-	{
-		return control->GroupMode;
-	}
-
-	return SkyUI::Flags::None;
+	return control ? control->GetValue() : true;
 }
 
 auto ConfigPageCache::GetPropertyVariable(

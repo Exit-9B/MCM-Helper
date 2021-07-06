@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ValueSource.h"
+#include "GroupConditionTree.h"
 #include "Action.h"
 #include "SkyUI.h"
 
@@ -19,7 +20,8 @@ public:
 	std::int32_t Position = -1;
 	std::string ID;
 	std::string Help;
-	std::uint32_t GroupCondition = 0;
+	std::shared_ptr<GroupConditionTree> GroupCondition;
+	SkyUI::Flags GroupBehavior = SkyUI::Flags::Disable;
 	std::shared_ptr<Action> Action;
 };
 
@@ -67,7 +69,6 @@ public:
 
 	std::string Text;
 	std::uint32_t GroupControl = 0;
-	SkyUI::Flags GroupMode = SkyUI::Flags::Disable;
 	std::shared_ptr<ValueSource> ValueSource;
 };
 

@@ -14,6 +14,7 @@ set(sources ${sources}
     src/Action.cpp
     src/ConfigStore.cpp
     src/ConfigPageCache.cpp
+    src/GroupConditionTree.cpp
 
     src/Papyrus.cpp
     src/Papyrus/MCM.cpp

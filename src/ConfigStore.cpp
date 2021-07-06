@@ -354,16 +354,6 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 
 				try {
 					element.at("groupControl").get_to(toggleOption->GroupControl);
-					try {
-						auto groupMode = element.at("groupMode").get<std::string>();
-						if (groupMode == "hide") {
-							toggleOption->GroupMode = SkyUI::Flags::Disable | SkyUI::Flags::Hide;
-						}
-						else if (groupMode == "disable") {
-							toggleOption->GroupMode = SkyUI::Flags::Disable;
-						}
-					}
-					catch (const json::exception&) {}
 
 					content->GroupControls[toggleOption->GroupControl] = toggleOption;
 				}
@@ -536,7 +526,18 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 		catch (const json::exception&) {}
 
 		try {
-			element.at("groupCondition").get_to(control->GroupCondition);
+			auto& groupCondition = element.at("groupCondition");
+			control->GroupCondition = ReadGroupCondition(groupCondition);
+			try {
+				auto groupBehavior = element.at("groupBehavior").get<std::string>();
+				if (groupBehavior == "hide") {
+					control->GroupBehavior = SkyUI::Flags::Disable | SkyUI::Flags::Hide;
+				}
+				else if (groupBehavior == "disable") {
+					control->GroupBehavior = SkyUI::Flags::Disable;
+				}
+			}
+			catch (const json::exception&) {}
 		}
 		catch (const json::exception&) {}
 
@@ -622,6 +623,73 @@ auto ConfigStore::ReadValueSource(
 		logger::warn("Failed to parse value source. ({}:{})"sv, a_modName, a_ID);
 		return nullptr;
 	}
+}
+
+auto ConfigStore::ReadGroupCondition(const json& a_groupCondition)
+	-> std::shared_ptr<GroupConditionTree>
+{
+	auto groupCondition = std::make_shared<GroupConditionTree>();
+
+	if (a_groupCondition.is_number_integer())
+	{
+		auto groupID = a_groupCondition.get<std::uint32_t>();
+		groupCondition->TopLevelOperands = { groupID };
+		return groupCondition;
+	}
+
+	json operands = nullptr;
+	if (a_groupCondition.is_array())
+	{
+		operands = a_groupCondition;
+	}
+	else if (a_groupCondition.is_object())
+	{
+		try {
+			operands = a_groupCondition.at("OR");
+			groupCondition->Conjunction = GroupConditionTree::ConjunctionType::OR;
+		}
+		catch (const json::exception&) {}
+
+		try {
+			operands = a_groupCondition.at("AND");
+			groupCondition->Conjunction = GroupConditionTree::ConjunctionType::AND;
+		}
+		catch (const json::exception&) {}
+
+		try {
+			operands = a_groupCondition.at("ONLY");
+			groupCondition->Conjunction = GroupConditionTree::ConjunctionType::ONLY;
+		}
+		catch (const json::exception&) {}
+
+		if (operands.is_number_integer())
+		{
+			groupCondition->TopLevelOperands.push_back(operands.get<std::uint32_t>());
+		}
+		else
+		{
+			if (!operands.is_array())
+				return nullptr;
+
+			for (auto& operand : operands)
+			{
+				if (operand.is_number_integer())
+				{
+					groupCondition->TopLevelOperands.push_back(operand.get<std::uint32_t>());
+				}
+				else
+				{
+					auto subtree = ReadGroupCondition(operand);
+					if (!subtree)
+						return nullptr;
+
+					groupCondition->SubTrees.push_back(subtree);
+				}
+			}
+		}
+	}
+
+	return groupCondition;
 }
 
 auto ConfigStore::ReadAction(const json& a_action) -> std::shared_ptr<Action>
