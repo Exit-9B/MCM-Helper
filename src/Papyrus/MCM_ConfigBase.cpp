@@ -181,6 +181,17 @@ namespace Papyrus
 
 			SendSettingChangeEvent(a_vm, object, toggle->ID);
 		}
+		else if (auto stepper = std::dynamic_pointer_cast<StepperControl>(control))
+		{
+			if (stepper->ValueSource && !stepper->Options.empty())
+			{
+				std::int32_t index = static_cast<std::int32_t>(stepper->GetValue());
+				std::int32_t nextIndex = (index + 1) % stepper->Options.size();
+				stepper->ValueSource->SetValue(static_cast<float>(nextIndex));
+			}
+
+			SendSettingChangeEvent(a_vm, object, stepper->ID);
+		}
 
 		if (control)
 		{

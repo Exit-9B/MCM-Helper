@@ -89,6 +89,21 @@ public:
 	std::shared_ptr<ValueSource> ValueSource;
 };
 
+class StepperControl : public Control
+{
+public:
+	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	virtual void InvokeAction(VM* a_vm) override;
+
+	auto GetValue() -> std::int32_t;
+	auto GetText() -> std::string;
+
+	std::string Text;
+	std::vector<std::string> Options;
+	std::shared_ptr<ValueSource> ValueSource;
+};
+
 class MenuControl : public Control
 {
 public:

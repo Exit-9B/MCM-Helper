@@ -387,6 +387,25 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 
 				control = sliderOption;
 			}
+			else if (type == "stepper") {
+				auto stepperOption = std::make_shared<StepperControl>();
+				try {
+					element.at("text").get_to(stepperOption->Text);
+				}
+				catch (const json::exception&) {}
+
+				auto& valueOptions = element.at("valueOptions");
+				try {
+					auto& options = valueOptions.at("options");
+					for (auto& option : options)
+					{
+						stepperOption->Options.push_back(option.get<std::string>());
+					}
+				}
+				catch (const json::exception&) {}
+				stepperOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+				control = stepperOption;
+			}
 			else if (type == "menu") {
 				auto menuOption = std::make_shared<MenuControl>();
 				try {

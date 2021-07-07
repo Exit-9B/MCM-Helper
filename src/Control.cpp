@@ -150,6 +150,43 @@ auto SliderControl::GetValue() -> float
 	return ValueSource ? ValueSource->GetValue() : 0.0f;
 }
 
+auto StepperControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+{
+	auto text = GetText();
+	return SkyUI::Config::AddTextOption(a_configScript, Text, text, GetFlags());
+}
+
+void StepperControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
+{
+	auto text = GetText();
+	SkyUI::Config::SetTextOptionValue(a_configScript, a_optionID, text);
+	RefreshFlags(a_configScript, a_optionID);
+}
+
+void StepperControl::InvokeAction(VM* a_vm)
+{
+	if (Action)
+	{
+		Action->InvokeInt(a_vm, GetValue());
+	}
+}
+
+auto StepperControl::GetValue() -> std::int32_t
+{
+	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
+}
+
+auto StepperControl::GetText() -> std::string
+{
+	auto value = GetValue();
+	if (value >= 0 && value < Options.size())
+	{
+		return Options[value];
+	}
+
+	return ""s;
+}
+
 auto MenuControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
 	auto value = GetValue();
