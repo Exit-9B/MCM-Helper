@@ -404,13 +404,13 @@ namespace Papyrus
 				std::string msg;
 				if (a_conflictName != ""sv)
 				{
-					msg = "$KeyAlreadyMappedByMod{" +
+					msg = "$MCM_KeyAlreadyMappedByMod{" +
 						std::string{ a_conflictControl } + "}{" +
 						std::string{ a_conflictName } + "}";
 				}
 				else
 				{
-					msg = "$KeyAlreadyMapped{" +
+					msg = "$MCM_KeyAlreadyMapped{" +
 						std::string{ a_conflictControl } + "}";
 				}
 
