@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<PapyrusProject
+  xmlns="PapyrusProject.xsd"
+  Game="sse"
+  Flags="TESV_Papyrus_Flags.flg"
+  Output="dist\Data\Scripts"
+  Optimize="true" Anonymize="true" Package="true" Zip="true">
+  <Variables>
+    <Variable Name="modname" Value="MCM Helper"/>
+    <Variable Name="filename" Value="MCMHelper"/>
+  </Variables>
+  <Imports>
+    <Import>dist\Data\Source\Scripts</Import>
+    <Import>%SKSE64Path%\Scripts\Source</Import>
+    <Import>%Skyrim64Path%\Data\Source\Scripts</Import>
+  </Imports>
+  <Scripts>
+    <Script>MCM.psc</Script>
+    <Script>MCM_ConfigBase.psc</Script>
+  </Scripts>
+  <PreBuildEvent Description="Copy SKSE plugin to distribution" UseInBuild="true">
+    <Command>xcopy "build\Release\@filename.dll" "dist\Data\SKSE\Plugins\@filename.dll*" /Y</Command>
+  </PreBuildEvent>
+  <Packages Output="dist\Data">
+    <Package Name="@filename" RootDir="dist\Data">
+      <Include NoRecurse="false">Interface</Include>
+      <Include NoRecurse="true">Scripts</Include>
+    </Package>
+  </Packages>
+  <ZipFiles Output="dist\Data">
+    <ZipFile Name="@modname" RootDir="dist\Data" Compression="deflate">
+      <Include>@filename.esp</Include>
+      <Include>@filename.bsa</Include>
+      <Include>SKSE\Plugins\@filename.dll</Include>
+      <Include>MCM\Settings\readme.txt</Include>
+      <Include NoRecurse="true">Source\Scripts</Include>
+    </ZipFile>
+  </ZipFiles>
+</PapyrusProject>
