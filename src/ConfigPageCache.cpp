@@ -34,9 +34,11 @@ void ConfigPageCache::AddControl(std::int32_t a_optionID, std::shared_ptr<Contro
 
 void ConfigPageCache::SetMenuOptions(
 	const std::string& a_ID,
-	const std::vector<std::string>& a_options)
+	const std::vector<std::string>& a_options,
+	const std::vector<std::string>& a_shortNames)
 {
 	_menuOptions[a_ID] = a_options;
+	_menuShortNames[a_ID] = a_shortNames;
 }
 
 auto ConfigPageCache::GetCurrentForm() const -> RE::TESForm*
@@ -94,8 +96,7 @@ auto ConfigPageCache::GetControl(std::int32_t a_optionID) const -> std::shared_p
 	return it != _pageCache.end() ? it->second : nullptr;
 }
 
-auto ConfigPageCache::GetMenuOptions(std::shared_ptr<MenuControl> a_control) const
-	-> std::vector<std::string>
+auto ConfigPageCache::GetMenuOptions(MenuControl* a_control) const -> std::vector<std::string>
 {
 	if (!a_control)
 		return std::vector<std::string>{};
@@ -103,6 +104,16 @@ auto ConfigPageCache::GetMenuOptions(std::shared_ptr<MenuControl> a_control) con
 	auto& id = a_control->ID;
 	auto it = _menuOptions.find(id);
 	return it != _menuOptions.end() ? it->second : a_control->Options;
+}
+
+auto ConfigPageCache::GetMenuShortNames(MenuControl* a_control) const -> std::vector<std::string>
+{
+	if (!a_control)
+		return std::vector<std::string>{};
+
+	auto& id = a_control->ID;
+	auto it = _menuShortNames.find(id);
+	return it != _menuShortNames.end() ? it->second : a_control->ShortNames;
 }
 
 void ConfigPageCache::ForEach(

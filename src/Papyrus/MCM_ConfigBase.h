@@ -13,7 +13,8 @@ namespace Papyrus
 		static void SetMenuOptions(
 			RE::TESQuest* a_self,
 			std::string_view a_ID,
-			std::vector<RE::BSFixedString> a_options);
+			std::vector<RE::BSFixedString> a_options,
+			std::vector<RE::BSFixedString> a_shortNames);
 
 		// Mod Settings
 		static auto GetModSettingInt(
@@ -59,7 +60,7 @@ namespace Papyrus
 		// SkyUI Overrides
 		static void OnConfigRegister(RE::TESQuest* a_self);
 
-		static void OnPageReset(RE::TESQuest* a_self, std::string_view a_page);
+		static void OnPageReset(RE::TESQuest* a_self, std::string a_page);
 
 		static void OnOptionHighlight(RE::TESQuest* a_self, std::int32_t a_option);
 

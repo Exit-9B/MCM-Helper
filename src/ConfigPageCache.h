@@ -25,7 +25,10 @@ public:
 
 	void AddControl(std::int32_t a_optionID, std::shared_ptr<Control> a_control);
 
-	void SetMenuOptions(const std::string& a_ID, const std::vector<std::string>& a_options);
+	void SetMenuOptions(
+		const std::string& a_ID,
+		const std::vector<std::string>& a_options,
+		const std::vector<std::string>& a_shortNames);
 
 	auto GetCurrentForm() const -> RE::TESForm*;
 
@@ -43,7 +46,9 @@ public:
 
 	auto GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>;
 
-	auto GetMenuOptions(std::shared_ptr<MenuControl> a_control) const -> std::vector<std::string>;
+	auto GetMenuOptions(MenuControl* a_control) const -> std::vector<std::string>;
+
+	auto GetMenuShortNames(MenuControl* a_control) const -> std::vector<std::string>;
 
 	void ForEach(std::function<void(std::int32_t, std::shared_ptr<Control>)> a_func) const;
 
@@ -54,5 +59,6 @@ private:
 	std::string _currentScript;
 	std::unordered_map<std::int32_t, std::shared_ptr<Control>> _pageCache;
 	std::unordered_map<std::string, std::vector<std::string>> _menuOptions;
+	std::unordered_map<std::string, std::vector<std::string>> _menuShortNames;
 	std::unordered_map<std::uint32_t, std::shared_ptr<ToggleControl>> _groupControls;
 };

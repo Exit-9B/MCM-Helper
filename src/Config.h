@@ -5,9 +5,9 @@
 class Config
 {
 public:
-	void ShowPage(ScriptObjectPtr a_object, std::string_view a_page = ""sv) const;
+	void ShowPage(ScriptObjectPtr a_object, const std::string& a_page = ""s) const;
 	void RefreshPage(ScriptObjectPtr a_object) const;
 
 	std::shared_ptr<PageContent> MainPage;
-	tsl::ordered_map<std::string_view, std::shared_ptr<PageContent>> SubPages;
+	tsl::ordered_map<std::string, std::shared_ptr<PageContent>> SubPages;
 };

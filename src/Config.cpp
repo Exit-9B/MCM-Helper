@@ -1,7 +1,7 @@
 #include "Config.h"
 #include "ConfigPageCache.h"
 
-void Config::ShowPage(ScriptObjectPtr a_object, std::string_view a_page) const
+void Config::ShowPage(ScriptObjectPtr a_object, const std::string& a_page) const
 {
 	if (a_page.empty())
 	{

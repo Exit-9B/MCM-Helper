@@ -1,0 +1,696 @@
+{
+  "modName": "SkyUI_SE",
+  "displayName": "SKY UI",
+  "customContent": {
+    "source": "skyui/skyui_splash.swf"
+  },
+  "pages": [
+    {
+      "pageDisplayName": "$General",
+      "cursorFillMode": "topToBottom",
+      "content": [
+        {
+          "text": "Item List",
+          "type": "header"
+        },
+        {
+          "id": "iFontSize:ItemList",
+          "text": "$Font Size",
+          "help": "$SKI_INFO1{$Medium}",
+          "type": "stepper",
+          "valueOptions": {
+            "options": ["$Small", "$Medium", "$Large"],
+            "sourceType": "ModSettingInt"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "ApplyItemListFontSize",
+            "params": ["{value}"]
+          }
+        },
+        {
+          "id": "iQuantityMinCount:ItemList",
+          "text": "$Quantity Menu Min. Count",
+          "help": "$SKI_INFO2{6}",
+          "type": "slider",
+          "valueOptions": {
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iCategoryIconTheme:ItemList",
+          "text": "$Category Icon Theme",
+          "help": "$SKI_INFO1{SKYUI V5}",
+          "type": "enum",
+          "valueOptions": {
+            "options": [
+              "SkyUI V5, by PsychoSteve",
+              "Celtic, by GreatClone",
+              "Curved, by T3T",
+              "Straight, by T3T"
+            ],
+            "shortNames": ["SKYUI V5", "CELTIC", "CURVED", "STRAIGHT"],
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "bNoIconColors:ItemList",
+          "text": "$Disable Icon Colors",
+          "help": "$SKI_INFO1{$Off}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "type": "empty"
+        },
+        {
+          "text": "$Active Effects HUD",
+          "type": "header"
+        },
+        {
+          "id": "bEnabled:EffectWidget",
+          "text": "$Enabled",
+          "help": "$SKI_INFO1{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "iIconSize:EffectWidget",
+          "text": "$Icon Size",
+          "help": "$SKI_INFO1{$Medium}",
+          "type": "stepper",
+          "valueOptions": {
+            "options": ["$Small", "$Medium", "$Large"],
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iMinTimeLeft:EffectWidget",
+          "text": "$Minimum Time Left",
+          "help": "$SKI_INFO5{180}",
+          "type": "slider",
+          "formatString": "{0} s",
+          "valueOptions": {
+            "min": 0,
+            "max": 600,
+            "step": 10,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "text": "$Favorites Menu",
+          "type": "header",
+          "position": 1
+        },
+        {
+          "id": "bHelpEnabled:FavoritesMenu",
+          "text": "$Show Button Help",
+          "help": "$SKI_INFO1{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "type": "empty"
+        },
+        {
+          "text": "$Favorite Groups",
+          "type": "header"
+        },
+        {
+          "text": "",
+          "help": "$SKI_INFO6",
+          "type": "enum",
+          "valueOptions": {
+            "options": [
+              "$Group {1}",
+              "$Group {2}",
+              "$Group {3}",
+              "$Group {4}",
+              "$Group {5}",
+              "$Group {6}",
+              "$Group {7}",
+              "$Group {8}"
+            ],
+            "sourceType": "PropertyValueInt",
+            "propertyName": "FavoriteGroup"
+          }
+        },
+        {
+          "text": "$Unequip Armor",
+          "help": "$SKI_INFO7{$Off}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "PropertyValueBool",
+            "propertyName": "UnequipArmor"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "ToggleUnequipArmor",
+            "params": ["{value}"]
+          }
+        },
+        {
+          "text": "$Unequip Hands",
+          "help": "$SKI_INFO8{$Off}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "PropertyValueBool",
+            "propertyName": "UnequipHands"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "ToggleUnequipHands",
+            "params": ["{value}"]
+          }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$Controls",
+      "cursorFillMode": "topToBottom",
+      "content": [
+        {
+          "text": "$Item List",
+          "type": "header"
+        },
+        {
+          "type": "hiddenToggle",
+          "groupControl": 1,
+          "valueOptions": {
+            "sourceType": "PropertyValueBool",
+            "propertyName": "IsGamepad"
+          }
+        },
+        {
+          "id": "iSearchKey:Controls",
+          "text": "$Search",
+          "help": "$SKI_INFO1{Space}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "disable",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iSwitchTabKey:Controls",
+          "text": "$Switch Tab",
+          "help": "$SKI_INFO1{LAlt}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iEquipModeKey:Controls",
+          "text": "$Equip Mode",
+          "help": "$SKI_INFO1{Shift}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": 1,
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iSwitchTabButton:Controls",
+          "text": "$Switch Tab",
+          "help": "$SKI_INFO1{Back}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": 1,
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iPreviousColumnButton:Controls",
+          "text": "$Previous Column",
+          "help": "$SKI_INFO{LB}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": 1,
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iNextColumnButton:Controls",
+          "text": "$Next Column",
+          "help": "$SKI_INFO{RB}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": 1,
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iSortOrderButton:Controls",
+          "text": "$Order",
+          "help": "$SKI_INFO{LS}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": 1,
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "type": "empty",
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip"
+        },
+        {
+          "id": "iFavoriteGroupAddKey:Controls",
+          "text": "{$Group}/{$Ungroup}",
+          "help": "$SKI_INFO1{F}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseKey:Controls",
+          "text": "$Group Use",
+          "help": "$SKI_INFO1{R}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteSetIconKey:Controls",
+          "text": "$Set Group Icon",
+          "help": "$SKI_INFO1{LAlt}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteEquipStateKey:Controls",
+          "text": "$Save Equip State",
+          "help": "$SKI_INFO{T}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteToggleFocusKey:Controls",
+          "text": "$Toggle Focus",
+          "help": "$SKI_INFO{Space}",
+          "type": "keymap",
+          "ignoreConflicts": true,
+          "groupCondition": {"NOT": 1},
+          "groupBehavior": "skip",
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "text": "$Favorite Groups",
+          "type": "header",
+          "position": 1
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey1:Controls",
+          "text": "$Group {1}",
+          "help": "$SKI_INFO1{F1}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey2:Controls",
+          "text": "$Group {2}",
+          "help": "$SKI_INFO1{F2}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey3:Controls",
+          "text": "$Group {3}",
+          "help": "$SKI_INFO1{F3}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey4:Controls",
+          "text": "$Group {4}",
+          "help": "$SKI_INFO1{F4}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey5:Controls",
+          "text": "$Group {5}",
+          "help": "$SKI_INFO1{F5}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey6:Controls",
+          "text": "$Group {6}",
+          "help": "$SKI_INFO1{F6}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey7:Controls",
+          "text": "$Group {7}",
+          "help": "$SKI_INFO1{F7}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iFavoriteGroupUseHotkey8:Controls",
+          "text": "$Group {8}",
+          "help": "$SKI_INFO1{F8}",
+          "type": "keymap",
+          "ignoreConflicts": false,
+          "valueOptions": {
+            "sourceType": "ModSettingInt"
+          }
+        }
+      ]
+    },
+    {
+      "pageDisplayName": "$Advanced",
+      "cursorFillMode": "topToBottom",
+      "content": [
+        {
+          "text": "$3D Item",
+          "type": "header"
+        },
+        {
+          "id": "fXOffset:3DItem",
+          "text": "$Horizontal Offset",
+          "help": "$SKI_INFO1{0}",
+          "type": "slider",
+          "groupCondition": {"NOT": 1},
+          "valueOptions": {
+            "min": -128,
+            "max": 128,
+            "step": 1,
+            "sourceType": "ModSettingFloat"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "Apply3DItemXOffset",
+            "params": ["{value}"]
+          }
+        },
+        {
+          "id": "fYOffset:3DItem",
+          "text": "$Vertical Offset",
+          "help": "$SKI_INFO1{0}",
+          "type": "slider",
+          "groupCondition": {"NOT": 1},
+          "valueOptions": {
+            "min": -128,
+            "max": 128,
+            "step": 1,
+            "sourceType": "ModSettingFloat"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "Apply3DItemYOffset",
+            "params": ["{value}"]
+          }
+        },
+        {
+          "id": "fScale:3DItem",
+          "text": "$Scale",
+          "help": "$SKI_INFO1{1.5}",
+          "type": "slider",
+          "groupCondition": {"NOT": 1},
+          "formatString": "{1}",
+          "valueOptions": {
+            "min": 0.5,
+            "max": 5,
+            "step": 0.1,
+            "sourceType": "ModSettingFloat"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "Apply3DItemScale",
+            "params": ["{value}"]
+          }
+        },
+        {
+          "id": "bDisablePositioning:3DItem",
+          "text": "$Disable Positioning",
+          "help": "$SKI_INFO4{$Off}",
+          "type": "toggle",
+          "groupControl": 1,
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "type": "empty"
+        },
+        {
+          "text": "$Active Effects HUD",
+          "type": "header"
+        },
+        {
+          "id": "iOrientation:EffectWidget",
+          "text": "$Orientation",
+          "help": "$SKI_INFO1{$Vertical}",
+          "type": "stepper",
+          "valueOptions": {
+            "options": ["$Horizontal", "$Vertical"],
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iHorizontalAnchor:EffectWidget",
+          "text": "$Horizontal Anchor",
+          "help": "$SKI_INFO1{$Center}",
+          "type": "stepper",
+          "valueOptions": {
+            "options": ["$Left", "$Right", "$Center"],
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iVerticalAnchor:EffectWidget",
+          "text": "$Vertical Anchor",
+          "help": "$SKI_INFO1{$Top}",
+          "type": "stepper",
+          "valueOptions": {
+            "options": ["$Top", "$Bottom", "$Center"],
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iGroupEffectCount:EffectWidget",
+          "text": "$Icon Group Count",
+          "help": "$SKI_INFO{8}",
+          "type": "slider",
+          "valueOptions": {
+            "min": 1,
+            "max": 16,
+            "step": 1,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iXOffset:EffectWidget",
+          "text": "$Horizontal Offset",
+          "help": "$SKI_INFO1{0}",
+          "type": "slider",
+          "valueOptions": {
+            "min": -1280,
+            "max": 1280,
+            "step": 1,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iYOffset:EffectWidget",
+          "text": "$Vertical Offset",
+          "help": "$SKI_INFO1{0}",
+          "type": "slider",
+          "valueOptions": {
+            "min": -720,
+            "max": 720,
+            "step": 1,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "text": "$Item Card",
+          "type": "header",
+          "position": 1
+        },
+        {
+          "id": "iAlign:ItemCard",
+          "text": "$Align",
+          "help": "$SKI_INFO1{$Center}",
+          "type": "stepper",
+          "valueOptions": {
+            "options": ["$Left", "$Right", "$Center"],
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iXOffset:ItemCard",
+          "text": "$Horizontal Offset",
+          "help": "$SKI_INFO1{0}",
+          "type": "slider",
+          "valueOptions": {
+            "min": -1000,
+            "max": 1000,
+            "step": 1,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "id": "iYOffset:ItemCard",
+          "text": "$Vertical Offset",
+          "help": "$SKI_INFO1{0}",
+          "type": "slider",
+          "valueOptions": {
+            "min": -1000,
+            "max": 1000,
+            "step": 1,
+            "sourceType": "ModSettingInt"
+          }
+        },
+        {
+          "type": "empty"
+        },
+        {
+          "text": "$SWF Version Checking",
+          "type": "header"
+        },
+        {
+          "id": "bMapMenu:SWFVersionCheck",
+          "text": "$Map Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bFavoritesMenu:SWFVersionCheck",
+          "text": "$Favorites Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bInventoryMenu:SWFVersionCheck",
+          "text": "$Inventory Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bMagicMenu:SWFVersionCheck",
+          "text": "$Magic Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bBarterMenu:SWFVersionCheck",
+          "text": "$Barter Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bContainerMenu:SWFVersionCheck",
+          "text": "$Container Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bCraftingMenu:SWFVersionCheck",
+          "text": "$Crafting Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        },
+        {
+          "id": "bGiftMenu:SWFVersionCheck",
+          "text": "$Gift Menu",
+          "help": "$SKI_INFO3{$On}",
+          "type": "toggle",
+          "valueOptions": {
+            "sourceType": "ModSettingBool"
+          }
+        }
+      ]
+    }
+  ]
+}

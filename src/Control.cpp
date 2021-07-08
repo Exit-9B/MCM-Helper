@@ -228,13 +228,13 @@ auto MenuControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto value = GetValue();
+	auto value = GetShortText();
 	return SkyUI::Config::AddMenuOption(a_configScript, Text, value, GetFlags());
 }
 
 void MenuControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto value = GetValue();
+	auto value = GetShortText();
 	SkyUI::Config::SetMenuOptionValue(a_configScript, a_optionID, value);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -269,18 +269,48 @@ auto MenuControl::GetValue() -> std::string
 	return ""s;
 }
 
+auto MenuControl::GetDefaultValue() -> std::string
+{
+	if (!ID.empty())
+	{
+		auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
+		if (setting && setting->GetType() == RE::Setting::Type::kString)
+		{
+			return setting->GetString();
+		}
+	}
+
+	return ""s;
+}
+
+auto MenuControl::GetShortText() -> std::string
+{
+	auto& configPageCache = ConfigPageCache::GetInstance();
+	auto options = configPageCache.GetMenuOptions(this);
+	auto shortNames = configPageCache.GetMenuShortNames(this);
+
+	if (options.size() != shortNames.size())
+		return GetValue();
+
+	auto value = GetValue();
+	auto item = std::find(options.begin(), options.end(), value);
+	auto index = static_cast<std::int32_t>(item - options.begin());
+
+	return shortNames[index];
+}
+
 auto EnumControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto text = GetText();
+	auto text = GetShortText();
 	return SkyUI::Config::AddMenuOption(a_configScript, Text, text, GetFlags());
 }
 
 void EnumControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto text = GetText();
+	auto text = GetShortText();
 	SkyUI::Config::SetMenuOptionValue(a_configScript, a_optionID, text);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -298,12 +328,15 @@ auto EnumControl::GetValue() -> std::int32_t
 	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
 }
 
-auto EnumControl::GetText() -> std::string
+auto EnumControl::GetShortText() -> std::string
 {
 	auto value = GetValue();
 	if (value >= 0 && value < Options.size())
 	{
-		return Options[value];
+		if (ShortNames.size() == Options.size())
+			return ShortNames[value];
+		else
+			return Options[value];
 	}
 
 	return ""s;

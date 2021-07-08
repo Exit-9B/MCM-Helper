@@ -22,7 +22,8 @@ namespace Papyrus
 	void MCM_ConfigBase::SetMenuOptions(
 		[[maybe_unused]] RE::TESQuest* a_self,
 		std::string_view a_ID,
-		std::vector<RE::BSFixedString> a_options)
+		std::vector<RE::BSFixedString> a_options,
+		std::vector<RE::BSFixedString> a_shortNames)
 	{
 		std::string id{ a_ID };
 		std::vector<std::string> options;
@@ -32,7 +33,14 @@ namespace Papyrus
 			options.push_back(std::string{ option });
 		}
 
-		ConfigPageCache::GetInstance().SetMenuOptions(id, options);
+		std::vector<std::string> shortNames;
+		shortNames.reserve(a_shortNames.size());
+		for (auto& shortName : a_shortNames)
+		{
+			shortNames.push_back(std::string{ shortName });
+		}
+
+		ConfigPageCache::GetInstance().SetMenuOptions(id, options, shortNames);
 	}
 
 	auto MCM_ConfigBase::GetModSettingInt(
@@ -123,7 +131,7 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::OnPageReset(RE::TESQuest* a_self, std::string_view a_page)
+	void MCM_ConfigBase::OnPageReset(RE::TESQuest* a_self, std::string a_page)
 	{
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
@@ -170,6 +178,8 @@ namespace Papyrus
 				}
 			}
 
+			toggle->Refresh(object, a_option);
+
 			if (toggle->GroupControl)
 			{
 				auto config = ConfigStore::GetInstance().GetConfig(a_self);
@@ -189,6 +199,8 @@ namespace Papyrus
 				std::int32_t nextIndex = (index + 1) % stepper->Options.size();
 				stepper->ValueSource->SetValue(static_cast<float>(nextIndex));
 			}
+
+			stepper->Refresh(object, a_option);
 
 			SendSettingChangeEvent(a_vm, object, stepper->ID);
 		}
@@ -272,12 +284,37 @@ namespace Papyrus
 
 		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
 		{
-			auto options = ConfigPageCache::GetInstance().GetMenuOptions(menu);
+			auto options = ConfigPageCache::GetInstance().GetMenuOptions(menu.get());
+			auto item = std::find(options.begin(), options.end(), menu->GetValue());
 			SkyUI::Config::SetMenuDialogOptions(object, options);
+			if (item != options.end())
+			{
+				auto index = static_cast<std::int32_t>(item - options.begin());
+				SkyUI::Config::SetMenuDialogStartIndex(object, index);
+			}
+
+			if (!menu->ID.empty())
+			{
+				auto defaultValue = menu->GetDefaultValue();
+				if (!defaultValue.empty())
+				{
+					item = std::find(options.begin(), options.end(), defaultValue);
+					auto index = static_cast<std::int32_t>(item - options.begin());
+					SkyUI::Config::SetMenuDialogDefaultIndex(object, index);
+				}
+			}
 		}
 		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control))
 		{
 			SkyUI::Config::SetMenuDialogOptions(object, menuEnum->Options);
+			SkyUI::Config::SetMenuDialogStartIndex(object, menuEnum->GetValue());
+
+			if (menuEnum->ValueSource)
+			{
+				auto defaultValue = static_cast<std::int32_t>(
+					menuEnum->ValueSource->GetDefaultValue());
+				SkyUI::Config::SetMenuDialogDefaultIndex(object, defaultValue);
+			}
 		}
 	}
 
@@ -296,7 +333,7 @@ namespace Papyrus
 
 		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
 		{
-			auto options = configPageCache.GetMenuOptions(menu);
+			auto options = configPageCache.GetMenuOptions(menu.get());
 			auto value = menu->GetValue();
 			if (!menu->PropertyName.empty())
 			{
@@ -327,9 +364,9 @@ namespace Papyrus
 				menuEnum->ValueSource->SetValue(static_cast<float>(a_index));
 			}
 
-			menu->Refresh(object, a_option);
+			menuEnum->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, menu->ID);
+			SendSettingChangeEvent(a_vm, object, menuEnum->ID);
 		}
 	}
 

@@ -121,9 +121,13 @@ public:
 	virtual void InvokeAction(VM* a_vm) override;
 
 	auto GetValue() -> std::string;
+	auto GetDefaultValue() -> std::string;
+	auto GetShortText() -> std::string;
+	auto GetIndex(const std::string&) -> std::int32_t;
 
 	std::string Text;
 	std::vector<std::string> Options;
+	std::vector<std::string> ShortNames;
 
 	std::string ModName;
 	RE::TESForm* SourceForm;
@@ -139,10 +143,11 @@ public:
 	virtual void InvokeAction(VM* a_vm) override;
 
 	auto GetValue() -> std::int32_t;
-	auto GetText() -> std::string;
+	auto GetShortText() -> std::string;
 
 	std::string Text;
 	std::vector<std::string> Options;
+	std::vector<std::string> ShortNames;
 	std::shared_ptr<ValueSource> ValueSource;
 };
 

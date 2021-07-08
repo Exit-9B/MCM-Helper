@@ -423,6 +423,15 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 				}
 				catch (const json::exception&) {}
 
+				try {
+					auto& shortNames = valueOptions.at("shortNames");
+					for (auto& shortName : shortNames)
+					{
+						menuOption->ShortNames.push_back(shortName.get<std::string>());
+					}
+				}
+				catch (const json::exception&) {}
+
 				valueOptions.at("propertyName").get_to(menuOption->PropertyName);
 				try {
 					valueOptions.at("scriptName").get_to(menuOption->ScriptName);
@@ -455,6 +464,16 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 					}
 				}
 				catch (const json::exception&) {}
+
+				try {
+					auto& shortNames = valueOptions.at("shortNames");
+					for (auto& shortName : shortNames)
+					{
+						enumOption->ShortNames.push_back(shortName.get<std::string>());
+					}
+				}
+				catch (const json::exception&) {}
+
 				enumOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
 				control = enumOption;
 			}
