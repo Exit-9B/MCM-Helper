@@ -549,11 +549,14 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 			control->GroupCondition = ReadGroupCondition(groupCondition);
 			try {
 				auto groupBehavior = element.at("groupBehavior").get<std::string>();
-				if (groupBehavior == "hide") {
-					control->GroupBehavior = SkyUI::Flags::Disable | SkyUI::Flags::Hide;
+				if (groupBehavior == "disable") {
+					control->GroupBehavior = Control::Behavior::Disable;
 				}
-				else if (groupBehavior == "disable") {
-					control->GroupBehavior = SkyUI::Flags::Disable;
+				else if (groupBehavior == "hide") {
+					control->GroupBehavior = Control::Behavior::Hide;
+				}
+				else if (groupBehavior == "skip") {
+					control->GroupBehavior = Control::Behavior::Skip;
 				}
 			}
 			catch (const json::exception&) {}

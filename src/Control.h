@@ -10,18 +10,27 @@ class Control
 public:
 	using VM = RE::BSScript::IVirtualMachine;
 
+	enum class Behavior : std::int32_t
+	{
+		Normal,
+		Disable,
+		Hide,
+		Skip,
+	};
+
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t = 0;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
 	virtual void InvokeAction(VM* a_vm);
 
 	auto GetFlags() -> SkyUI::Flags;
+	auto GetDesiredBehavior() -> Behavior;
 	void RefreshFlags(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
 
 	std::int32_t Position = -1;
 	std::string ID;
 	std::string Help;
 	std::shared_ptr<GroupConditionTree> GroupCondition;
-	SkyUI::Flags GroupBehavior = SkyUI::Flags::Disable;
+	Behavior GroupBehavior = Behavior::Disable;
 	std::shared_ptr<Action> Action;
 };
 

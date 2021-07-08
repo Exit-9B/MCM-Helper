@@ -22,22 +22,43 @@ auto Control::GetFlags() -> SkyUI::Flags
 {
 	if (GroupCondition && !GroupCondition->GetIsActive())
 	{
-		return GroupBehavior;
+		switch (GroupBehavior) {
+		case Behavior::Disable:
+			return SkyUI::Flags::Disable;
+		case Behavior::Hide:
+			return SkyUI::Flags::Disable | SkyUI::Flags::Hide;
+		}
 	}
 
 	return SkyUI::Flags::None;
+}
+
+auto Control::GetDesiredBehavior() -> Behavior
+{
+	if (GroupCondition && !GroupCondition->GetIsActive())
+	{
+		return GroupBehavior;
+	}
+
+	return Behavior::Normal;
 }
 
 void Control::RefreshFlags(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
 	if (GroupCondition > 0)
 	{
+		if (GetDesiredBehavior() == Behavior::Skip)
+			return;
+
 		SkyUI::Config::SetOptionFlags(a_configScript, a_optionID, GetFlags());
 	}
 }
 
 auto EmptyControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	if (Position >= 0)
 	{
 		SkyUI::Config::SetCursorPosition(a_configScript, Position);
@@ -47,6 +68,9 @@ auto EmptyControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 
 auto HeaderControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	return SkyUI::Config::AddHeaderOption(a_configScript, Text, GetFlags());
 }
 
@@ -57,6 +81,9 @@ void HeaderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 
 auto TextControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto value = GetValue();
 	return SkyUI::Config::AddTextOption(a_configScript, Text, value, GetFlags());
 }
@@ -100,6 +127,9 @@ auto TextControl::GetValue() -> std::string
 
 auto ToggleControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto checked = GetValue();
 	return SkyUI::Config::AddToggleOption(a_configScript, Text, checked, GetFlags());
 }
@@ -126,6 +156,9 @@ auto ToggleControl::GetValue() -> bool
 
 auto SliderControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto value = GetValue();
 	return SkyUI::Config::AddSliderOption(a_configScript, Text, value, FormatString, GetFlags());
 }
@@ -152,6 +185,9 @@ auto SliderControl::GetValue() -> float
 
 auto StepperControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto text = GetText();
 	return SkyUI::Config::AddTextOption(a_configScript, Text, text, GetFlags());
 }
@@ -189,6 +225,9 @@ auto StepperControl::GetText() -> std::string
 
 auto MenuControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto value = GetValue();
 	return SkyUI::Config::AddMenuOption(a_configScript, Text, value, GetFlags());
 }
@@ -232,6 +271,9 @@ auto MenuControl::GetValue() -> std::string
 
 auto EnumControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto text = GetText();
 	return SkyUI::Config::AddMenuOption(a_configScript, Text, text, GetFlags());
 }
@@ -269,6 +311,9 @@ auto EnumControl::GetText() -> std::string
 
 auto ColorControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto value = GetColor();
 	return SkyUI::Config::AddColorOption(a_configScript, Text, value, GetFlags());
 }
@@ -295,6 +340,9 @@ auto ColorControl::GetColor() -> std::uint32_t
 
 auto KeyMapControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto keyCode = GetKeyCode();
 	return SkyUI::Config::AddKeyMapOption(a_configScript, Text, keyCode, GetFlags());
 }
@@ -321,6 +369,9 @@ auto KeyMapControl::GetKeyCode() -> std::int32_t
 
 auto InputControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
+	if (GetDesiredBehavior() == Behavior::Skip)
+		return -1;
+
 	auto value = GetValue();
 	return SkyUI::Config::AddInputOption(a_configScript, Text, value, GetFlags());
 }
