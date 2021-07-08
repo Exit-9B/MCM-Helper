@@ -7,6 +7,7 @@ struct GroupConditionTree
 		OR,
 		AND,
 		ONLY,
+		NOT,
 	};
 
 	ConjunctionType Conjunction = ConjunctionType::OR;

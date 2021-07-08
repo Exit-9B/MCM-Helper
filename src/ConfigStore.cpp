@@ -681,6 +681,12 @@ auto ConfigStore::ReadGroupCondition(const json& a_groupCondition)
 		}
 		catch (const json::exception&) {}
 
+		try {
+			operands = a_groupCondition.at("NOT");
+			groupCondition->Conjunction = GroupConditionTree::ConjunctionType::NOT;
+		}
+		catch (const json::exception&) {}
+
 		if (operands.is_number_integer())
 		{
 			groupCondition->TopLevelOperands.push_back(operands.get<std::uint32_t>());

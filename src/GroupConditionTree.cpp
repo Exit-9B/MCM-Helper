@@ -81,9 +81,34 @@ auto GroupConditionTree::GetIsActive() -> bool const
 		return true;
 	}
 
+	case ConjunctionType::NOT:
+	{
+		for (auto operand : TopLevelOperands)
+		{
+			if (configPageCache.IsGroupActive(operand))
+			{
+				return false;
+			}
+		}
+
+		for (auto& subtree : SubTrees)
+		{
+			if (!subtree)
+				continue;
+
+			if (subtree->GetIsActive())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	default:
 	{
 		return true;
 	}
+
 	}
 }
