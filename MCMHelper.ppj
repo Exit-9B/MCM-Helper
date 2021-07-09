@@ -35,14 +35,15 @@
       <Include>@filename.bsa</Include>
       <Include>SKSE\Plugins\@filename.dll</Include>
       <Include>MCM\Settings\readme.txt</Include>
+      <Include>Source\Scripts\SKI_ConfigMenu.psc</Include>
+      <Include NoRecurse="false">MCM\Config\SkyUI_SE</Include>
+    <!--/ZipFile>
+    <ZipFile Name="MCM SDK" RootDir="dist\Data" Compression="deflate"-->
       <Include>Scripts\SKI_PlayerLoadGameAlias.pex</Include>
       <Include>Source\Scripts\MCM.psc</Include>
       <Include>Source\Scripts\MCM_ConfigBase.psc</Include>
       <Include>Source\Scripts\SKI_ConfigBase.psc</Include>
-      <Include>Source\Scripts\SKI_ConfigMenu.psc</Include>
-      <Include>Source\Scripts\SKI_PlayerLoadGameAlias.psc</Include>
       <Include>Source\Scripts\SKI_QuestBase.psc</Include>
-      <Include NoRecurse="false">MCM\Config\SkyUI_SE</Include>
     </ZipFile>
   </ZipFiles>
 </PapyrusProject>
