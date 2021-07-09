@@ -405,10 +405,6 @@ function LoadSettings()
 
 	SKI_ActiveEffectsWidgetInstance.MinimumTimeLeft = GetModSettingInt("iMinTimeLeft:EffectWidget")
 	SKI_ActiveEffectsWidgetInstance.GroupEffectCount = GetModSettingInt("iGroupEffectCount:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.X = \
-		_alignmentBaseOffsets[GetModSettingInt("iHorizontalAnchor:EffectWidget")] + GetModSettingInt("iXOffset:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.Y = \
-		_vertAlignmentBaseOffsets[GetModSettingInt("iVerticalAnchor:EffectWidget")] + GetModSettingInt("iYOffset:EffectWidget")
 
 	; ItemCard
 	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$align", _alignmentValues[GetModSettingInt("iAlign:ItemCard")])
