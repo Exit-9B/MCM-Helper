@@ -176,11 +176,11 @@ event OnSettingChange(string a_ID)
 	elseif a_ID == "iGroupEffectCount:EffectWidget"
 		SKI_ActiveEffectsWidgetInstance.GroupEffectCount = GetModSettingInt(a_ID)
 	elseif a_ID == "iXOffset:EffectWidget"
-		SKI_ActiveEffectsWidgetInstance.X = \
-			_alignmentBaseOffsets[GetModSettingInt("iHorizontalAnchor:EffectWidget")] + GetModSettingInt(a_ID)
+		int effectWidgetHAnchorIdx = GetModSettingInt("iHorizontalAnchor:EffectWidget")
+		SKI_ActiveEffectsWidgetInstance.X = _alignmentBaseOffsets[effectWidgetHAnchorIdx] + GetModSettingInt(a_ID)
 	elseif a_ID == "iYOffset:EffectWidget"
-		SKI_ActiveEffectsWidgetInstance.Y = \
-			_vertAlignmentBaseOffsets[GetModSettingInt("iVerticalAnchor:EffectWidget")] + GetModSettingInt(a_ID)
+		int effectWidgetVAnchorIdx = GetModSettingInt("iVerticalAnchor:EffectWidget")
+		SKI_ActiveEffectsWidgetInstance.Y = _vertAlignmentBaseOffsets[effectWidgetVAnchorIdx] + GetModSettingInt(a_ID)
 
 	; ItemCard
 	elseif a_ID == "iAlign:ItemCard"
