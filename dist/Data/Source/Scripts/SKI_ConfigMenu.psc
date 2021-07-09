@@ -138,6 +138,13 @@ endEvent
 
 event OnConfigOpen()
 	IsGamepad = Game.UsingGamepad()
+
+	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
+	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
+
+	FavoriteCurrentGroup = 0
+	UnequipArmor = SKI_FavoritesManagerInstance.GetGroupFlag(0, ARMOR_FLAG)
+	UnequipHands = SKI_FavoritesManagerInstance.GetGroupFlag(0, HANDS_FLAG)
 endEvent
 
 event OnSettingChange(string a_ID)
@@ -186,6 +193,19 @@ event OnSettingChange(string a_ID)
 	; FavoritesMenu
 	elseif a_ID == "bHelpEnabled:FavoritesMenu"
 		SKI_FavoritesManagerInstance.ButtonHelpEnabled = GetModSettingBool(a_ID)
+
+	; FavoriteGroups
+	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
+	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
+
+	int GroupIdx = 0
+	while GroupIdx < 8
+		bool armorSetting = GetModSettingBool("bUnequipArmor:FavoriteGroup" + (GroupIdx + 1))
+		bool handsSetting = GetModSettingBool("bUnequipHands:FavoriteGroup" + (GroupIdx + 1))
+		SKI_FavoritesManagerInstance.SetGroupFlag(GroupIdx, ARMOR_FLAG, armorSetting)
+		SKI_FavoritesManagerInstance.SetGroupFlag(GroupIdx, HANDS_FLAG, handsSetting)
+		GroupIdx += 1
+	endWhile
 
 	; SWFVersionCheck
 	elseif a_ID == "bMapMenu:SWFVersionCheck"
@@ -330,14 +350,26 @@ function Apply3DItemScale(float a_value)
 	endIf
 endFunction
 
+function ChooseFavoriteGroup(int a_value)
+	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
+	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
+
+	UnequipArmor = SKI_FavoritesManagerInstance.GetGroupFlag(0, ARMOR_FLAG)
+	UnequipHands = SKI_FavoritesManagerInstance.GetGroupFlag(0, HANDS_FLAG)
+
+	RefreshMenu()
+endFunction
+
 function ToggleUnequipArmor(bool a_value)
 	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
 	SKI_FavoritesManagerInstance.SetGroupFlag(FavoriteCurrentGroup, ARMOR_FLAG, a_value)
+	SetModSettingBool("bUnequipArmor:FavoriteGroup" + (FavoriteCurrentGroup + 1), a_value)
 endFunction
 
 function ToggleUnequipHands(bool a_value)
 	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
 	SKI_FavoritesManagerInstance.SetGroupFlag(FavoriteCurrentGroup, HANDS_FLAG, a_value)
+	SetModSettingBool("bUnequipHands:FavoriteGroup" + (FavoriteCurrentGroup + 1), a_value)
 endFunction
 
 

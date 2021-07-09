@@ -141,7 +141,12 @@
               "$Group {8}"
             ],
             "sourceType": "PropertyValueInt",
-            "propertyName": "FavoriteGroup"
+            "propertyName": "FavoriteCurrentGroup"
+          },
+          "action": {
+            "type": "CallFunction",
+            "function": "ChooseFavoriteGroup",
+            "params": ["{value}"]
           }
         },
         {
