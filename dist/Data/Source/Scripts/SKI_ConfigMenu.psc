@@ -3,7 +3,7 @@ scriptname SKI_ConfigMenu extends MCM_ConfigBase
 ; SCRIPT VERSION ----------------------------------------------------------------------------------
 
 int function GetVersion()
-	return 8
+	return 9
 endFunction
 
 ; PRIVATE VARIABLES -------------------------------------------------------------------------------
@@ -120,91 +120,13 @@ event OnConfigInit()
 	_vertAlignmentBaseOffsets[1] = 720.0
 	_vertAlignmentBaseOffsets[2] = 360.0
 
-	; ItemList
-	SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", \
-		GetModSettingFloat("iQuantityMinCount:ItemList"))
-	SKI_SettingsManagerInstance.SetOverride("Appearance$icons$category$source", \
-		_categoryIconThemeValues[GetModSettingInt("iCategoryIconTheme:ItemList")])
-	SKI_SettingsManagerInstance.SetOverride("Appearance$icons$item$noColor", \
-		GetModSettingBool("bNoIconColors:ItemList"))
-
-	; EffectWidget
-	SKI_ActiveEffectsWidgetInstance.Enabled = GetModSettingBool("bEnabled:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.EffectSize = _effectWidgetIconSizeValues[GetModSettingInt("iIconSize:EffectWidget")]
-	SKI_ActiveEffectsWidgetInstance.Orientation = _orientationValues[GetModSettingInt("iOrientation:EffectWidget")]
-
-	int effectWidgetHAnchorIdx = GetModSettingInt("iHorizontalAnchor:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.HAnchor = _alignmentValues[effectWidgetHAnchorIdx]
-	SKI_ActiveEffectsWidgetInstance.X = \
-		_alignmentBaseOffsets[effectWidgetHAnchorIdx] + GetModSettingInt("iXOffset:EffectWidget")
-
-	int effectWidgetVAnchorIdx = GetModSettingInt("iVerticalAnchor:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.VAnchor = _vertAlignmentValues[effectWidgetVAnchorIdx]
-	SKI_ActiveEffectsWidgetInstance.Y = \
-		_vertAlignmentBaseOffsets[effectWidgetVAnchorIdx] + GetModSettingInt("iYOffset:EffectWidget")
-
-	SKI_ActiveEffectsWidgetInstance.MinimumTimeLeft = GetModSettingInt("iMinTimeLeft:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.GroupEffectCount = GetModSettingInt("iGroupEffectCount:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.X = \
-		_alignmentBaseOffsets[GetModSettingInt("iHorizontalAnchor:EffectWidget")] + GetModSettingInt("iXOffset:EffectWidget")
-	SKI_ActiveEffectsWidgetInstance.Y = \
-		_vertAlignmentBaseOffsets[GetModSettingInt("iVerticalAnchor:EffectWidget")] + GetModSettingInt("iYOffset:EffectWidget")
-
-	; ItemCard
-	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$align", _alignmentValues[GetModSettingInt("iAlign:ItemCard")])
-	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$xOffset", GetModSettingInt("iXOffset:ItemCard"))
-	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$yOffset", GetModSettingInt("iYOffset:ItemCard"))
-
-	; FavoritesMenu
-	SKI_FavoritesManagerInstance.ButtonHelpEnabled = GetModSettingBool("bHelpEnabled:FavoritesMenu")
-
-	; SWFVersionCheck
-	SKI_MainInstance.MapMenuCheckEnabled = GetModSettingBool("bMapMenu:SWFVersionCheck")
-	SKI_MainInstance.FavoritesMenuCheckEnabled = GetModSettingBool("bFavoritesMenu:SWFVersionCheck")
-	SKI_MainInstance.InventoryMenuCheckEnabled = GetModSettingBool("bInventoryMenu:SWFVersionCheck")
-	SKI_MainInstance.MagicMenuCheckEnabled = GetModSettingBool("bMagicMenu:SWFVersionCheck")
-	SKI_MainInstance.BarterMenuCheckEnabled = GetModSettingBool("bBarterMenu:SWFVersionCheck")
-	SKI_MainInstance.ContainerMenuCheckEnabled = GetModSettingBool("bContainerMenu:SWFVersionCheck")
-	SKI_MainInstance.CraftingMenuCheckEnabled = GetModSettingBool("bCraftingMenu:SWFVersionCheck")
-	SKI_MainInstance.GiftMenuCheckEnabled = GetModSettingBool("bGiftMenu:SWFVersionCheck")
-
-	; Controls
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$search", \
-		GetModSettingInt("iSearchKey:Controls"))
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$switchTab", \
-		GetModSettingInt("iSwitchTabKey:Controls"))
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$equipMode", \
-		GetModSettingInt("iEquipModeKey:Controls"))
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$switchTab", \
-		GetModSettingInt("iSwitchTabButton:Controls"))
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$prevColumn", \
-		GetModSettingInt("iPreviousColumnButton:Controls"))
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$nextColumn", \
-		GetModSettingInt("iNextColumnButton:Controls"))
-	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$sortOrder", \
-		GetModSettingInt("iSortOrderButton:Controls"))
-
-	SKI_FavoritesManagerInstance.GroupAddKey = GetModSettingInt("iFavoriteGroupAddKey:Controls")
-	SKI_FavoritesManagerInstance.GroupUseKey = GetModSettingInt("iFavoriteGroupUseKey:Controls")
-	SKI_FavoritesManagerInstance.SetIconKey = GetModSettingInt("iFavoriteSetIconKey:Controls")
-	SKI_FavoritesManagerInstance.SaveEquipStateKey = GetModSettingInt("iFavoriteEquipStateKey:Controls")
-	SKI_FavoritesManagerInstance.ToggleFocusKey = GetModSettingInt("iFavoriteToggleFocusKey:Controls")
-	SKI_FavoritesManagerInstance.SetGroupHotkey(0, GetModSettingInt("iFavoriteGroupUseHotkey1:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(1, GetModSettingInt("iFavoriteGroupUseHotkey2:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(2, GetModSettingInt("iFavoriteGroupUseHotkey3:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(3, GetModSettingInt("iFavoriteGroupUseHotkey4:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(4, GetModSettingInt("iFavoriteGroupUseHotkey5:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(5, GetModSettingInt("iFavoriteGroupUseHotkey6:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(6, GetModSettingInt("iFavoriteGroupUseHotkey7:Controls"))
-	SKI_FavoritesManagerInstance.SetGroupHotkey(7, GetModSettingInt("iFavoriteGroupUseHotkey8:Controls"))
-
-	ApplySettings()
+	LoadSettings()
 endEvent
 
 ; @implements SKI_QuestBase
 event OnGameReload()
 	parent.OnGameReload()
-	ApplySettings()
+	LoadSettings()
 endEvent
 
 ; @implements SKI_QuestBase
@@ -298,6 +220,7 @@ event OnSettingChange(string a_ID)
 		SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$nextColumn", GetModSettingInt(a_ID))
 	elseif a_ID == "iSortOrderButton:Controls"
 		SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$sortOrder", GetModSettingInt(a_ID))
+
 	elseif a_ID == "iFavoriteGroupAddKey:Controls"
 		SKI_FavoritesManagerInstance.GroupAddKey = GetModSettingInt(a_ID)
 	elseif a_ID == "iFavoriteGroupUseKey:Controls"
@@ -426,6 +349,79 @@ bool property DisablePositioning3DItem
 	endFunction
 endProperty
 
+function LoadSettings()
+	; ItemList
+	SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", \
+		GetModSettingFloat("iQuantityMinCount:ItemList"))
+	SKI_SettingsManagerInstance.SetOverride("Appearance$icons$category$source", \
+		_categoryIconThemeValues[GetModSettingInt("iCategoryIconTheme:ItemList")])
+	SKI_SettingsManagerInstance.SetOverride("Appearance$icons$item$noColor", \
+		GetModSettingBool("bNoIconColors:ItemList"))
+
+	; EffectWidget
+	SKI_ActiveEffectsWidgetInstance.Enabled = GetModSettingBool("bEnabled:EffectWidget")
+	SKI_ActiveEffectsWidgetInstance.EffectSize = _effectWidgetIconSizeValues[GetModSettingInt("iIconSize:EffectWidget")]
+	SKI_ActiveEffectsWidgetInstance.Orientation = _orientationValues[GetModSettingInt("iOrientation:EffectWidget")]
+
+	int effectWidgetHAnchorIdx = GetModSettingInt("iHorizontalAnchor:EffectWidget")
+	SKI_ActiveEffectsWidgetInstance.HAnchor = _alignmentValues[effectWidgetHAnchorIdx]
+	SKI_ActiveEffectsWidgetInstance.X = _alignmentBaseOffsets[effectWidgetHAnchorIdx] + GetModSettingInt("iXOffset:EffectWidget")
+
+	int effectWidgetVAnchorIdx = GetModSettingInt("iVerticalAnchor:EffectWidget")
+	SKI_ActiveEffectsWidgetInstance.VAnchor = _vertAlignmentValues[effectWidgetVAnchorIdx]
+	SKI_ActiveEffectsWidgetInstance.Y = _vertAlignmentBaseOffsets[effectWidgetVAnchorIdx] + GetModSettingInt("iYOffset:EffectWidget")
+
+	SKI_ActiveEffectsWidgetInstance.MinimumTimeLeft = GetModSettingInt("iMinTimeLeft:EffectWidget")
+	SKI_ActiveEffectsWidgetInstance.GroupEffectCount = GetModSettingInt("iGroupEffectCount:EffectWidget")
+	SKI_ActiveEffectsWidgetInstance.X = \
+		_alignmentBaseOffsets[GetModSettingInt("iHorizontalAnchor:EffectWidget")] + GetModSettingInt("iXOffset:EffectWidget")
+	SKI_ActiveEffectsWidgetInstance.Y = \
+		_vertAlignmentBaseOffsets[GetModSettingInt("iVerticalAnchor:EffectWidget")] + GetModSettingInt("iYOffset:EffectWidget")
+
+	; ItemCard
+	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$align", _alignmentValues[GetModSettingInt("iAlign:ItemCard")])
+	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$xOffset", GetModSettingInt("iXOffset:ItemCard"))
+	SKI_SettingsManagerInstance.SetOverride("ItemInfo$itemcard$yOffset", GetModSettingInt("iYOffset:ItemCard"))
+
+	; FavoritesMenu
+	SKI_FavoritesManagerInstance.ButtonHelpEnabled = GetModSettingBool("bHelpEnabled:FavoritesMenu")
+
+	; SWFVersionCheck
+	SKI_MainInstance.MapMenuCheckEnabled = GetModSettingBool("bMapMenu:SWFVersionCheck")
+	SKI_MainInstance.FavoritesMenuCheckEnabled = GetModSettingBool("bFavoritesMenu:SWFVersionCheck")
+	SKI_MainInstance.InventoryMenuCheckEnabled = GetModSettingBool("bInventoryMenu:SWFVersionCheck")
+	SKI_MainInstance.MagicMenuCheckEnabled = GetModSettingBool("bMagicMenu:SWFVersionCheck")
+	SKI_MainInstance.BarterMenuCheckEnabled = GetModSettingBool("bBarterMenu:SWFVersionCheck")
+	SKI_MainInstance.ContainerMenuCheckEnabled = GetModSettingBool("bContainerMenu:SWFVersionCheck")
+	SKI_MainInstance.CraftingMenuCheckEnabled = GetModSettingBool("bCraftingMenu:SWFVersionCheck")
+	SKI_MainInstance.GiftMenuCheckEnabled = GetModSettingBool("bGiftMenu:SWFVersionCheck")
+
+	; Controls
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$search", GetModSettingInt("iSearchKey:Controls"))
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$switchTab", GetModSettingInt("iSwitchTabKey:Controls"))
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$equipMode", GetModSettingInt("iEquipModeKey:Controls"))
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$switchTab", GetModSettingInt("iSwitchTabButton:Controls"))
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$prevColumn", GetModSettingInt("iPreviousColumnButton:Controls"))
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$nextColumn", GetModSettingInt("iNextColumnButton:Controls"))
+	SKI_SettingsManagerInstance.SetOverride("Input$controls$gamepad$sortOrder", GetModSettingInt("iSortOrderButton:Controls"))
+
+	SKI_FavoritesManagerInstance.GroupAddKey = GetModSettingInt("iFavoriteGroupAddKey:Controls")
+	SKI_FavoritesManagerInstance.GroupUseKey = GetModSettingInt("iFavoriteGroupUseKey:Controls")
+	SKI_FavoritesManagerInstance.SetIconKey = GetModSettingInt("iFavoriteSetIconKey:Controls")
+	SKI_FavoritesManagerInstance.SaveEquipStateKey = GetModSettingInt("iFavoriteEquipStateKey:Controls")
+	SKI_FavoritesManagerInstance.ToggleFocusKey = GetModSettingInt("iFavoriteToggleFocusKey:Controls")
+	SKI_FavoritesManagerInstance.SetGroupHotkey(0, GetModSettingInt("iFavoriteGroupUseHotkey1:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(1, GetModSettingInt("iFavoriteGroupUseHotkey2:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(2, GetModSettingInt("iFavoriteGroupUseHotkey3:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(3, GetModSettingInt("iFavoriteGroupUseHotkey4:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(4, GetModSettingInt("iFavoriteGroupUseHotkey5:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(5, GetModSettingInt("iFavoriteGroupUseHotkey6:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(6, GetModSettingInt("iFavoriteGroupUseHotkey7:Controls"))
+	SKI_FavoritesManagerInstance.SetGroupHotkey(7, GetModSettingInt("iFavoriteGroupUseHotkey8:Controls"))
+
+	ApplySettings()
+endFunction
+
 function ApplySettings()
 	; Apply settings that aren't handled by SKI_SettingsManagerInstance
 
@@ -497,19 +493,19 @@ endFunction
 ; int		_searchKeyOID_K					; (4)
 ; int		_switchTabKeyOID_K				; (4)
 ; int		_equipModeKeyOID_K				; (4)
-;string[]	_alignments						; (MCM Helper)
-;string[]	_sizes							; (MCM Helper)
-;int		_itemlistFontSizeIdx			; (MCM Helper)
-;int		_itemlistQuantityMinCount		; (MCM Helper)
-;int		_itemcardAlignIdx				; (MCM Helper)
-;float		_itemcardXOffset				; (MCM Helper)
-;float		_itemcardYOffset				; (MCM Helper)
-;float		_3DItemXOffset					; (MCM Helper)
-;float		_3DItemYOffset					; (MCM Helper)
-;float		_3DItemScale					; (MCM Helper)
-;int		_searchKey						; (MCM Helper)
-;int		_switchTabKey					; (MCM Helper)
-;int		_equipModeKey					; (MCM Helper)
+; string[]	_alignments						; (MCM Helper)
+; string[]	_sizes							; (MCM Helper)
+; int		_itemlistFontSizeIdx			; (MCM Helper)
+; int		_itemlistQuantityMinCount		; (MCM Helper)
+; int		_itemcardAlignIdx				; (MCM Helper)
+; float		_itemcardXOffset				; (MCM Helper)
+; float		_itemcardYOffset				; (MCM Helper)
+; float		_3DItemXOffset					; (MCM Helper)
+; float		_3DItemYOffset					; (MCM Helper)
+; float		_3DItemScale					; (MCM Helper)
+; int		_searchKey						; (MCM Helper)
+; int		_switchTabKey					; (MCM Helper)
+; int		_equipModeKey					; (MCM Helper)
 
 
 ; -- Version 2 --
@@ -520,37 +516,37 @@ endFunction
 ; int		_prevColumnButtonOID_K 			; (4)
 ; int		_nextColumnButtonOID_K 			; (4)
 ; int		_sortOrderButtonOID_K 			; (4)
-;string[]	_categoryIconThemeShortNames	; (MCM Helper)
-;string[]	_categoryIconThemeLongNames		; (MCM Helper)
-;int		_categoryIconThemeIdx			; (MCM Helper)
-;bool		_itemlistNoIconColors			; (MCM Helper)
-;int		_switchTabButton				; (MCM Helper)
-;int		_prevColumnButton				; (MCM Helper)
-;int		_nextColumnButton				; (MCM Helper)
-;int		_sortOrderButton				; (MCM Helper)
+; string[]	_categoryIconThemeShortNames	; (MCM Helper)
+; string[]	_categoryIconThemeLongNames		; (MCM Helper)
+; int		_categoryIconThemeIdx			; (MCM Helper)
+; bool		_itemlistNoIconColors			; (MCM Helper)
+; int		_switchTabButton				; (MCM Helper)
+; int		_prevColumnButton				; (MCM Helper)
+; int		_nextColumnButton				; (MCM Helper)
+; int		_sortOrderButton				; (MCM Helper)
 
 
 ; -- Version 3 --
 
 ; int		_3DItemDisablePositioningOID_B	; (4)
-;bool		_3DItemDisablePositioning		; (MCM Helper)
-;int		_3DItemFlags					; (MCM Helper)
+; bool		_3DItemDisablePositioning		; (MCM Helper)
+; int		_3DItemFlags					; (MCM Helper)
 
 
 ; -- Version 4 --
-;string[]	_orientations					; (MCM Helper)
-;string[]	_vertAlignments					; (MCM Helper)
-;int		_effectWidgetIconSizeIdx		; (MCM Helper)
-;int		_effectWidgetVAnchorIdx			; (MCM Helper)
-;int		_effectWidgetHAnchorIdx			; (MCM Helper)
-;int		_effectWidgetGroupCount			; (MCM Helper)
-;int		_effectWidgetOrientationIdx		; (MCM Helper)
-;float		_effectWidgetXOffset			; (MCM Helper)
-;float		_effectWidgetYOffset			; (MCM Helper)
-;int		_effectWidgetFlags				; (MCM Helper)
+; string[]	_orientations					; (MCM Helper)
+; string[]	_vertAlignments					; (MCM Helper)
+; int		_effectWidgetIconSizeIdx		; (MCM Helper)
+; int		_effectWidgetVAnchorIdx			; (MCM Helper)
+; int		_effectWidgetHAnchorIdx			; (MCM Helper)
+; int		_effectWidgetGroupCount			; (MCM Helper)
+; int		_effectWidgetOrientationIdx		; (MCM Helper)
+; float		_effectWidgetXOffset			; (MCM Helper)
+; float		_effectWidgetYOffset			; (MCM Helper)
+; int		_effectWidgetFlags				; (MCM Helper)
 
 
 ; -- Version 6 --
 
-;string[]	_favGroupNames					; (MCM Helper)
-;int		_favCurGroupIdx					; (MCM Helper)
+; string[]	_favGroupNames					; (MCM Helper)
+; int		_favCurGroupIdx					; (MCM Helper)
