@@ -26,7 +26,7 @@ Function RefreshMenu() native
 
 ; Dynamically override menu options via script.
 ; The supplied ID must refer to a menu control.
-Function SetMenuOptions(string a_ID, string[] a_options, string[] a_shortNames = none) native
+Function SetMenuOptions(string a_ID, string[] a_options, string[] a_shortNames = None) native
 
 ;-----------------
 ; Mod Settings

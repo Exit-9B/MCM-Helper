@@ -153,7 +153,7 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 				if (!requirement.is_string())
 					continue;
 
-				auto dataHandler = RE::TESDataHandler::GetSingleton();
+				const auto dataHandler = RE::TESDataHandler::GetSingleton();
 				if (dataHandler && !dataHandler->LookupModByName(requirement))
 				{
 					logger::warn(
@@ -183,8 +183,8 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 
 	_configStore[plugin] = config;
 
-	auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 	auto pagesVariable = a_configScript->GetProperty("Pages");
 
 	if (vm && pagesVariable)

@@ -75,8 +75,8 @@ void ScriptObject::RegisterForModEvent(
 	RE::BSFixedString a_eventName,
 	RE::BSFixedString a_callbackName)
 {
-	auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
 	if (vm)
 	{
@@ -91,8 +91,8 @@ void ScriptObject::UnregisterForModEvent(
 	ScriptObjectPtr a_object,
 	RE::BSFixedString a_eventName)
 {
-	auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
 	if (vm)
 	{

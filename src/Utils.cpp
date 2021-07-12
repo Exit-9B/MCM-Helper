@@ -9,7 +9,7 @@ RE::TESForm* Utils::GetFormFromIdentifier(const std::string& a_identifier)
 	std::getline(ss, id);
 	RE::FormID relativeID;
 	std::istringstream{ id } >> std::hex >> relativeID;
-	auto dataHandler = RE::TESDataHandler::GetSingleton();
+	const auto dataHandler = RE::TESDataHandler::GetSingleton();
 	return dataHandler ? dataHandler->LookupForm(relativeID, plugin) : nullptr;
 }
 
@@ -53,7 +53,7 @@ auto Utils::GetScriptObject(RE::TESForm* a_form, const char* a_scriptName) -> Sc
 		return nullptr;
 	}
 
-	auto skyrimVM = RE::SkyrimVM::GetSingleton();
+	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 
 	auto typeID = static_cast<RE::VMTypeID>(a_form->GetFormType());
 	RE::VMHandle handle = skyrimVM->handlePolicy.GetHandleForObject(typeID, a_form);

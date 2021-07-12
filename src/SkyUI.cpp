@@ -6,7 +6,7 @@ namespace SkyUI
 {
 	auto ConfigManager::GetInstance() -> ScriptObjectPtr
 	{
-		auto dataHandler = RE::TESDataHandler::GetSingleton();
+		const auto dataHandler = RE::TESDataHandler::GetSingleton();
 		auto configManagerInstance = dataHandler->LookupForm(0x00000802, SkyUI::PluginName);
 		return
 			configManagerInstance
@@ -171,8 +171,8 @@ namespace SkyUI
 		float a_x,
 		float a_y)
 	{
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			RE::GFxValue params[]{ a_x, a_y };
@@ -189,8 +189,8 @@ namespace SkyUI
 
 	void Config::UnloadCustomContent()
 	{
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			menu->uiMovie->InvokeNoReturn(
@@ -222,8 +222,8 @@ namespace SkyUI
 		oldFlags %= 0x100;
 		oldFlags += static_cast<std::int32_t>(a_flags) * 0x100;
 
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			RE::GFxValue params[]{ index, a_flags };
@@ -540,8 +540,8 @@ namespace SkyUI
 			return;
 		}
 
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			std::vector<RE::GFxValue> args;
@@ -654,8 +654,8 @@ namespace SkyUI
 		SetBool(a_object, "_waitForMessage"sv, true);
 		SetBool(a_object, "_messageResult"sv, false);
 
-		auto skyrimVM = RE::SkyrimVM::GetSingleton();
-		auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+		const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+		const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
@@ -677,8 +677,8 @@ namespace SkyUI
 
 				virtual void operator()([[maybe_unused]] RE::BSScript::Variable a_result) override
 				{
-					auto skyrimVM = RE::SkyrimVM::GetSingleton();
-					auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+					const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+					const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
 					if (!GetBool(self, "_waitForMessage"sv))
 					{
@@ -780,8 +780,8 @@ namespace SkyUI
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
 
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursorIndex", a_index);
@@ -804,8 +804,8 @@ namespace SkyUI
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
 
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursorIndex", a_index);
@@ -829,8 +829,8 @@ namespace SkyUI
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
 
-		auto ui = RE::UI::GetSingleton();
-		auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+		const auto ui = RE::UI::GetSingleton();
+		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		if (menu)
 		{
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursorIndex", a_index);
