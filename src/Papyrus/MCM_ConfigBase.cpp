@@ -525,24 +525,10 @@ namespace Papyrus
 		}
 	}
 
-	std::string MCM_ConfigBase::GetCustomControl(
-		[[maybe_unused]] RE::TESQuest* a_self,
-		std::int32_t a_keyCode)
+	std::string MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode)
 	{
-		std::string name;
-		ConfigPageCache::GetInstance().ForEach([&](std::int32_t, std::shared_ptr<Control> control)
-			{
-				if (auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control))
-				{
-					if (!keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode)
-					{
-						name = keymap->Text;
-						return;
-					}
-				}
-			});
-
-		return name;
+		auto config = ConfigStore::GetInstance().GetConfig(a_self);
+		return config ? config->GetCustomControl(a_keyCode) : ""s;
 	}
 
 	void MCM_ConfigBase::SendSettingChangeEvent(

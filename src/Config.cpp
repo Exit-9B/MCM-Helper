@@ -33,3 +33,36 @@ void Config::RefreshPage(ScriptObjectPtr a_object) const
 			a_control->Refresh(a_object, a_ID);
 		});
 }
+
+auto Config::GetCustomControl(std::int32_t a_keyCode) const -> std::string
+{
+	if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(MainPage))
+	{
+		for (auto& control : pageLayout->Controls)
+		{
+			auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control);
+			if (keymap && !keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode)
+			{
+				return keymap->Text;
+			}
+		}
+	}
+
+	for (auto& [name, page] : SubPages)
+	{
+		auto pageLayout = std::dynamic_pointer_cast<PageLayout>(page);
+		if (!pageLayout)
+			continue;
+
+		for (auto& control : pageLayout->Controls)
+		{
+			auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control);
+			if (keymap && !keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode)
+			{
+				return keymap->Text;
+			}
+		}
+	}
+
+	return ""s;
+}
