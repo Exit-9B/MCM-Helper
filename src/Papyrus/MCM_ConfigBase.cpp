@@ -25,6 +25,10 @@ namespace Papyrus
 		std::vector<RE::BSFixedString> a_options,
 		std::vector<RE::BSFixedString> a_shortNames)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		std::string id{ a_ID };
 		std::vector<std::string> options;
 		options.reserve(a_options.size());
@@ -40,7 +44,7 @@ namespace Papyrus
 			shortNames.push_back(std::string{ shortName });
 		}
 
-		ConfigPageCache::GetInstance().SetMenuOptions(id, options, shortNames);
+		configPageCache.SetMenuOptions(id, options, shortNames);
 	}
 
 	auto MCM_ConfigBase::GetModSettingInt(
@@ -144,10 +148,14 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnOptionHighlight(RE::TESQuest* a_self, std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 		if (control && !control->Help.empty())
 		{
 			SkyUI::Config::SetInfoText(object, control->Help);
@@ -160,9 +168,13 @@ namespace Papyrus
 		RE::TESQuest* a_self,
 		std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto toggle = std::dynamic_pointer_cast<ToggleControl>(control))
 		{
@@ -213,9 +225,13 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnOptionDefault(RE::TESQuest* a_self, std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (control)
 		{
@@ -229,10 +245,14 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnOptionSliderOpen(RE::TESQuest* a_self, std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto slider = std::dynamic_pointer_cast<SliderControl>(control))
 		{
@@ -257,10 +277,14 @@ namespace Papyrus
 		std::int32_t a_option,
 		float a_value)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto slider = std::dynamic_pointer_cast<SliderControl>(control))
 		{
@@ -277,14 +301,18 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnOptionMenuOpen(RE::TESQuest* a_self, std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
 		{
-			auto options = ConfigPageCache::GetInstance().GetMenuOptions(menu.get());
+			auto options = configPageCache.GetMenuOptions(menu.get());
 			auto item = std::find(options.begin(), options.end(), menu->GetValue());
 			SkyUI::Config::SetMenuDialogOptions(object, options);
 			if (item != options.end())
@@ -325,10 +353,13 @@ namespace Papyrus
 		std::int32_t a_option,
 		std::int32_t a_index)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto& configPageCache = ConfigPageCache::GetInstance();
 		auto control = configPageCache.GetControl(a_option);
 
 		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
@@ -372,10 +403,14 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnOptionColorOpen(RE::TESQuest* a_self, std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto color = std::dynamic_pointer_cast<ColorControl>(control))
 		{
@@ -399,10 +434,14 @@ namespace Papyrus
 		std::int32_t a_option,
 		std::uint32_t a_color)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto color = std::dynamic_pointer_cast<ColorControl>(control))
 		{
@@ -426,10 +465,14 @@ namespace Papyrus
 		std::string_view a_conflictControl,
 		std::string_view a_conflictName)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control))
 		{
@@ -473,10 +516,14 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnOptionInputOpen(RE::TESQuest* a_self, std::int32_t a_option)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto input = std::dynamic_pointer_cast<InputControl>(control))
 		{
@@ -496,16 +543,20 @@ namespace Papyrus
 		std::int32_t a_option,
 		std::string_view a_input)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		auto control = ConfigPageCache::GetInstance().GetControl(a_option);
+		auto control = configPageCache.GetControl(a_option);
 
 		if (auto input = std::dynamic_pointer_cast<InputControl>(control))
 		{
 			if (!input->PropertyName.empty())
 			{
-				auto variable = ConfigPageCache::GetInstance().GetPropertyVariable(
+				auto variable = configPageCache.GetPropertyVariable(
 					input->SourceForm,
 					input->ScriptName,
 					input->PropertyName);
