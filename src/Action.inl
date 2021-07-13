@@ -84,7 +84,7 @@ void CallFunction::Invoke(VM* a_vm, T a_value)
 		auto args = FunctionArguments::Make<T>(Params, a_value);
 
 		ScriptCallbackPtr nullCallback;
-		a_vm->DispatchMethodCall1(object, Function, args.get(), nullCallback);
+		a_vm->DispatchMethodCall(object, Function, args.get(), nullCallback);
 	}
 }
 

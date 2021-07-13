@@ -82,7 +82,7 @@ void ScriptObject::RegisterForModEvent(
 	{
 		auto args = RE::MakeFunctionArguments(std::move(a_eventName), std::move(a_callbackName));
 		ScriptCallbackPtr nullCallback;
-		vm->DispatchMethodCall1(a_object, "RegisterForModEvent", args, nullCallback);
+		vm->DispatchMethodCall(a_object, "RegisterForModEvent", args, nullCallback);
 		delete args;
 	}
 }
@@ -98,7 +98,7 @@ void ScriptObject::UnregisterForModEvent(
 	{
 		auto args = RE::MakeFunctionArguments(std::move(a_eventName));
 		ScriptCallbackPtr nullCallback;
-		vm->DispatchMethodCall1(a_object, "UnregisterForModEvent", args, nullCallback);
+		vm->DispatchMethodCall(a_object, "UnregisterForModEvent", args, nullCallback);
 		delete args;
 	}
 }

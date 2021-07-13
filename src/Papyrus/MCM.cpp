@@ -2,7 +2,6 @@
 #include "SettingStore.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func)
-#define REGISTER_LATENT_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func, true)
 
 auto Papyrus::MCM::IsInstalled(RE::StaticFunctionTag*) -> bool
 {

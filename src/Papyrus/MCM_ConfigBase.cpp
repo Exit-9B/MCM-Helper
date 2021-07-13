@@ -4,7 +4,6 @@
 #include "ConfigPageCache.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func)
-#define REGISTER_LATENT_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func, true)
 
 namespace Papyrus
 {
@@ -125,6 +124,7 @@ namespace Papyrus
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		if (object)
 		{
+			auto startTime = std::chrono::steady_clock::now();
 			ConfigStore::GetInstance().ReadConfig(object);
 
 			auto configManager = SkyUI::ConfigManager::GetInstance();
@@ -132,6 +132,14 @@ namespace Papyrus
 			{
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, object);
 			}
+
+			auto endTime = std::chrono::steady_clock::now();
+			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+
+			logger::info(
+				"Registered mod config for {} in {} ms."sv,
+				Utils::GetModName(a_self),
+				elapsedMs.count());
 		}
 	}
 
@@ -601,7 +609,7 @@ namespace Papyrus
 
 		ScriptCallbackPtr nullCallback;
 		auto args = RE::MakeFunctionArguments(std::move(a_ID));
-		a_vm->DispatchMethodCall1(a_object, "OnSettingChange"sv, args, nullCallback);
+		a_vm->DispatchMethodCall(a_object, "OnSettingChange"sv, args, nullCallback);
 		delete args;
 	}
 
