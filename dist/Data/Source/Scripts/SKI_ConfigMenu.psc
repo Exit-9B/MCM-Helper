@@ -354,8 +354,8 @@ function ChooseFavoriteGroup(int a_value)
 	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
 	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
 
-	UnequipArmor = SKI_FavoritesManagerInstance.GetGroupFlag(0, ARMOR_FLAG)
-	UnequipHands = SKI_FavoritesManagerInstance.GetGroupFlag(0, HANDS_FLAG)
+	UnequipArmor = SKI_FavoritesManagerInstance.GetGroupFlag(a_value, ARMOR_FLAG)
+	UnequipHands = SKI_FavoritesManagerInstance.GetGroupFlag(a_value, HANDS_FLAG)
 
 	RefreshMenu()
 endFunction
