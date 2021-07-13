@@ -107,8 +107,7 @@ auto TextControl::GetValue() -> std::string
 {
 	if (!PropertyName.empty())
 	{
-		auto& configPageCache = ConfigPageCache::GetInstance();
-		auto variable = configPageCache.GetPropertyVariable(SourceForm, ScriptName, PropertyName);
+		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
 		if (variable && variable->IsString())
 		{
 			return std::string{ variable->GetString() };
@@ -251,8 +250,7 @@ auto MenuControl::GetValue() -> std::string
 {
 	if (!PropertyName.empty())
 	{
-		auto& configPageCache = ConfigPageCache::GetInstance();
-		auto variable = configPageCache.GetPropertyVariable(SourceForm, ScriptName, PropertyName);
+		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
 		if (variable && variable->IsString())
 		{
 			return std::string{ variable->GetString() };
@@ -426,8 +424,7 @@ auto InputControl::GetValue() -> std::string
 {
 	if (!PropertyName.empty())
 	{
-		auto& configPageCache = ConfigPageCache::GetInstance();
-		auto variable = configPageCache.GetPropertyVariable(SourceForm, ScriptName, PropertyName);
+		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
 		if (variable && variable->IsString())
 		{
 			return std::string{ variable->GetString() };

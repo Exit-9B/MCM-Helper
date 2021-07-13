@@ -12,11 +12,16 @@ namespace Utils
 	// Papyrus
 	auto GetScriptObject(
 		RE::TESForm* a_form,
-		const char* a_scriptName) -> ScriptObjectPtr;
+		const std::string& a_scriptName) -> ScriptObjectPtr;
+
+	RE::BSScript::Variable* GetScriptProperty(
+		RE::TESForm* a_form,
+		const std::string& a_scriptName,
+		std::string_view a_propertyName);
 
 	RE::BSScript::Variable* GetScriptVariable(
 		RE::TESForm* a_form,
-		const char* a_scriptName,
+		const std::string& a_scriptName,
 		std::string_view a_variableName);
 
 	RE::BSScript::Variable* GetVariable(

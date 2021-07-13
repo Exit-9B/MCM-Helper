@@ -78,8 +78,7 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 {
 	assert(a_configScript);
 
-	auto typeID = static_cast<RE::VMTypeID>(RE::TESQuest::FORMTYPE);
-	auto quest = static_cast<RE::TESQuest*>(a_configScript->Resolve(typeID));
+	auto quest = GetFormFromScript(a_configScript);
 	auto plugin = Utils::GetModName(quest);
 
 	if (plugin.empty())
@@ -170,13 +169,13 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 
 	auto config = std::make_shared<Config>();
 
-	config->MainPage = ReadPage(plugin, configDefinition);
+	config->MainPage = ReadPage(a_configScript, configDefinition);
 	try {
 		auto& pages = configDefinition.at("pages");
 		for (auto& page : pages)
 		{
 			auto pageDisplayName = page.at("pageDisplayName").get<std::string>();
-			config->SubPages[pageDisplayName] = ReadPage(plugin, page);
+			config->SubPages[pageDisplayName] = ReadPage(a_configScript, page);
 		}
 	}
 	catch (const json::exception&) {}
@@ -227,7 +226,9 @@ auto ConfigStore::GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Conf
 	return GetConfig(modName);
 }
 
-auto ConfigStore::ReadPage(const std::string& a_modName, const json& a_page)
+auto ConfigStore::ReadPage(
+	ScriptObjectPtr& a_configScript,
+	const json& a_page)
 	-> std::shared_ptr<PageContent>
 {
 	try {
@@ -238,7 +239,7 @@ auto ConfigStore::ReadPage(const std::string& a_modName, const json& a_page)
 
 	try {
 		auto& content = a_page.at("content");
-		auto page = ReadContent(a_modName, content);
+		auto page = ReadContent(a_configScript, content);
 		if (page)
 		{
 			try {
@@ -285,7 +286,9 @@ auto ConfigStore::ReadCustomContent(const json& a_customContent) -> std::shared_
 	return content;
 }
 
-auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_content)
+auto ConfigStore::ReadContent(
+	ScriptObjectPtr& a_configScript,
+	const json& a_content)
 	-> std::shared_ptr<PageLayout>
 {
 	auto content = std::make_shared<PageLayout>();
@@ -326,17 +329,22 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 						try {
 							valueOptions.at("scriptName").get_to(textOption->ScriptName);
 						}
-						catch (const json::exception&) {}
+						catch (const json::exception&) {
+							textOption->ScriptName = a_configScript->GetTypeInfo()->GetName();
+						}
 					}
 					catch (const json::exception&) {}
 
-					textOption->ModName = a_modName;
+					textOption->ModName = GetModName(a_configScript);
 
 					try {
 						auto sourceForm = valueOptions.at("sourceForm").get<std::string>();
 						textOption->SourceForm = Utils::GetFormFromIdentifier(sourceForm);
 					}
-					catch (const json::exception&) {}
+					catch (const json::exception&)
+					{
+						textOption->SourceForm = GetFormFromScript(a_configScript);
+					}
 				}
 				catch (const json::exception&) {}
 				control = textOption;
@@ -361,7 +369,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 
 				try {
 					auto& valueOptions = element.at("valueOptions");
-					toggleOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+					toggleOption->ValueSource = ReadValueSource(a_configScript, id, valueOptions);
 				}
 				catch (const json::out_of_range&) {}
 
@@ -378,7 +386,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 				valueOptions.at("min").get_to(sliderOption->Min);
 				valueOptions.at("max").get_to(sliderOption->Max);
 				valueOptions.at("step").get_to(sliderOption->Step);
-				sliderOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+				sliderOption->ValueSource = ReadValueSource(a_configScript, id, valueOptions);
 
 				try {
 					element.at("formatString").get_to(sliderOption->FormatString);
@@ -403,7 +411,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 					}
 				}
 				catch (const json::exception&) {}
-				stepperOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+				stepperOption->ValueSource = ReadValueSource(a_configScript, id, valueOptions);
 				control = stepperOption;
 			}
 			else if (type == "menu") {
@@ -436,15 +444,19 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 				try {
 					valueOptions.at("scriptName").get_to(menuOption->ScriptName);
 				}
-				catch (const json::exception&) {}
+				catch (const json::exception&) {
+					menuOption->ScriptName = a_configScript->GetTypeInfo()->GetName();
+				}
 
-				menuOption->ModName = a_modName;
+				menuOption->ModName = GetModName(a_configScript);
 
 				try {
 					auto sourceForm = valueOptions.at("sourceForm").get<std::string>();
 					menuOption->SourceForm = Utils::GetFormFromIdentifier(sourceForm);
 				}
-				catch (const json::exception&) {}
+				catch (const json::exception&) {
+					menuOption->SourceForm = GetFormFromScript(a_configScript);
+				}
 
 				control = menuOption;
 			}
@@ -474,7 +486,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 				}
 				catch (const json::exception&) {}
 
-				enumOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+				enumOption->ValueSource = ReadValueSource(a_configScript, id, valueOptions);
 				control = enumOption;
 			}
 			else if (type == "color") {
@@ -486,7 +498,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 
 				try {
 					auto& valueOptions = element.at("valueOptions");
-					colorOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+					colorOption->ValueSource = ReadValueSource(a_configScript, id, valueOptions);
 				}
 				catch (const json::out_of_range&) {}
 				control = colorOption;
@@ -505,7 +517,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 
 				try {
 					auto& valueOptions = element.at("valueOptions");
-					keyMapOption->ValueSource = ReadValueSource(a_modName, id, valueOptions);
+					keyMapOption->ValueSource = ReadValueSource(a_configScript, id, valueOptions);
 				}
 				catch (const json::out_of_range&) {}
 				control = keyMapOption;
@@ -522,15 +534,19 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 				try {
 					valueOptions.at("scriptName").get_to(inputOption->ScriptName);
 				}
-				catch (const json::exception&) {}
+				catch (const json::exception&) {
+					inputOption->ScriptName = a_configScript->GetTypeInfo()->GetName();
+				}
 
-				inputOption->ModName = a_modName;
+				inputOption->ModName = GetModName(a_configScript);
 
 				try {
 					auto sourceForm = valueOptions.at("sourceForm").get<std::string>();
 					inputOption->SourceForm = Utils::GetFormFromIdentifier(sourceForm);
 				}
-				catch (const json::exception&) {}
+				catch (const json::exception&) {
+					inputOption->SourceForm = GetFormFromScript(a_configScript);
+				}
 
 				control = inputOption;
 			}
@@ -559,7 +575,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 
 		try {
 			auto& action = element.at("action");
-			control->Action = ReadAction(action);
+			control->Action = ReadAction(a_configScript, action);
 		}
 		catch (const json::exception&) {}
 
@@ -589,7 +605,7 @@ auto ConfigStore::ReadContent(const std::string& a_modName, const json& a_conten
 }
 
 auto ConfigStore::ReadValueSource(
-	const std::string& a_modName,
+	ScriptObjectPtr& a_configScript,
 	const std::string& a_ID,
 	const json& a_valueOptions)
 	-> std::shared_ptr<ValueSource>
@@ -615,13 +631,17 @@ auto ConfigStore::ReadValueSource(
 				try {
 					a_valueOptions.at("scriptName").get_to(propertyValue->ScriptName);
 				}
-				catch (const json::exception&) {}
+				catch (const json::exception&) {
+					propertyValue->ScriptName = a_configScript->GetTypeInfo()->GetName();
+				}
 
 				try {
 					auto sourceForm = a_valueOptions.at("sourceForm").get<std::string>();
 					propertyValue->SourceForm = Utils::GetFormFromIdentifier(sourceForm);
 				}
-				catch (const json::exception&) {}
+				catch (const json::exception&) {
+					propertyValue->SourceForm = GetFormFromScript(a_configScript);
+				}
 
 				return propertyValue;
 			}
@@ -641,7 +661,7 @@ auto ConfigStore::ReadValueSource(
 
 			if (modSetting)
 			{
-				modSetting->ModName = a_modName;
+				modSetting->ModName = GetModName(a_configScript);
 				modSetting->ID = a_ID;
 
 				return modSetting;
@@ -661,7 +681,8 @@ auto ConfigStore::ReadValueSource(
 		return nullptr;
 	}
 	catch (const json::exception&) {
-		logger::warn("Failed to parse value source. ({}:{})"sv, a_modName, a_ID);
+		auto modName = GetModName(a_configScript);
+		logger::warn("Failed to parse value source. ({}:{})"sv, modName, a_ID);
 		return nullptr;
 	}
 }
@@ -739,7 +760,8 @@ auto ConfigStore::ReadGroupCondition(const json& a_groupCondition)
 	return groupCondition;
 }
 
-auto ConfigStore::ReadAction(const json& a_action) -> std::shared_ptr<Action>
+auto ConfigStore::ReadAction(ScriptObjectPtr& a_configScript, const json& a_action)
+	-> std::shared_ptr<Action>
 {
 	auto type = a_action.at("type").get<std::string>();
 
@@ -753,12 +775,16 @@ auto ConfigStore::ReadAction(const json& a_action) -> std::shared_ptr<Action>
 			auto form = Utils::GetFormFromIdentifier(formIdentifier);
 			callFunction->Form = form;
 		}
-		catch (const json::exception&) {}
+		catch (const json::exception&) {
+			callFunction->Form = GetFormFromScript(a_configScript);
+		}
 
 		try {
 			a_action.at("scriptName").get_to(callFunction->ScriptName);
 		}
-		catch (const json::exception&) {}
+		catch (const json::exception&) {
+			callFunction->ScriptName = a_configScript->GetTypeInfo()->GetName();
+		}
 
 		action = callFunction;
 	}
@@ -769,7 +795,9 @@ auto ConfigStore::ReadAction(const json& a_action) -> std::shared_ptr<Action>
 		try {
 			a_action.at("script").get_to(callGlobalFunction->ScriptName);
 		}
-		catch (const json::exception&) {}
+		catch (const json::exception&) {
+			callGlobalFunction->ScriptName = a_configScript->GetTypeInfo()->GetName();
+		}
 
 		action = callGlobalFunction;
 	}
@@ -802,4 +830,17 @@ auto ConfigStore::ReadAction(const json& a_action) -> std::shared_ptr<Action>
 	}
 
 	return action;
+}
+
+auto ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*
+{
+	auto typeID = static_cast<RE::VMTypeID>(RE::TESQuest::FORMTYPE);
+	auto quest = static_cast<RE::TESQuest*>(a_configScript->Resolve(typeID));
+	return quest;
+}
+
+auto ConfigStore::GetModName(ScriptObjectPtr& a_configScript) -> std::string
+{
+	auto quest = GetFormFromScript(a_configScript);
+	return Utils::GetModName(quest);
 }

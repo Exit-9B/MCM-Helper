@@ -9,8 +9,7 @@ float ValueSource::GetDefaultValue()
 
 float PropertyValue::GetValue()
 {
-	auto& configPageCache = ConfigPageCache::GetInstance();
-	auto variable = configPageCache.GetPropertyVariable(SourceForm, ScriptName, PropertyName);
+	auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
 	if (variable)
 	{
 		return GetValue(*variable);
@@ -73,8 +72,7 @@ float GlobalValue::GetValue()
 
 void PropertyValue::SetValue(float a_value)
 {
-	auto& configPageCache = ConfigPageCache::GetInstance();
-	auto variable = configPageCache.GetPropertyVariable(SourceForm, ScriptName, PropertyName);
+	auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
 	if (variable)
 	{
 		SetValue(*variable, a_value);

@@ -39,8 +39,6 @@ public:
 	virtual void InvokeFloat(VM* a_vm, float a_value) override;
 	virtual void InvokeString(VM* a_vm, std::string_view a_value) override;
 
-	auto GetScriptObject() -> ScriptObjectPtr;
-
 	RE::TESForm* Form;
 };
 
@@ -54,8 +52,6 @@ public:
 	virtual void InvokeInt(VM* a_vm, std::int32_t a_value) override;
 	virtual void InvokeFloat(VM* a_vm, float a_value) override;
 	virtual void InvokeString(VM* a_vm, std::string_view a_value) override;
-
-	auto GetScriptName() -> std::string;
 };
 
 #include "Action.inl"

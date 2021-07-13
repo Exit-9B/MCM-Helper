@@ -46,9 +46,9 @@ auto ConfigPageCache::GetCurrentForm() const -> RE::TESForm*
 	return _currentForm;
 }
 
-auto ConfigPageCache::GetCurrentScriptName() const -> const char*
+auto ConfigPageCache::GetCurrentScriptName() const -> const std::string&
 {
-	return !_currentScript.empty() ? _currentScript.c_str() : nullptr;
+	return _currentScript;
 }
 
 auto ConfigPageCache::GetGroups() const -> std::unordered_set<std::uint32_t>
@@ -67,27 +67,6 @@ auto ConfigPageCache::IsGroupActive(std::uint32_t a_groupID) const -> bool
 	auto it = _groupControls.find(a_groupID);
 	auto control = it != _groupControls.end() ? it->second : nullptr;
 	return control ? control->GetValue() : true;
-}
-
-auto ConfigPageCache::GetPropertyVariable(
-	RE::TESForm* a_form,
-	const std::string& a_scriptName,
-	const std::string& a_propertyName)
-	-> RE::BSScript::Variable* const
-{
-	RE::TESForm* form = a_form;
-	const char* scriptName = !a_scriptName.empty() ? a_scriptName.c_str() : nullptr;
-	if (!form)
-	{
-		form = a_form ? a_form : _currentForm;
-		if (a_scriptName.empty())
-		{
-			scriptName = _currentScript.c_str();
-		}
-	}
-
-	auto script = Utils::GetScriptObject(form, scriptName);
-	return script ? script->GetProperty(a_propertyName) : nullptr;
 }
 
 auto ConfigPageCache::GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>

@@ -44,7 +44,7 @@ std::string Utils::GetModName(RE::TESForm* a_form)
 	return std::filesystem::path{ fileName }.stem().string();
 }
 
-auto Utils::GetScriptObject(RE::TESForm* a_form, const char* a_scriptName) -> ScriptObjectPtr
+auto Utils::GetScriptObject(RE::TESForm* a_form, const std::string& a_scriptName) -> ScriptObjectPtr
 {
 	if (!a_form)
 	{
@@ -57,14 +57,15 @@ auto Utils::GetScriptObject(RE::TESForm* a_form, const char* a_scriptName) -> Sc
 
 	auto typeID = static_cast<RE::VMTypeID>(a_form->GetFormType());
 	RE::VMHandle handle = skyrimVM->handlePolicy.GetHandleForObject(typeID, a_form);
+	auto scriptName = !a_scriptName.empty() ? a_scriptName.c_str() : nullptr;
 
 	ScriptObjectPtr object;
-	skyrimVM->impl->FindBoundObject(handle, a_scriptName, object);
+	skyrimVM->impl->FindBoundObject(handle, scriptName, object);
 
 	if (!object)
 	{
 		std::string formIdentifier = GetIdentifierFromForm(a_form);
-		if (a_scriptName)
+		if (!a_scriptName.empty())
 		{
 			logger::warn(
 				"Script {} is not attached to form. {}"sv,
@@ -82,9 +83,19 @@ auto Utils::GetScriptObject(RE::TESForm* a_form, const char* a_scriptName) -> Sc
 	return object;
 }
 
+RE::BSScript::Variable* Utils::GetScriptProperty(
+	RE::TESForm* a_form,
+	const std::string& a_scriptName,
+	std::string_view a_propertyName)
+{
+	auto scriptName = !a_scriptName.empty() ? a_scriptName.c_str() : nullptr;
+	auto script = Utils::GetScriptObject(a_form, scriptName);
+	return script ? script->GetProperty(a_propertyName) : nullptr;
+}
+
 RE::BSScript::Variable* Utils::GetScriptVariable(
 	RE::TESForm* a_form,
-	const char* a_scriptName,
+	const std::string& a_scriptName,
 	std::string_view a_variableName)
 {
 	auto object = GetScriptObject(a_form, a_scriptName);

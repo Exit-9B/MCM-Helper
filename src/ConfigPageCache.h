@@ -32,17 +32,11 @@ public:
 
 	auto GetCurrentForm() const -> RE::TESForm*;
 
-	auto GetCurrentScriptName() const -> const char*;
+	auto GetCurrentScriptName() const -> const std::string&;
 
 	auto GetGroups() const -> std::unordered_set<std::uint32_t>;
 
 	auto IsGroupActive(std::uint32_t a_groupID) const -> bool;
-
-	auto GetPropertyVariable(
-		RE::TESForm* a_form,
-		const std::string& a_scriptName,
-		const std::string& a_propertyName)
-		-> RE::BSScript::Variable* const;
 
 	auto GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>;
 

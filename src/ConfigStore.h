@@ -30,24 +30,34 @@ public:
 private:
 	ConfigStore();
 
-	auto ReadPage(const std::string& a_modName, const json& a_page)
+	auto ReadPage(
+		ScriptObjectPtr& a_configScript,
+		const json& a_page)
 		-> std::shared_ptr<PageContent>;
 
 	auto ReadCustomContent(const json& a_customContent)
 		-> std::shared_ptr<CustomContent>;
 
-	auto ReadContent(const std::string& a_modName, const json& a_content)
+	auto ReadContent(
+		ScriptObjectPtr& a_configScript,
+		const json& a_content)
 		-> std::shared_ptr<PageLayout>;
 
 	auto ReadValueSource(
-		const std::string& a_modName,
+		ScriptObjectPtr& a_configScript,
 		const std::string& a_ID,
 		const json& a_valueOptions)
 		-> std::shared_ptr<ValueSource>;
 
 	auto ReadGroupCondition(const json& a_groupCondition) -> std::shared_ptr<GroupConditionTree>;
 
-	auto ReadAction(const json& a_action) -> std::shared_ptr<Action>;
+	auto ReadAction(
+		ScriptObjectPtr& a_configScript,
+		const json& a_action) -> std::shared_ptr<Action>;
+
+	auto GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*;
+
+	auto GetModName(ScriptObjectPtr& a_configScript) -> std::string;
 
 	Storage _configStore;
 };

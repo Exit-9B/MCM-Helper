@@ -8,7 +8,7 @@
 
 namespace Papyrus
 {
-	void MCM_ConfigBase::RefreshMenu([[maybe_unused]] RE::TESQuest* a_self)
+	void MCM_ConfigBase::RefreshMenu(RE::TESQuest* a_self)
 	{
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
@@ -20,7 +20,7 @@ namespace Papyrus
 	}
 
 	void MCM_ConfigBase::SetMenuOptions(
-		[[maybe_unused]] RE::TESQuest* a_self,
+		RE::TESQuest* a_self,
 		std::string_view a_ID,
 		std::vector<RE::BSFixedString> a_options,
 		std::vector<RE::BSFixedString> a_shortNames)
@@ -153,7 +153,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 		if (control && !control->Help.empty())
@@ -250,7 +249,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -282,7 +280,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -306,7 +303,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -358,7 +354,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -368,7 +363,7 @@ namespace Papyrus
 			auto value = menu->GetValue();
 			if (!menu->PropertyName.empty())
 			{
-				auto variable = configPageCache.GetPropertyVariable(
+				auto variable = Utils::GetScriptProperty(
 					menu->SourceForm,
 					menu->ScriptName,
 					menu->PropertyName);
@@ -408,7 +403,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -439,7 +433,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -470,7 +463,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -521,7 +513,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -548,7 +539,6 @@ namespace Papyrus
 			return;
 
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
-		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -556,7 +546,7 @@ namespace Papyrus
 		{
 			if (!input->PropertyName.empty())
 			{
-				auto variable = configPageCache.GetPropertyVariable(
+				auto variable = Utils::GetScriptProperty(
 					input->SourceForm,
 					input->ScriptName,
 					input->PropertyName);

@@ -2,6 +2,7 @@
 
 #include "Action.h"
 #include "ColorUtil.h"
+#include "Utils.h"
 
 template <typename T>
 auto Action::FunctionArguments::Make(std::span<std::string> a_params, T a_value)
@@ -77,7 +78,7 @@ void CallFunction::Invoke(VM* a_vm, T a_value)
 	if (!a_vm || Function.empty())
 		return;
 
-	auto object = GetScriptObject();
+	auto object = Utils::GetScriptObject(Form, ScriptName);
 	if (object)
 	{
 		auto args = FunctionArguments::Make<T>(Params, a_value);
@@ -93,12 +94,11 @@ void CallGlobalFunction::Invoke(VM* a_vm, T a_value)
 	if (!a_vm || Function.empty())
 		return;
 
-	auto scriptName = GetScriptName();
-	if (!scriptName.empty())
+	if (!ScriptName.empty())
 	{
 		auto args = FunctionArguments::Make<T>(Params, a_value);
 
 		ScriptCallbackPtr nullCallback;
-		a_vm->DispatchStaticCall(scriptName, Function, args.get(), nullCallback);
+		a_vm->DispatchStaticCall(ScriptName, Function, args.get(), nullCallback);
 	}
 }
