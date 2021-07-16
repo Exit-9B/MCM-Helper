@@ -316,6 +316,12 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			control->GroupBehavior = _data.GroupBehavior;
 			control->Action = _data.Action;
 			_pageLayout->Controls.push_back(control);
+
+			if (auto toggle = std::dynamic_pointer_cast<ToggleControl>(control)) {
+				if (toggle->GroupControl > 0) {
+					_pageLayout->GroupControls[toggle->GroupControl] = toggle;
+				}
+			}
 		}
 		else {
 			return false;
