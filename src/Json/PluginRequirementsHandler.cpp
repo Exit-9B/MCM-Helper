@@ -10,30 +10,33 @@ bool PluginRequirementsHandler::String(
 	[[maybe_unused]] SizeType length,
 	[[maybe_unused]] bool copy)
 {
-	if (_state == State::Start) {
+	switch (_state) {
+	case State::Start:
+	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
 		return dataHandler && dataHandler->LookupModByName(str);
 	}
-
-	return false;
+	default:
+		return false;
+	}
 }
 
 bool PluginRequirementsHandler::StartArray()
 {
-	if (_state == State::End) {
+	switch (_state) {
+	case State::End:
 		_state = State::Start;
-		return true;
+	default:
+		return false;
 	}
-
-	return false;
 }
 
 bool PluginRequirementsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
-	if (_state == State::Start) {
+	switch (_state) {
+	case State::Start:
 		_state = State::End;
-		return true;
+	default:
+		return false;
 	}
-
-	return false;
 }

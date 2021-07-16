@@ -141,7 +141,7 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
 	case State::Start:
-		if (_data.Type == "CallFunction") {
+		if (_data.Type == "CallFunction"s) {
 			auto callFunction = std::make_shared<CallFunction>();
 			*_action = callFunction;
 			if (_data.Form) {
@@ -155,7 +155,7 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 					: _scriptName;
 			}
 		}
-		else if (_data.Type == "CallGlobalFunction") {
+		else if (_data.Type == "CallGlobalFunction"s) {
 			auto callGlobalFunction = std::make_shared<CallGlobalFunction>();
 			*_action = callGlobalFunction;
 			callGlobalFunction->ScriptName =

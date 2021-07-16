@@ -1,8 +1,6 @@
 #include "ConfigStore.h"
 #include "SkyUI.h"
 #include "Utils.h"
-#include "Config.h"
-
 #include "Json/ConfigHandler.h"
 #include <rapidjson/filereadstream.h>
 

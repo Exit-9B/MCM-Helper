@@ -97,7 +97,7 @@ bool ConfigHandler::String(const Ch* str, SizeType length, bool copy)
 		return strcmp(str, _modName.c_str()) == 0;
 	case State::DisplayName:
 	{
-		auto variable = _script->GetProperty("ModName");
+		auto variable = _script->GetProperty("ModName"sv);
 		if (variable) {
 			variable->SetString(str);
 		}

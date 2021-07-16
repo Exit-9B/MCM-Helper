@@ -228,13 +228,13 @@ bool ContentHandler::EndObject(SizeType memberCount)
 	case State::Control:
 	{
 		std::shared_ptr<Control> control;
-		if (_data.Type == "empty") {
+		if (_data.Type == "empty"s) {
 			control = std::make_shared<EmptyControl>();
 		}
-		else if (_data.Type == "header") {
+		else if (_data.Type == "header"s) {
 			control = std::make_shared<HeaderControl>();
 		}
-		else if (_data.Type == "text") {
+		else if (_data.Type == "text"s) {
 			auto textOption = std::make_shared<TextControl>();
 			textOption->Value = _data.ValueOptions.Value;
 			textOption->ModName = _modName;
@@ -243,19 +243,19 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			textOption->PropertyName = _data.ValueOptions.PropertyName;
 			control = textOption;
 		}
-		else if (_data.Type == "toggle") {
+		else if (_data.Type == "toggle"s) {
 			auto toggleOption = std::make_shared<ToggleControl>();
 			toggleOption->GroupControl = _data.GroupControl;
 			toggleOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = toggleOption;
 		}
-		else if (_data.Type == "hiddenToggle") {
+		else if (_data.Type == "hiddenToggle"s) {
 			auto hiddenToggleOption = std::make_shared<HiddenToggleControl>();
 			hiddenToggleOption->GroupControl = _data.GroupControl;
 			hiddenToggleOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = hiddenToggleOption;
 		}
-		else if (_data.Type == "slider") {
+		else if (_data.Type == "slider"s) {
 			auto sliderOption = std::make_shared<SliderControl>();
 			sliderOption->Min = _data.ValueOptions.Min;
 			sliderOption->Max = _data.ValueOptions.Max;
@@ -264,13 +264,13 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			sliderOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = sliderOption;
 		}
-		else if (_data.Type == "stepper") {
+		else if (_data.Type == "stepper"s) {
 			auto stepperOption = std::make_shared<StepperControl>();
 			stepperOption->Options = _data.ValueOptions.Options;
 			stepperOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = stepperOption;
 		}
-		else if (_data.Type == "menu") {
+		else if (_data.Type == "menu"s) {
 			auto menuOption = std::make_shared<MenuControl>();
 			menuOption->ModName = _modName;
 			menuOption->SourceForm = _data.ValueOptions.SourceForm;
@@ -280,25 +280,25 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			menuOption->ShortNames = _data.ValueOptions.ShortNames;
 			control = menuOption;
 		}
-		else if (_data.Type == "enum") {
+		else if (_data.Type == "enum"s) {
 			auto enumOption = std::make_shared<EnumControl>();
 			enumOption->Options = _data.ValueOptions.Options;
 			enumOption->ShortNames = _data.ValueOptions.ShortNames;
 			enumOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = enumOption;
 		}
-		else if (_data.Type == "color") {
+		else if (_data.Type == "color"s) {
 			auto colorOption = std::make_shared<ColorControl>();
 			colorOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = colorOption;
 		}
-		else if (_data.Type == "keymap") {
+		else if (_data.Type == "keymap"s) {
 			auto keymapOption = std::make_shared<KeyMapControl>();
 			keymapOption->IgnoreConflicts = _data.IgnoreConflicts;
 			keymapOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = keymapOption;
 		}
-		else if (_data.Type == "input") {
+		else if (_data.Type == "input"s) {
 			auto inputOption = std::make_shared<InputControl>();
 			inputOption->ModName = _modName;
 			inputOption->SourceForm = _data.ValueOptions.SourceForm;

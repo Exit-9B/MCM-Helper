@@ -14,15 +14,15 @@ bool GroupConditionHandler::Uint(unsigned i)
 {
 	switch (_state) {
 	case State::End:
-		_tree->TopLevelOperands.push_back(i);
+		_tree->TopLevelOperands.push_back(static_cast<std::uint32_t>(i));
 		return true;
 	case State::Conjunction:
-		_tree->TopLevelOperands.push_back(i);
+		_tree->TopLevelOperands.push_back(static_cast<std::uint32_t>(i));
 		_state = State::Start;
 		return true;
 	case State::Array:
 	case State::TopLevelArray:
-		_tree->TopLevelOperands.push_back(i);
+		_tree->TopLevelOperands.push_back(static_cast<std::uint32_t>(i));
 		return true;
 	case State::Child:
 	case State::TopLevelArrayChild:
