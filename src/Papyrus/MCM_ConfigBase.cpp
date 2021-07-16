@@ -134,7 +134,8 @@ namespace Papyrus
 			}
 
 			auto endTime = std::chrono::steady_clock::now();
-			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+				endTime - startTime);
 
 			logger::info(
 				"Registered mod config for {} in {} ms."sv,

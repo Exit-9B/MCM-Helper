@@ -9,7 +9,7 @@
     "spdlog",
     "boost-stl-interfaces",
     "simpleini",
-    "nlohmann-json",
+    "rapidjson",
     "tsl-ordered-map"
   ]
 }

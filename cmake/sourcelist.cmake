@@ -19,4 +19,14 @@ set(sources ${sources}
     src/Papyrus.cpp
     src/Papyrus/MCM.cpp
     src/Papyrus/MCM_ConfigBase.cpp
+
+    src/Json/ConfigHandler.cpp
+    src/Json/PluginRequirementsHandler.cpp
+    src/Json/ContentHandler.cpp
+    src/Json/CustomContentHandler.cpp
+    src/Json/PagesHandler.cpp
+    src/Json/ValueOptionsHandler.cpp
+    src/Json/ActionHandler.cpp
+    src/Json/ParamsHandler.cpp
+    src/Json/GroupConditionHandler.cpp
 )

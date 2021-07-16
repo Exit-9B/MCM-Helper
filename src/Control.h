@@ -28,6 +28,7 @@ public:
 
 	std::int32_t Position = -1;
 	std::string ID;
+	std::string Text;
 	std::string Help;
 	std::shared_ptr<GroupConditionTree> GroupCondition;
 	Behavior GroupBehavior = Behavior::Disable;
@@ -45,8 +46,6 @@ class HeaderControl : public Control
 public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-
-	std::string Text;
 };
 
 class TextControl : public Control
@@ -58,7 +57,6 @@ public:
 
 	auto GetValue() -> std::string;
 
-	std::string Text;
 	std::string Value;
 
 	std::string ModName;
@@ -76,7 +74,6 @@ public:
 
 	auto GetValue() -> bool;
 
-	std::string Text;
 	std::uint32_t GroupControl = 0;
 	std::shared_ptr<ValueSource> ValueSource;
 };
@@ -90,7 +87,6 @@ public:
 
 	auto GetValue() -> float;
 
-	std::string Text;
 	float Min = 0.0f;
 	float Max = 0.0f;
 	float Step = 0.0f;
@@ -108,7 +104,6 @@ public:
 	auto GetValue() -> std::int32_t;
 	auto GetText() -> std::string;
 
-	std::string Text;
 	std::vector<std::string> Options;
 	std::shared_ptr<ValueSource> ValueSource;
 };
@@ -125,7 +120,6 @@ public:
 	auto GetShortText() -> std::string;
 	auto GetIndex(const std::string&) -> std::int32_t;
 
-	std::string Text;
 	std::vector<std::string> Options;
 	std::vector<std::string> ShortNames;
 
@@ -145,7 +139,6 @@ public:
 	auto GetValue() -> std::int32_t;
 	auto GetShortText() -> std::string;
 
-	std::string Text;
 	std::vector<std::string> Options;
 	std::vector<std::string> ShortNames;
 	std::shared_ptr<ValueSource> ValueSource;
@@ -160,7 +153,6 @@ public:
 
 	auto GetColor() -> std::uint32_t;
 
-	std::string Text;
 	std::shared_ptr<ValueSource> ValueSource;
 };
 
@@ -173,7 +165,6 @@ public:
 
 	auto GetKeyCode() -> std::int32_t;
 
-	std::string Text;
 	bool IgnoreConflicts = false;
 	std::shared_ptr<ValueSource> ValueSource;
 };
@@ -186,8 +177,6 @@ public:
 	virtual void InvokeAction(VM* a_vm) override;
 
 	auto GetValue() -> std::string;
-
-	std::string Text;
 
 	std::string ModName;
 	RE::TESForm* SourceForm;
