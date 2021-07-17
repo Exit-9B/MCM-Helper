@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 
 class PluginRequirementsHandler : public IHandler
 {

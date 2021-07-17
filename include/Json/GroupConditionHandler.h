@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 #include "Config/GroupConditionTree.h"
 
 class GroupConditionHandler : public IHandler
@@ -27,6 +27,5 @@ private:
 
 	State _state = State::Init;
 
-	ReaderHandler* _master;
 	std::shared_ptr<GroupConditionTree> _tree;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 #include "Json/ValueOptionsHandler.h"
 #include "Config/PageContent.h"
 #include "Config/Control.h"

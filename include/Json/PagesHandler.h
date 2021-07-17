@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 #include "Config/Config.h"
 #include "Config/PageContent.h"
 #include "Script/SkyUI.h"

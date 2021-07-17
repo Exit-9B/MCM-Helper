@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 #include "Config/ValueSource.h"
 
 struct ValueOptionsData
@@ -66,7 +66,6 @@ private:
 
 	State _state = State::Init;
 
-	ReaderHandler* _master;
 	ValueOptionsData* _data;
 	std::string _modName;
 	std::string _id;

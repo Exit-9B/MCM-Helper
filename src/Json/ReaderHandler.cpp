@@ -1,4 +1,5 @@
 #include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 
 bool ReaderHandler::Null()
 {

@@ -1,7 +1,8 @@
 #pragma once
 
 #include <rapidjson/reader.h>
-#include "Json/IHandler.h"
+
+class IHandler;
 
 class ReaderHandler : public rapidjson::BaseReaderHandler<rapidjson::UTF8<>, ReaderHandler>
 {

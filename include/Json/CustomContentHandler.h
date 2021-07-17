@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Json/ReaderHandler.h"
+#include "Json/IHandler.h"
 #include "Config/PageContent.h"
 
 class CustomContentHandler : public IHandler
