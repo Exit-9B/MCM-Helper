@@ -149,8 +149,10 @@ endEvent
 
 event OnSettingChange(string a_ID)
 	; ItemList
-	if a_ID == "iQuantityMinCount:ItemList"
-		SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", GetModSettingFloat(a_ID))
+	if a_ID == "iFontSize:ItemList"
+		ApplyItemListFontSize(GetModSettingInt(a_ID))
+	elseif a_ID == "iQuantityMinCount:ItemList"
+		SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", GetModSettingInt(a_ID))
 	elseif a_ID == "iCategoryIconTheme:ItemList"
 		SKI_SettingsManagerInstance.SetOverride("Appearance$icons$category$source", _categoryIconThemeValues[GetModSettingInt(a_ID)])
 	elseif a_ID == "bNoIconColors:ItemList"
@@ -193,19 +195,6 @@ event OnSettingChange(string a_ID)
 	; FavoritesMenu
 	elseif a_ID == "bHelpEnabled:FavoritesMenu"
 		SKI_FavoritesManagerInstance.ButtonHelpEnabled = GetModSettingBool(a_ID)
-
-	; FavoriteGroups
-	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
-	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
-
-	int GroupIdx = 0
-	while GroupIdx < 8
-		bool armorSetting = GetModSettingBool("bUnequipArmor:FavoriteGroup" + (GroupIdx + 1))
-		bool handsSetting = GetModSettingBool("bUnequipHands:FavoriteGroup" + (GroupIdx + 1))
-		SKI_FavoritesManagerInstance.SetGroupFlag(GroupIdx, ARMOR_FLAG, armorSetting)
-		SKI_FavoritesManagerInstance.SetGroupFlag(GroupIdx, HANDS_FLAG, handsSetting)
-		GroupIdx += 1
-	endWhile
 
 	; SWFVersionCheck
 	elseif a_ID == "bMapMenu:SWFVersionCheck"
@@ -383,8 +372,9 @@ endProperty
 
 function LoadSettings()
 	; ItemList
+	ApplyItemListFontSize(GetModSettingInt("iFontSize:ItemList"))
 	SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", \
-		GetModSettingFloat("iQuantityMinCount:ItemList"))
+		GetModSettingInt("iQuantityMinCount:ItemList"))
 	SKI_SettingsManagerInstance.SetOverride("Appearance$icons$category$source", \
 		_categoryIconThemeValues[GetModSettingInt("iCategoryIconTheme:ItemList")])
 	SKI_SettingsManagerInstance.SetOverride("Appearance$icons$item$noColor", \
@@ -413,6 +403,19 @@ function LoadSettings()
 
 	; FavoritesMenu
 	SKI_FavoritesManagerInstance.ButtonHelpEnabled = GetModSettingBool("bHelpEnabled:FavoritesMenu")
+
+	; FavoriteGroups
+	int ARMOR_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_ARMOR
+	int HANDS_FLAG = SKI_FavoritesManagerInstance.GROUP_FLAG_UNEQUIP_HANDS
+
+	int GroupIdx = 0
+	while GroupIdx < 8
+		bool armorSetting = GetModSettingBool("bUnequipArmor:FavoriteGroup" + (GroupIdx + 1))
+		bool handsSetting = GetModSettingBool("bUnequipHands:FavoriteGroup" + (GroupIdx + 1))
+		SKI_FavoritesManagerInstance.SetGroupFlag(GroupIdx, ARMOR_FLAG, armorSetting)
+		SKI_FavoritesManagerInstance.SetGroupFlag(GroupIdx, HANDS_FLAG, handsSetting)
+		GroupIdx += 1
+	endWhile
 
 	; SWFVersionCheck
 	SKI_MainInstance.MapMenuCheckEnabled = GetModSettingBool("bMapMenu:SWFVersionCheck")
