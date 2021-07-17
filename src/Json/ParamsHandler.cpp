@@ -9,7 +9,7 @@ ParamsHandler::ParamsHandler(ReaderHandler* master, std::vector<std::string>* pa
 bool ParamsHandler::Bool(bool b)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 	{
 		std::ostringstream ss;
 		ss << "{b}" << b;
@@ -24,7 +24,7 @@ bool ParamsHandler::Bool(bool b)
 bool ParamsHandler::Int(int i)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 	{
 		std::ostringstream ss;
 		ss << "{i}" << i;
@@ -39,7 +39,7 @@ bool ParamsHandler::Int(int i)
 bool ParamsHandler::Uint(unsigned i)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 	{
 		std::ostringstream ss;
 		ss << "{i}" << i;
@@ -54,7 +54,7 @@ bool ParamsHandler::Uint(unsigned i)
 bool ParamsHandler::Double(double d)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 	{
 		std::ostringstream ss;
 		ss << "{f}" << d;
@@ -72,7 +72,7 @@ bool ParamsHandler::String(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_params->push_back(str);
 		return true;
 	default:
@@ -83,8 +83,8 @@ bool ParamsHandler::String(
 bool ParamsHandler::StartArray()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -94,7 +94,7 @@ bool ParamsHandler::StartArray()
 bool ParamsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:

@@ -22,23 +22,23 @@ bool ActionHandler::String(
 	switch (_state) {
 	case State::Type:
 		_data.Type = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Form:
 		_data.Form = Utils::GetFormFromIdentifier(str);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Script:
 		_data.Script = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::ScriptName:
 		_data.ScriptName = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Function:
 		_data.Function = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -48,8 +48,8 @@ bool ActionHandler::String(
 bool ActionHandler::StartObject()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -62,7 +62,7 @@ bool ActionHandler::Key(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (strcmp(str, "type") == 0) {
 			_state = State::Type;
 			return true;
@@ -98,7 +98,7 @@ bool ActionHandler::Key(
 bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (_data.Type == "CallFunction"s) {
 			auto callFunction = std::make_shared<CallFunction>();
 			*_action = callFunction;

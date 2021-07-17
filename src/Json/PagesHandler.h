@@ -20,14 +20,14 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		Page,
 		PageDisplayName,
 		CursorFillMode,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 	ScriptObjectPtr _script;
 
 	ReaderHandler* _master;

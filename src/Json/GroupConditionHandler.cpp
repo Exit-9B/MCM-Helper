@@ -11,13 +11,13 @@ GroupConditionHandler::GroupConditionHandler(
 bool GroupConditionHandler::Uint(unsigned i)
 {
 	switch (_state) {
-	case State::End:
+	case State::Init:
 		_tree->TopLevelOperands.push_back(static_cast<std::uint32_t>(i));
 		_master->PopHandler();
 		return true;
 	case State::Conjunction:
 		_tree->TopLevelOperands.push_back(static_cast<std::uint32_t>(i));
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Array:
 	case State::TopLevelArray:
@@ -31,8 +31,8 @@ bool GroupConditionHandler::Uint(unsigned i)
 bool GroupConditionHandler::StartObject()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	case State::Array:
 	case State::TopLevelArray:
@@ -53,7 +53,7 @@ bool GroupConditionHandler::Key(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (strcmp(str, "OR") == 0) {
 			_tree->Conjunction = GroupConditionTree::ConjunctionType::OR;
 			_state = State::Conjunction;
@@ -85,7 +85,7 @@ bool GroupConditionHandler::Key(
 bool GroupConditionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
@@ -96,7 +96,7 @@ bool GroupConditionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 bool GroupConditionHandler::StartArray()
 {
 	switch (_state) {
-	case State::End:
+	case State::Init:
 		_state = State::TopLevelArray;
 		return true;
 	case State::Conjunction:
@@ -111,7 +111,7 @@ bool GroupConditionHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::Array:
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::TopLevelArray:
 		_master->PopHandler();

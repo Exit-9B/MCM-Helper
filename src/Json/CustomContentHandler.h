@@ -19,14 +19,14 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		Source,
 		X,
 		Y,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 
 	ReaderHandler* _master;
 	CustomContent* _customContent;

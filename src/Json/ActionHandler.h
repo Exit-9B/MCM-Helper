@@ -30,8 +30,8 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		Type,
 		Form,
 		Script,
@@ -39,7 +39,7 @@ private:
 		Function,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 	ReaderHandler* _master;
 	RE::TESForm* _sourceForm;
 	std::string _scriptName;

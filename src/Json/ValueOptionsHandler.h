@@ -47,8 +47,8 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		Min,
 		Max,
 		Step,
@@ -64,7 +64,7 @@ private:
 		DefaultValue,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 
 	ReaderHandler* _master;
 	ValueOptionsData* _data;

@@ -21,11 +21,11 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 
 	ReaderHandler* _master;
 	std::vector<std::string>* _params;

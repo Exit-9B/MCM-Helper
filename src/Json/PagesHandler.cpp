@@ -44,7 +44,7 @@ bool PagesHandler::String(
 bool PagesHandler::StartObject()
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_state = State::Page;
 		return true;
 	default:
@@ -100,7 +100,7 @@ bool PagesHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			_cursorFillMode = SkyUI::CursorFillMode::LeftToRight;
 			_pageContent.reset();
 		}
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -110,8 +110,8 @@ bool PagesHandler::EndObject([[maybe_unused]] SizeType memberCount)
 bool PagesHandler::StartArray()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -121,7 +121,7 @@ bool PagesHandler::StartArray()
 bool PagesHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:

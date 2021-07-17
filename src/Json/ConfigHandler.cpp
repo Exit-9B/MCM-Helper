@@ -33,7 +33,7 @@ bool ConfigHandler::String(
 {
 	switch (_state) {
 	case State::ModName:
-		_state = State::Start;
+		_state = State::Main;
 		return strcmp(str, _modName.c_str()) == 0;
 	case State::DisplayName:
 	{
@@ -41,18 +41,18 @@ bool ConfigHandler::String(
 		if (variable) {
 			variable->SetString(str);
 		}
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	}
 	case State::CursorFillMode:
 		if (strcmp(str, "leftToRight") == 0) {
 			_cursorFillMode = SkyUI::CursorFillMode::LeftToRight;
-			_state = State::Start;
+			_state = State::Main;
 			return true;
 		}
 		else if (strcmp(str, "topToBottom") == 0) {
 			_cursorFillMode = SkyUI::CursorFillMode::TopToBottom;
-			_state = State::Start;
+			_state = State::Main;
 			return true;
 		}
 		else {
@@ -66,8 +66,8 @@ bool ConfigHandler::String(
 bool ConfigHandler::StartObject()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -80,7 +80,7 @@ bool ConfigHandler::Key(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (strcmp(str, "modName") == 0) {
 			_state = State::ModName;
 			return true;
@@ -128,11 +128,11 @@ bool ConfigHandler::Key(
 bool ConfigHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(_config->MainPage)) {
 			pageLayout->CursorFillMode = _cursorFillMode;
 		}
-		_state = State::End;
+		_state = State::Init;
 		return true;
 	default:
 		return false;

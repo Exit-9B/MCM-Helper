@@ -23,7 +23,7 @@ bool ValueOptionsHandler::Bool(bool b)
 	switch (_state) {
 	case State::DefaultValue:
 		_data->DefaultValue = b ? 1.0f : 0.0f;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -35,19 +35,19 @@ bool ValueOptionsHandler::Int(int i)
 	switch (_state) {
 	case State::Min:
 		_data->Min = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Max:
 		_data->Max = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Step:
 		_data->Step = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::DefaultValue:
 		_data->DefaultValue = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -59,19 +59,19 @@ bool ValueOptionsHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::Min:
 		_data->Min = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Max:
 		_data->Max = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Step:
 		_data->Step = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::DefaultValue:
 		_data->DefaultValue = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -83,19 +83,19 @@ bool ValueOptionsHandler::Double(double d)
 	switch (_state) {
 	case State::Min:
 		_data->Min = static_cast<float>(d);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Max:
 		_data->Max = static_cast<float>(d);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Step:
 		_data->Step = static_cast<float>(d);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::DefaultValue:
 		_data->DefaultValue = static_cast<float>(d);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -110,7 +110,7 @@ bool ValueOptionsHandler::String(
 	switch (_state) {
 	case State::Value:
 		_data->Value = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::OptionElem:
 		_data->Options.push_back(str);
@@ -120,19 +120,19 @@ bool ValueOptionsHandler::String(
 		return true;
 	case State::SourceType:
 		_data->SourceType = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::SourceForm:
 		_data->SourceForm = Utils::GetFormFromIdentifier(str);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::ScriptName:
 		_data->ScriptName = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::PropertyName:
 		_data->PropertyName = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::DefaultValue:
 		if (strncmp(str, "{i}", strlen("{i}")) == 0) {
@@ -172,7 +172,7 @@ bool ValueOptionsHandler::String(
 			_data->DefaultValueStr = str;
 		}
 
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -182,8 +182,8 @@ bool ValueOptionsHandler::String(
 bool ValueOptionsHandler::StartObject()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -196,7 +196,7 @@ bool ValueOptionsHandler::Key(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (strcmp(str, "min") == 0) {
 			_state = State::Min;
 			return true;
@@ -248,7 +248,7 @@ bool ValueOptionsHandler::Key(
 bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (_data->SourceType.rfind("PropertyValue", 0) == 0) {
 			std::shared_ptr<PropertyValue> propertyValue;
 			if (_data->SourceType == "PropertyValueBool"s) {
@@ -337,10 +337,10 @@ bool ValueOptionsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::OptionElem:
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::ShortNameElem:
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;

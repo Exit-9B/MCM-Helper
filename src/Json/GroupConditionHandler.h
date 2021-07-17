@@ -18,14 +18,14 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		Conjunction,
 		Array,
 		TopLevelArray,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 
 	ReaderHandler* _master;
 	std::shared_ptr<GroupConditionTree> _tree;

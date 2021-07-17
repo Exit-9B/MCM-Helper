@@ -41,8 +41,8 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		Control,
 		ID,
 		Position,
@@ -55,7 +55,7 @@ private:
 		IgnoreConflicts,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 
 	ReaderHandler* _master;
 	PageLayout* _pageLayout;

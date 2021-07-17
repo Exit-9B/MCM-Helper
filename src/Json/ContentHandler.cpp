@@ -96,7 +96,7 @@ bool ContentHandler::String(
 bool ContentHandler::StartObject()
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_state = State::Control;
 		return true;
 	default:
@@ -283,7 +283,7 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		}
 
 		_data = ControlData{};
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	}
 	default:
@@ -294,8 +294,8 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 bool ContentHandler::StartArray()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -305,7 +305,7 @@ bool ContentHandler::StartArray()
 bool ContentHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:

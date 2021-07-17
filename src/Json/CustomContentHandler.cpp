@@ -13,11 +13,11 @@ bool CustomContentHandler::Int(int i)
 	switch (_state) {
 	case State::X:
 		_customContent->X = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Y:
 		_customContent->Y = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -29,11 +29,11 @@ bool CustomContentHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::X:
 		_customContent->X = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Y:
 		_customContent->Y = static_cast<float>(i);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -45,11 +45,11 @@ bool CustomContentHandler::Double(double d)
 	switch (_state) {
 	case State::X:
 		_customContent->X = static_cast<float>(d);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	case State::Y:
 		_customContent->Y = static_cast<float>(d);
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -64,7 +64,7 @@ bool CustomContentHandler::String(
 	switch (_state) {
 	case State::Source:
 		_customContent->Source = str;
-		_state = State::Start;
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -74,8 +74,8 @@ bool CustomContentHandler::String(
 bool CustomContentHandler::StartObject()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -88,7 +88,7 @@ bool CustomContentHandler::Key(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		if (strcmp(str, "source") == 0) {
 			_state = State::Source;
 			return true;
@@ -112,7 +112,7 @@ bool CustomContentHandler::Key(
 bool CustomContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:

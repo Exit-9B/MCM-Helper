@@ -23,15 +23,15 @@ public:
 private:
 	enum class State
 	{
-		End,
-		Start,
+		Init,
+		Main,
 		ModName,
 		DisplayName,
 		MinMcmVersion,
 		CursorFillMode,
 	};
 
-	State _state = State::End;
+	State _state = State::Init;
 
 	ReaderHandler* _master;
 	Config* _config;

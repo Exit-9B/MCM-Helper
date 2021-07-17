@@ -11,7 +11,7 @@ bool PluginRequirementsHandler::String(
 	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
 		return dataHandler && dataHandler->LookupModByName(str);
@@ -24,8 +24,8 @@ bool PluginRequirementsHandler::String(
 bool PluginRequirementsHandler::StartArray()
 {
 	switch (_state) {
-	case State::End:
-		_state = State::Start;
+	case State::Init:
+		_state = State::Main;
 	default:
 		return false;
 	}
@@ -34,7 +34,7 @@ bool PluginRequirementsHandler::StartArray()
 bool PluginRequirementsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
-	case State::Start:
+	case State::Main:
 		_master->PopHandler();
 	default:
 		return false;
