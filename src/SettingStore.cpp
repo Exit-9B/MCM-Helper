@@ -195,8 +195,16 @@ void SettingStore::ResetToDefault(
 	std::string_view a_settingName)
 {
 	auto key = GetKey(a_modName, a_settingName);
-	auto setting = _settingStore[key];
-	auto& defaultValue = _defaults[key]->data;
+	auto item = _settingStore.find(key);
+	if (item == _settingStore.end())
+		return;
+
+	auto defaultItem = _defaults.find(key);
+	if (defaultItem = _defaults.end())
+		return;
+
+	auto setting = item->second;
+	auto& defaultValue = defaultItem->second->data;
 
 	switch (setting->GetType()) {
 	case RE::Setting::Type::kBool:

@@ -134,10 +134,11 @@ namespace Papyrus
 			}
 
 			auto endTime = std::chrono::steady_clock::now();
-			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+			auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(
+				endTime - startTime);
 
 			logger::info(
-				"Registered mod config for {} in {} ms."sv,
+				"Registered mod config for {} in {} us."sv,
 				Utils::GetModName(a_self),
 				elapsedMs.count());
 		}
@@ -242,10 +243,7 @@ namespace Papyrus
 
 		if (control)
 		{
-			auto modName = Utils::GetModName(a_self);
-			auto& settingName = control->ID;
-			SettingStore::GetInstance().ResetToDefault(modName, settingName);
-
+			control->ResetToDefault();
 			control->Refresh(object, a_option);
 		}
 	}

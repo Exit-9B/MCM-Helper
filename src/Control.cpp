@@ -18,6 +18,11 @@ void Control::InvokeAction(VM* a_vm)
 	}
 }
 
+void Control::ResetToDefault()
+{
+	// base behavior is to do nothing
+}
+
 auto Control::GetFlags() -> SkyUI::Flags
 {
 	if (GroupCondition && !GroupCondition->GetIsActive())
@@ -103,6 +108,22 @@ void TextControl::InvokeAction(VM* a_vm)
 	}
 }
 
+void TextControl::ResetToDefault()
+{
+	if (!PropertyName.empty())
+	{
+		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
+		if (variable)
+		{
+			variable->SetString(DefaultValue);
+		}
+	}
+	else if (!ID.empty())
+	{
+		SettingStore::GetInstance().ResetToDefault(ModName, ID);
+	}
+}
+
 auto TextControl::GetValue() -> std::string
 {
 	if (!PropertyName.empty())
@@ -148,6 +169,11 @@ void ToggleControl::InvokeAction(VM* a_vm)
 	}
 }
 
+void ToggleControl::ResetToDefault()
+{
+	ValueSource->ResetToDefault();
+}
+
 auto ToggleControl::GetValue() -> bool
 {
 	return ValueSource && ValueSource->GetValue() != 0.0f;
@@ -177,6 +203,11 @@ void SliderControl::InvokeAction(VM* a_vm)
 	}
 }
 
+void SliderControl::ResetToDefault()
+{
+	ValueSource->ResetToDefault();
+}
+
 auto SliderControl::GetValue() -> float
 {
 	return ValueSource ? ValueSource->GetValue() : 0.0f;
@@ -204,6 +235,11 @@ void StepperControl::InvokeAction(VM* a_vm)
 	{
 		Action->InvokeInt(a_vm, GetValue());
 	}
+}
+
+void StepperControl::ResetToDefault()
+{
+	ValueSource->ResetToDefault();
 }
 
 auto StepperControl::GetValue() -> std::int32_t
@@ -243,6 +279,22 @@ void MenuControl::InvokeAction(VM* a_vm)
 	if (Action)
 	{
 		Action->InvokeString(a_vm, GetValue());
+	}
+}
+
+void MenuControl::ResetToDefault()
+{
+	if (!PropertyName.empty())
+	{
+		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
+		if (variable)
+		{
+			variable->SetString(DefaultValue);
+		}
+	}
+	else if (!ID.empty())
+	{
+		SettingStore::GetInstance().ResetToDefault(ModName, ID);
 	}
 }
 
@@ -321,6 +373,11 @@ void EnumControl::InvokeAction(VM* a_vm)
 	}
 }
 
+void EnumControl::ResetToDefault()
+{
+	ValueSource->ResetToDefault();
+}
+
 auto EnumControl::GetValue() -> std::int32_t
 {
 	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
@@ -364,6 +421,11 @@ void ColorControl::InvokeAction(VM* a_vm)
 	}
 }
 
+void ColorControl::ResetToDefault()
+{
+	ValueSource->ResetToDefault();
+}
+
 auto ColorControl::GetColor() -> std::uint32_t
 {
 	return ValueSource ? static_cast<std::uint32_t>(ValueSource->GetValue()) : 0;
@@ -393,6 +455,11 @@ void KeyMapControl::InvokeAction(VM* a_vm)
 	}
 }
 
+void KeyMapControl::ResetToDefault()
+{
+	ValueSource->ResetToDefault();
+}
+
 auto KeyMapControl::GetKeyCode() -> std::int32_t
 {
 	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
@@ -417,6 +484,22 @@ void InputControl::InvokeAction(VM* a_vm)
 	if (Action)
 	{
 		Action->InvokeString(a_vm, GetValue());
+	}
+}
+
+void InputControl::ResetToDefault()
+{
+	if (!PropertyName.empty())
+	{
+		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
+		if (variable)
+		{
+			variable->SetString(DefaultValue);
+		}
+	}
+	else if (!ID.empty())
+	{
+		SettingStore::GetInstance().ResetToDefault(ModName, ID);
 	}
 }
 

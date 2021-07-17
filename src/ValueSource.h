@@ -9,6 +9,7 @@ public:
 	virtual float GetValue() = 0;
 	virtual void SetValue(float a_value) = 0;
 	virtual float GetDefaultValue();
+	void ResetToDefault();
 };
 
 class PropertyValue : public ValueSource
@@ -17,9 +18,12 @@ public:
 	RE::TESForm* SourceForm;
 	std::string ScriptName;
 	std::string PropertyName;
+	float DefaultValue;
 
 	virtual float GetValue() override;
 	virtual void SetValue(float a_value) override;
+	virtual float GetDefaultValue() override;
+
 	virtual float GetValue(RE::BSScript::Variable& a_variable) = 0;
 	virtual void SetValue(RE::BSScript::Variable& a_variable, float a_value) = 0;
 };
@@ -57,6 +61,7 @@ class ModSettingBool : public ModSetting
 public:
 	virtual float GetValue() override;
 	virtual void SetValue(float a_value) override;
+	virtual float GetDefaultValue() override;
 };
 
 class ModSettingInt : public ModSetting
@@ -64,6 +69,7 @@ class ModSettingInt : public ModSetting
 public:
 	virtual float GetValue() override;
 	virtual void SetValue(float a_value) override;
+	virtual float GetDefaultValue() override;
 };
 
 class ModSettingFloat : public ModSetting
@@ -71,13 +77,16 @@ class ModSettingFloat : public ModSetting
 public:
 	virtual float GetValue() override;
 	virtual void SetValue(float a_value) override;
+	virtual float GetDefaultValue() override;
 };
 
 class GlobalValue : public ValueSource
 {
 public:
 	RE::TESGlobal* SourceForm;
+	float DefaultValue;
 
 	virtual float GetValue() override;
 	virtual void SetValue(float a_value) override;
+	virtual float GetDefaultValue() override;
 };

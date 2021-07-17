@@ -115,6 +115,7 @@ add_subdirectory(extern/CommonLibSSE CommonLibSSE)
 
 find_package(spdlog REQUIRED)
 find_package(tsl-ordered-map CONFIG REQUIRED)
+find_package(RapidJSON REQUIRED)
 
 # ---- Add source files ----
 
