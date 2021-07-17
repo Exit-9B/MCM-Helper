@@ -200,7 +200,7 @@ void SettingStore::ResetToDefault(
 		return;
 
 	auto defaultItem = _defaults.find(key);
-	if (defaultItem = _defaults.end())
+	if (defaultItem == _defaults.end())
 		return;
 
 	auto setting = item->second;
@@ -319,7 +319,7 @@ void SettingStore::LoadDefaults()
 		if (!entry.is_directory())
 			continue;
 
-		auto modName = entry.path().filename().string();
+		auto modName = entry.path().stem().string();
 		auto iniPath = entry.path() / "settings.ini"sv;
 		std::filesystem::directory_entry iniEntry{ iniPath };
 
@@ -344,7 +344,7 @@ void SettingStore::LoadUserSettings()
 			continue;
 
 		auto& iniPath = entry.path();
-		auto modName = iniPath.filename().string();
+		auto modName = iniPath.stem().string();
 
 		ReadINI(modName, iniPath, false);
 		count++;
