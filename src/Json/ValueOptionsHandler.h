@@ -17,6 +17,8 @@ struct ValueOptionsData
 	RE::TESForm* SourceForm;
 	std::string ScriptName;
 	std::string PropertyName;
+	float DefaultValue = 0.0f;
+	std::string DefaultValueStr = "";
 	std::shared_ptr<ValueSource> ValueSource;
 };
 
@@ -35,6 +37,7 @@ public:
 
 	bool Complete();
 
+	bool Bool(bool b);
 	bool Int(int i);
 	bool Uint(unsigned i);
 	bool Double(double d);
@@ -62,6 +65,7 @@ private:
 		SourceForm,
 		ScriptName,
 		PropertyName,
+		DefaultValue,
 	};
 
 	State _state = State::End;

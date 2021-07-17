@@ -21,6 +21,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t = 0;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
 	virtual void InvokeAction(VM* a_vm);
+	virtual void ResetToDefault();
 
 	auto GetFlags() -> SkyUI::Flags;
 	auto GetDesiredBehavior() -> Behavior;
@@ -54,10 +55,12 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> std::string;
 
 	std::string Value;
+	std::string DefaultValue;
 
 	std::string ModName;
 	RE::TESForm* SourceForm;
@@ -71,6 +74,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> bool;
 
@@ -84,6 +88,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> float;
 
@@ -100,6 +105,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> std::int32_t;
 	auto GetText() -> std::string;
@@ -114,6 +120,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> std::string;
 	auto GetDefaultValue() -> std::string;
@@ -122,6 +129,7 @@ public:
 
 	std::vector<std::string> Options;
 	std::vector<std::string> ShortNames;
+	std::string DefaultValue;
 
 	std::string ModName;
 	RE::TESForm* SourceForm;
@@ -135,6 +143,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> std::int32_t;
 	auto GetShortText() -> std::string;
@@ -150,6 +159,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetColor() -> std::uint32_t;
 
@@ -162,6 +172,7 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetKeyCode() -> std::int32_t;
 
@@ -175,8 +186,11 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
+	virtual void ResetToDefault() override;
 
 	auto GetValue() -> std::string;
+
+	std::string DefaultValue;
 
 	std::string ModName;
 	RE::TESForm* SourceForm;

@@ -23,6 +23,8 @@ bool ContentHandler::Bool(bool b)
 		return true;
 	case State::Action:
 		return _action->Bool(b);
+	case State::ValueOptions:
+		return _action->Bool(b);
 	default:
 		return false;
 	}
@@ -237,6 +239,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 		else if (_data.Type == "text"s) {
 			auto textOption = std::make_shared<TextControl>();
 			textOption->Value = _data.ValueOptions.Value;
+			textOption->DefaultValue = _data.ValueOptions.DefaultValueStr;
 			textOption->ModName = _modName;
 			textOption->SourceForm = _data.ValueOptions.SourceForm;
 			textOption->ScriptName = _data.ValueOptions.ScriptName;
@@ -278,6 +281,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			menuOption->PropertyName = _data.ValueOptions.PropertyName;
 			menuOption->Options = _data.ValueOptions.Options;
 			menuOption->ShortNames = _data.ValueOptions.ShortNames;
+			menuOption->DefaultValue = _data.ValueOptions.DefaultValueStr;
 			control = menuOption;
 		}
 		else if (_data.Type == "enum"s) {
@@ -300,6 +304,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 		}
 		else if (_data.Type == "input"s) {
 			auto inputOption = std::make_shared<InputControl>();
+			inputOption->DefaultValue = _data.ValueOptions.DefaultValueStr;
 			inputOption->ModName = _modName;
 			inputOption->SourceForm = _data.ValueOptions.SourceForm;
 			inputOption->ScriptName = _data.ValueOptions.ScriptName;

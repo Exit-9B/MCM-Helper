@@ -243,10 +243,7 @@ namespace Papyrus
 
 		if (control)
 		{
-			auto modName = Utils::GetModName(a_self);
-			auto& settingName = control->ID;
-			SettingStore::GetInstance().ResetToDefault(modName, settingName);
-
+			control->ResetToDefault();
 			control->Refresh(object, a_option);
 		}
 	}

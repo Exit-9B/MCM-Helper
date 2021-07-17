@@ -1,5 +1,6 @@
 #include "Json/ValueOptionsHandler.h"
 #include "Utils.h"
+#include "ColorUtil.h"
 
 ValueOptionsHandler::ValueOptionsHandler(
 	ValueOptionsData* data,
@@ -20,6 +21,18 @@ bool ValueOptionsHandler::Complete()
 	return _state == State::End;
 }
 
+bool ValueOptionsHandler::Bool(bool b)
+{
+	switch (_state) {
+	case State::DefaultValue:
+		_data->DefaultValue = b ? 1.0f : 0.0f;
+		_state = State::Start;
+		return true;
+	default:
+		return false;
+	}
+}
+
 bool ValueOptionsHandler::Int(int i)
 {
 	switch (_state) {
@@ -33,6 +46,10 @@ bool ValueOptionsHandler::Int(int i)
 		return true;
 	case State::Step:
 		_data->Step = static_cast<float>(i);
+		_state = State::Start;
+		return true;
+	case State::DefaultValue:
+		_data->DefaultValue = static_cast<float>(i);
 		_state = State::Start;
 		return true;
 	default:
@@ -55,6 +72,10 @@ bool ValueOptionsHandler::Uint(unsigned i)
 		_data->Step = static_cast<float>(i);
 		_state = State::Start;
 		return true;
+	case State::DefaultValue:
+		_data->DefaultValue = static_cast<float>(i);
+		_state = State::Start;
+		return true;
 	default:
 		return false;
 	}
@@ -73,6 +94,10 @@ bool ValueOptionsHandler::Double(double d)
 		return true;
 	case State::Step:
 		_data->Step = static_cast<float>(d);
+		_state = State::Start;
+		return true;
+	case State::DefaultValue:
+		_data->DefaultValue = static_cast<float>(d);
 		_state = State::Start;
 		return true;
 	default:
@@ -110,6 +135,46 @@ bool ValueOptionsHandler::String(
 		return true;
 	case State::PropertyName:
 		_data->PropertyName = str;
+		_state = State::Start;
+		return true;
+	case State::DefaultValue:
+		if (strncmp(str, "{i}", strlen("{i}")) == 0) {
+			std::istringstream ss{ str + 3 };
+			std::int32_t value;
+			ss >> value;
+			_data->DefaultValue = static_cast<float>(value);
+		}
+		else if (strncmp(str, "{u}", strlen("{u}")) == 0) {
+			std::istringstream ss{ str + 3 };
+			std::uint32_t value;
+			ss >> value;
+			_data->DefaultValue = static_cast<float>(value);
+		}
+		else if (strncmp(str, "{b}", strlen("{b}")) == 0) {
+			std::istringstream ss{ str + 3 };
+			bool value;
+			ss >> value;
+			_data->DefaultValue = value ? 1.0f : 0.0f;
+		}
+		else if (strncmp(str, "{f}", strlen("{f}")) == 0) {
+			std::istringstream ss{ str + 3 };
+			float value;
+			ss >> value;
+			_data->DefaultValue = value;
+		}
+		else if (strncmp(str, "{r}", strlen("{r}")) == 0) {
+			std::istringstream ss{ str + 3 };
+			RE::Color value;
+			ss >> value;
+			_data->DefaultValue = static_cast<float>(PackARGB(value));
+		}
+		else if (strncmp(str, "{s}", strlen("{s}")) == 0) {
+			_data->DefaultValueStr = str + 3;
+		}
+		else {
+			_data->DefaultValueStr = str;
+		}
+
 		_state = State::Start;
 		return true;
 	default:
@@ -175,6 +240,10 @@ bool ValueOptionsHandler::Key(
 			_state = State::PropertyName;
 			return true;
 		}
+		else if (strcmp(str, "defaultValue") == 0) {
+			_state = State::DefaultValue;
+			return true;
+		}
 	}
 	return false;
 }
@@ -210,6 +279,8 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 					: _scriptName;
 			}
 
+			propertyValue->DefaultValue = _data->DefaultValue;
+
 			_data->ValueSource = propertyValue;
 		}
 		else if (_data->SourceType.rfind("ModSetting", 0) == 0) {
@@ -235,6 +306,8 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		else if (_data->SourceType == "GlobalValue"s) {
 			std::shared_ptr<GlobalValue> globalValue;
 			globalValue->SourceForm = skyrim_cast<RE::TESGlobal*>(_data->SourceForm);
+
+			globalValue->DefaultValue = _data->DefaultValue;
 
 			_data->ValueSource = globalValue;
 		}

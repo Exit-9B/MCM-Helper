@@ -155,7 +155,8 @@
           "type": "toggle",
           "valueOptions": {
             "sourceType": "PropertyValueBool",
-            "propertyName": "UnequipArmor"
+            "propertyName": "UnequipArmor",
+            "defaultValue": false
           },
           "action": {
             "type": "CallFunction",
@@ -169,7 +170,8 @@
           "type": "toggle",
           "valueOptions": {
             "sourceType": "PropertyValueBool",
-            "propertyName": "UnequipHands"
+            "propertyName": "UnequipHands",
+            "defaultValue": false
           },
           "action": {
             "type": "CallFunction",
