@@ -36,5 +36,7 @@ private:
 	std::string _modName;
 	ScriptObjectPtr _script;
 
+	bool _hasModName = false;
+	bool _hasDisplayName = false;
 	SkyUI::CursorFillMode _cursorFillMode = SkyUI::CursorFillMode::LeftToRight;
 };

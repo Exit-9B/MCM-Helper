@@ -33,10 +33,12 @@ bool ConfigHandler::String(
 {
 	switch (_state) {
 	case State::ModName:
+		_hasModName = true;
 		_state = State::Main;
 		return strcmp(str, _modName.c_str()) == 0;
 	case State::DisplayName:
 	{
+		_hasDisplayName = true;
 		auto variable = _script->GetProperty("ModName"sv);
 		if (variable) {
 			variable->SetString(str);
@@ -132,8 +134,7 @@ bool ConfigHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(_config->MainPage)) {
 			pageLayout->CursorFillMode = _cursorFillMode;
 		}
-		_state = State::Init;
-		return true;
+		return _hasModName && _hasDisplayName;
 	default:
 		return false;
 	}
