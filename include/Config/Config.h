@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PageContent.h"
+#include "Config/PageContent.h"
 
 class Config
 {

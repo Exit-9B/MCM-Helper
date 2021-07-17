@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Json/ReaderHandler.h"
-#include "Action.h"
+#include "Config/Action.h"
 
 struct ActionData
 {

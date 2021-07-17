@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Config.h"
-#include "GroupConditionTree.h"
-#include "Action.h"
+#include "Config/Config.h"
+#include "Config/GroupConditionTree.h"
+#include "Config/Action.h"
 
 class ConfigStore
 {

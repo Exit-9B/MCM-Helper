@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "Config/Config.h"
 #include "ConfigPageCache.h"
 
 void Config::ShowPage(ScriptObjectPtr a_object, const std::string& a_page) const

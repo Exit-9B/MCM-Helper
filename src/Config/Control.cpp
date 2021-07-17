@@ -1,6 +1,6 @@
-#include "Control.h"
+#include "Config/Control.h"
 
-#include "SkyUI.h"
+#include "Script/SkyUI.h"
 #include "SettingStore.h"
 #include "ConfigPageCache.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Json/ReaderHandler.h"
-#include "GroupConditionTree.h"
+#include "Config/GroupConditionTree.h"
 
 class GroupConditionHandler : public IHandler
 {

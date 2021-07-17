@@ -1,35 +1,36 @@
 set(headers ${headers}
-    src/PCH.h
+    include/PCH.h
 
-    src/ColorUtil.h
-    src/Utils.h
-    src/ScriptObject.h
-    src/SkyUI.h
-    src/SettingStore.h
+    include/ColorUtil.h
+    include/Utils.h
+    include/SettingStore.h
+    include/ConfigStore.h
+    include/ConfigPageCache.h
 
-    src/Config.h
-    src/PageContent.h
-    src/Control.h
-    src/ValueSource.h
-    src/Action.h
-    src/Action.inl
-    src/ConfigStore.h
-    src/ConfigPageCache.h
-    src/GroupConditionTree.h
+    include/Script/ScriptObject.h
+    include/Script/SkyUI.h
 
-    src/Papyrus.h
-    src/Papyrus/MCM.h
-    src/Papyrus/MCM_ConfigBase.h
+    include/Config/Config.h
+    include/Config/PageContent.h
+    include/Config/Control.h
+    include/Config/ValueSource.h
+    include/Config/Action.h
+    include/Config/Action.inl
+    include/Config/GroupConditionTree.h
 
-    src/Json/ReaderHandler.h
-    src/Json/IHandler.h
-    src/Json/ConfigHandler.h
-    src/Json/PluginRequirementsHandler.h
-    src/Json/ContentHandler.h
-    src/Json/CustomContentHandler.h
-    src/Json/PagesHandler.h
-    src/Json/ValueOptionsHandler.h
-    src/Json/ActionHandler.h
-    src/Json/ParamsHandler.h
-    src/Json/GroupConditionHandler.h
+    include/Papyrus.h
+    include/Papyrus/MCM.h
+    include/Papyrus/MCM_ConfigBase.h
+
+    include/Json/ReaderHandler.h
+    include/Json/IHandler.h
+    include/Json/ConfigHandler.h
+    include/Json/PluginRequirementsHandler.h
+    include/Json/ContentHandler.h
+    include/Json/CustomContentHandler.h
+    include/Json/PagesHandler.h
+    include/Json/ValueOptionsHandler.h
+    include/Json/ActionHandler.h
+    include/Json/ParamsHandler.h
+    include/Json/GroupConditionHandler.h
 )

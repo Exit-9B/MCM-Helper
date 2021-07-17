@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ValueSource.h"
-#include "GroupConditionTree.h"
-#include "Action.h"
-#include "SkyUI.h"
+#include "Config/ValueSource.h"
+#include "Config/GroupConditionTree.h"
+#include "Config/Action.h"
+#include "Script/SkyUI.h"
 
 class Control
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Control.h"
-#include "SkyUI.h"
+#include "Config/Control.h"
+#include "Script/SkyUI.h"
 
 class PageContent
 {

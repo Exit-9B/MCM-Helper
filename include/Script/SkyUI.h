@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ScriptObject.h"
+#include "Script/ScriptObject.h"
 
 #define MENU_ROOT "_root.ConfigPanelFader.configPanel"
 

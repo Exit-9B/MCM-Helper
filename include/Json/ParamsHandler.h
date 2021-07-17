@@ -5,9 +5,6 @@
 class ParamsHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
-
 	ParamsHandler(ReaderHandler* master, std::vector<std::string>* params);
 
 	bool Bool(bool b);

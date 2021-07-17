@@ -3,18 +3,19 @@ set(sources ${sources}
     src/PCH.cpp
 
     src/Utils.cpp
-    src/SkyUI.cpp
-    src/ScriptObject.cpp
     src/SettingStore.cpp
-
-    src/Config.cpp
-    src/PageContent.cpp
-    src/Control.cpp
-    src/ValueSource.cpp
-    src/Action.cpp
     src/ConfigStore.cpp
     src/ConfigPageCache.cpp
-    src/GroupConditionTree.cpp
+
+    src/Script/ScriptObject.cpp
+    src/Script/SkyUI.cpp
+
+    src/Config/Config.cpp
+    src/Config/PageContent.cpp
+    src/Config/Control.cpp
+    src/Config/ValueSource.cpp
+    src/Config/Action.cpp
+    src/Config/GroupConditionTree.cpp
 
     src/Papyrus.cpp
     src/Papyrus/MCM.cpp

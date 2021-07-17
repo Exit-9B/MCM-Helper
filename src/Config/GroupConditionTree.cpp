@@ -1,4 +1,4 @@
-#include "GroupConditionTree.h"
+#include "Config/GroupConditionTree.h"
 #include "ConfigPageCache.h"
 
 auto GroupConditionTree::GetIsActive() -> bool const

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Json/ReaderHandler.h"
-#include "ValueSource.h"
+#include "Config/ValueSource.h"
 
 struct ValueOptionsData
 {

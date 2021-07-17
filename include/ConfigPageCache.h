@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Config.h"
-#include "SkyUI.h"
+#include "Config/Config.h"
+#include "Script/SkyUI.h"
 
 /* Stores data about the current MCM page and provides helpers for fetching data back
  */

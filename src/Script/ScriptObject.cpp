@@ -1,4 +1,4 @@
-#include "ScriptObject.h"
+#include "Script/ScriptObject.h"
 #include "Utils.h"
 
 auto ScriptObject::GetBool(ScriptObjectPtr a_object, std::string_view a_variableName) -> bool

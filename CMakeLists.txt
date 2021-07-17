@@ -157,8 +157,8 @@ target_compile_options(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
 	PRIVATE 
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-        $<INSTALL_INTERFACE:src>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -176,5 +176,5 @@ target_link_options(${PROJECT_NAME}
 
 target_precompile_headers(${PROJECT_NAME}
 	PRIVATE
-		src/PCH.h
+		include/PCH.h
 )

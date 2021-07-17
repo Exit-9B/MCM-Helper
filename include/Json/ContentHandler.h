@@ -2,8 +2,8 @@
 
 #include "Json/ReaderHandler.h"
 #include "Json/ValueOptionsHandler.h"
-#include "PageContent.h"
-#include "Control.h"
+#include "Config/PageContent.h"
+#include "Config/Control.h"
 
 struct ControlData
 {

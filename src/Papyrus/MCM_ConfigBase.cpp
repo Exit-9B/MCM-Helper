@@ -1,5 +1,5 @@
 #include "Papyrus/MCM_ConfigBase.h"
-#include "SkyUI.h"
+#include "Script/SkyUI.h"
 #include "ConfigStore.h"
 #include "ConfigPageCache.h"
 

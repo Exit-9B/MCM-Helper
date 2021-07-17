@@ -1,5 +1,5 @@
-#include "Action.h"
-#include "Action.inl"
+#include "Config/Action.h"
+#include "Config/Action.inl"
 
 #include "ConfigPageCache.h"
 

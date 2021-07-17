@@ -1,7 +1,7 @@
-#include "PageContent.h"
+#include "Config/PageContent.h"
 
 #include "ConfigPageCache.h"
-#include "SkyUI.h"
+#include "Script/SkyUI.h"
 
 void PageLayout::Draw(ScriptObjectPtr a_object) const
 {
