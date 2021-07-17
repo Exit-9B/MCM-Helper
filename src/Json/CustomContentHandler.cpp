@@ -1,13 +1,11 @@
 #include "Json/CustomContentHandler.h"
 
-CustomContentHandler::CustomContentHandler(CustomContent* customContent) :
+CustomContentHandler::CustomContentHandler(
+	ReaderHandler* master,
+	CustomContent* customContent) :
+	_master{ master },
 	_customContent{ customContent }
 {
-}
-
-bool CustomContentHandler::Complete()
-{
-	return _state == State::End;
 }
 
 bool CustomContentHandler::Int(int i)
@@ -115,7 +113,7 @@ bool CustomContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
 	case State::Start:
-		_state = State::End;
+		_master->PopHandler();
 		return true;
 	default:
 		return false;

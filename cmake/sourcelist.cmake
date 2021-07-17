@@ -20,6 +20,8 @@ set(sources ${sources}
     src/Papyrus/MCM.cpp
     src/Papyrus/MCM_ConfigBase.cpp
 
+    src/Json/ReaderHandler.cpp
+    src/Json/IHandler.cpp
     src/Json/ConfigHandler.cpp
     src/Json/PluginRequirementsHandler.cpp
     src/Json/ContentHandler.cpp

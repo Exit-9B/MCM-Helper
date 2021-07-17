@@ -1,13 +1,9 @@
 #include "Json/ParamsHandler.h"
 
-ParamsHandler::ParamsHandler(std::vector<std::string>* params) :
+ParamsHandler::ParamsHandler(ReaderHandler* master, std::vector<std::string>* params) :
+	_master{ master },
 	_params{ params }
 {
-}
-
-bool ParamsHandler::Complete()
-{
-	return _state == State::End;
 }
 
 bool ParamsHandler::Bool(bool b)
@@ -99,7 +95,7 @@ bool ParamsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::Start:
-		_state = State::End;
+		_master->PopHandler();
 		return true;
 	default:
 		return false;

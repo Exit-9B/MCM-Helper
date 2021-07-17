@@ -1,9 +1,7 @@
 #pragma once
 
-#include <rapidjson/reader.h>
-#include "Json/GroupConditionHandler.h"
+#include "Json/ReaderHandler.h"
 #include "Json/ValueOptionsHandler.h"
-#include "Json/ActionHandler.h"
 #include "PageContent.h"
 #include "Control.h"
 
@@ -26,20 +24,13 @@ struct ControlData
 	ValueOptionsData ValueOptions;
 };
 
-class ContentHandler
+class ContentHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
-
-	ContentHandler(PageLayout* pageLayout, const ScriptObjectPtr& script);
-
-	bool Complete();
+	ContentHandler(ReaderHandler* master, PageLayout* pageLayout, const ScriptObjectPtr& script);
 
 	bool Bool(bool b);
-	bool Int(int i);
 	bool Uint(unsigned i);
-	bool Double(double d);
 	bool String(const Ch* str, SizeType length, bool copy);
 	bool StartObject();
 	bool Key(const Ch* str, SizeType length, bool copy);
@@ -62,20 +53,15 @@ private:
 		GroupControl,
 		FormatString,
 		IgnoreConflicts,
-		GroupCondition,
-		Action,
-		ValueOptions,
 	};
 
 	State _state = State::End;
 
+	ReaderHandler* _master;
 	PageLayout* _pageLayout;
 	std::string _modName;
 	RE::TESForm* _form;
 	std::string _scriptName;
 
 	ControlData _data;
-	std::unique_ptr<GroupConditionHandler> _groupCondition;
-	std::unique_ptr<ValueOptionsHandler> _valueOptions;
-	std::unique_ptr<ActionHandler> _action;
 };

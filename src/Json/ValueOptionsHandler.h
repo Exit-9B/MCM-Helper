@@ -1,6 +1,6 @@
 #pragma once
 
-#include <rapidjson/reader.h>
+#include "Json/ReaderHandler.h"
 #include "ValueSource.h"
 
 struct ValueOptionsData
@@ -18,24 +18,20 @@ struct ValueOptionsData
 	std::string ScriptName;
 	std::string PropertyName;
 	float DefaultValue = 0.0f;
-	std::string DefaultValueStr = "";
+	std::string DefaultValueStr;
 	std::shared_ptr<ValueSource> ValueSource;
 };
 
-class ValueOptionsHandler
+class ValueOptionsHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
-
 	ValueOptionsHandler(
+		ReaderHandler* master,
 		ValueOptionsData* data,
 		const std::string& modName,
 		const std::string& id,
 		RE::TESForm* sourceForm,
 		const std::string& scriptName);
-
-	bool Complete();
 
 	bool Bool(bool b);
 	bool Int(int i);
@@ -69,6 +65,8 @@ private:
 	};
 
 	State _state = State::End;
+
+	ReaderHandler* _master;
 	ValueOptionsData* _data;
 	std::string _modName;
 	std::string _id;

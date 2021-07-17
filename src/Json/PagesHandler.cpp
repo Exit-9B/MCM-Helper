@@ -1,67 +1,27 @@
 #include "Json/PagesHandler.h"
+#include "Json/ContentHandler.h"
+#include "Json/CustomContentHandler.h"
 
-PagesHandler::PagesHandler(Config* config, const ScriptObjectPtr& script) :
+PagesHandler::PagesHandler(
+	ReaderHandler* master,
+	Config* config,
+	const ScriptObjectPtr& script) :
+	_master{ master },
 	_config{ config },
 	_script{ script }
 {
 }
 
-bool PagesHandler::Complete()
-{
-	return _state == State::End;
-}
-
-bool PagesHandler::Bool(bool b)
-{
-	switch (_state) {
-	case State::Content:
-		return _content->Bool(b);
-	default:
-		return false;
-	}
-}
-
-bool PagesHandler::Int(int i)
-{
-	switch (_state) {
-	case State::Content:
-		return _content->Int(i);
-	default:
-		return false;
-	}
-}
-
-bool PagesHandler::Uint(unsigned i)
-{
-	switch (_state) {
-	case State::Content:
-		return _content->Uint(i);
-	default:
-		return false;
-	}
-}
-
-bool PagesHandler::Double(double d)
-{
-	switch (_state) {
-	case State::Content:
-		return _content->Double(d);
-	default:
-		return false;
-	}
-}
-
-bool PagesHandler::String(const Ch* str, SizeType length, bool copy)
+bool PagesHandler::String(
+	const Ch* str,
+	[[maybe_unused]] SizeType length,
+	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
 	case State::PageDisplayName:
 		_pageDisplayName = str;
 		_state = State::Page;
 		return true;
-	case State::Content:
-		return _content->String(str, length, copy);
-	case State::CustomContent:
-		return _customContent->String(str, length, copy);
 	case State::CursorFillMode:
 		if (strcmp(str, "leftToRight") == 0) {
 			_cursorFillMode = SkyUI::CursorFillMode::LeftToRight;
@@ -87,16 +47,15 @@ bool PagesHandler::StartObject()
 	case State::Start:
 		_state = State::Page;
 		return true;
-	case State::Content:
-		return _content->StartObject();
-	case State::CustomContent:
-		return _customContent->StartObject();
 	default:
 		return false;
 	}
 }
 
-bool PagesHandler::Key(const Ch* str, SizeType length, bool copy)
+bool PagesHandler::Key(
+	const Ch* str,
+	[[maybe_unused]] SizeType length,
+	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
 	case State::Page:
@@ -107,15 +66,13 @@ bool PagesHandler::Key(const Ch* str, SizeType length, bool copy)
 		else if (strcmp(str, "content") == 0) {
 			auto pageLayout = std::make_shared<PageLayout>();
 			_pageContent = pageLayout;
-			_content = std::make_unique<ContentHandler>(pageLayout.get(), _script);
-			_state = State::Content;
+			_master->PushHandler<ContentHandler>(_master, pageLayout.get(), _script);
 			return true;
 		}
 		else if (strcmp(str, "customContent") == 0) {
 			auto customContent = std::make_shared<CustomContent>();
 			_pageContent = customContent;
-			_customContent = std::make_unique<CustomContentHandler>(customContent.get());
-			_state = State::CustomContent;
+			_master->PushHandler<CustomContentHandler>(_master, customContent.get());
 			return true;
 		}
 		else if (strcmp(str, "cursorFillMode") == 0) {
@@ -125,16 +82,12 @@ bool PagesHandler::Key(const Ch* str, SizeType length, bool copy)
 		else {
 			return false;
 		}
-	case State::Content:
-		return _content->Key(str, length, copy);
-	case State::CustomContent:
-		return _customContent->Key(str, length, copy);
 	default:
 		return false;
 	}
 }
 
-bool PagesHandler::EndObject(SizeType memberCount)
+bool PagesHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
 	case State::Page:
@@ -149,15 +102,6 @@ bool PagesHandler::EndObject(SizeType memberCount)
 		}
 		_state = State::Start;
 		return true;
-	case State::Content:
-		return _content->EndObject(memberCount);
-	case State::CustomContent:
-	{
-		bool customContentOK = _customContent->EndObject(memberCount);
-		if (_customContent->Complete())
-			_state = State::Start;
-		return customContentOK;
-	}
 	default:
 		return false;
 	}
@@ -169,26 +113,17 @@ bool PagesHandler::StartArray()
 	case State::End:
 		_state = State::Start;
 		return true;
-	case State::Content:
-		return _content->StartArray();
 	default:
 		return false;
 	}
 }
 
-bool PagesHandler::EndArray(SizeType elementCount)
+bool PagesHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::Start:
-		_state = State::End;
+		_master->PopHandler();
 		return true;
-	case State::Content:
-	{
-		bool contentOK = _content->EndArray(elementCount);
-		if (_content->Complete())
-			_state = State::Page;
-		return contentOK;
-	}
 	default:
 		return false;
 	}

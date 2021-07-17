@@ -21,6 +21,8 @@ set(headers ${headers}
     src/Papyrus/MCM.h
     src/Papyrus/MCM_ConfigBase.h
 
+    src/Json/ReaderHandler.h
+    src/Json/IHandler.h
     src/Json/ConfigHandler.h
     src/Json/PluginRequirementsHandler.h
     src/Json/ContentHandler.h

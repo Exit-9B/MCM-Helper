@@ -1,18 +1,15 @@
 #pragma once
 
-#include <rapidjson/reader.h>
+#include "Json/ReaderHandler.h"
 
-class PluginRequirementsHandler
+class PluginRequirementsHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
+	PluginRequirementsHandler(ReaderHandler* master);
 
-	bool Complete();
-
-	bool String(const Ch* str, SizeType length, bool copy);
-	bool StartArray();
-	bool EndArray(SizeType elementCount);
+	virtual bool String(const Ch* str, SizeType length, bool copy) override;
+	virtual bool StartArray() override;
+	virtual bool EndArray(SizeType elementCount) override;
 
 private:
 	enum class State
@@ -22,4 +19,6 @@ private:
 	};
 
 	State _state = State::End;
+
+	ReaderHandler* _master;
 };

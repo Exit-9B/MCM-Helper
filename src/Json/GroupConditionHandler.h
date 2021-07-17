@@ -1,17 +1,12 @@
 #pragma once
 
-#include <rapidjson/reader.h>
+#include "Json/ReaderHandler.h"
 #include "GroupConditionTree.h"
 
-class GroupConditionHandler
+class GroupConditionHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
-
-	GroupConditionHandler(std::shared_ptr<GroupConditionTree> tree);
-
-	bool Complete();
+	GroupConditionHandler(ReaderHandler* master, std::shared_ptr<GroupConditionTree> tree);
 
 	bool Uint(unsigned i);
 	bool StartObject();
@@ -27,12 +22,11 @@ private:
 		Start,
 		Conjunction,
 		Array,
-		Child,
 		TopLevelArray,
-		TopLevelArrayChild,
 	};
 
 	State _state = State::End;
+
+	ReaderHandler* _master;
 	std::shared_ptr<GroupConditionTree> _tree;
-	std::unique_ptr<GroupConditionHandler> _child;
 };

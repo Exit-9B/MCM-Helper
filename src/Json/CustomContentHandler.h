@@ -1,17 +1,12 @@
 #pragma once
 
-#include <rapidjson/reader.h>
+#include "Json/ReaderHandler.h"
 #include "PageContent.h"
 
-class CustomContentHandler
+class CustomContentHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
-
-	CustomContentHandler(CustomContent* customContent);
-
-	bool Complete();
+	CustomContentHandler(ReaderHandler* master, CustomContent* customContent);
 
 	bool Int(int i);
 	bool Uint(unsigned i);
@@ -32,5 +27,7 @@ private:
 	};
 
 	State _state = State::End;
+
+	ReaderHandler* _master;
 	CustomContent* _customContent;
 };

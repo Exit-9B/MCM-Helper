@@ -1,6 +1,7 @@
 #include "ConfigStore.h"
 #include "SkyUI.h"
 #include "Utils.h"
+#include "Json/ReaderHandler.h"
 #include "Json/ConfigHandler.h"
 #include <rapidjson/filereadstream.h>
 
@@ -80,8 +81,9 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
 	auto configLocation = configPath / plugin / "config.json"sv;
 
+	ReaderHandler handler;
 	auto config = std::make_shared<Config>();
-	ConfigHandler handler{ config.get(), plugin, a_configScript };
+	handler.PushHandler<ConfigHandler>(&handler, config.get(), plugin, a_configScript);
 
 	rapidjson::Reader reader;
 

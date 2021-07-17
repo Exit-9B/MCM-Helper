@@ -1,8 +1,8 @@
 #include "Json/PluginRequirementsHandler.h"
 
-bool PluginRequirementsHandler::Complete()
+PluginRequirementsHandler::PluginRequirementsHandler(ReaderHandler* master) :
+	_master{ master }
 {
-	return _state == State::End;
 }
 
 bool PluginRequirementsHandler::String(
@@ -35,7 +35,7 @@ bool PluginRequirementsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::Start:
-		_state = State::End;
+		_master->PopHandler();
 	default:
 		return false;
 	}

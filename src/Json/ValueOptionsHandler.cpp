@@ -3,22 +3,19 @@
 #include "ColorUtil.h"
 
 ValueOptionsHandler::ValueOptionsHandler(
+	ReaderHandler* master,
 	ValueOptionsData* data,
 	const std::string& modName,
 	const std::string& id,
 	RE::TESForm* sourceForm,
 	const std::string& scriptName) :
+	_master{ master },
 	_data{ data },
 	_modName{ modName },
 	_id{ id },
 	_sourceForm{ sourceForm },
 	_scriptName{ scriptName }
 {
-}
-
-bool ValueOptionsHandler::Complete()
-{
-	return _state == State::End;
 }
 
 bool ValueOptionsHandler::Bool(bool b)
@@ -315,7 +312,7 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			return false;
 		}
 
-		_state = State::End;
+		_master->PopHandler();
 		return true;
 	default:
 		return false;

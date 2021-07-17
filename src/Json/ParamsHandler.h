@@ -1,15 +1,14 @@
 #pragma once
 
-#include <rapidjson/reader.h>
+#include "Json/ReaderHandler.h"
 
-class ParamsHandler
+class ParamsHandler : public IHandler
 {
 public:
 	using Ch = rapidjson::UTF8<>::Ch;
 	using SizeType = rapidjson::SizeType;
 
-	ParamsHandler(std::vector<std::string>* params);
-	bool Complete();
+	ParamsHandler(ReaderHandler* master, std::vector<std::string>* params);
 
 	bool Bool(bool b);
 	bool Int(int i);
@@ -27,5 +26,7 @@ private:
 	};
 
 	State _state = State::End;
+
+	ReaderHandler* _master;
 	std::vector<std::string>* _params;
 };

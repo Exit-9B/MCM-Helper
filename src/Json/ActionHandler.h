@@ -1,7 +1,6 @@
 #pragma once
 
-#include <rapidjson/reader.h>
-#include "Json/ParamsHandler.h"
+#include "Json/ReaderHandler.h"
 #include "Action.h"
 
 struct ActionData
@@ -14,29 +13,19 @@ struct ActionData
 	std::vector<std::string> Params;
 };
 
-class ActionHandler
+class ActionHandler : public IHandler
 {
 public:
-	using Ch = rapidjson::UTF8<>::Ch;
-	using SizeType = rapidjson::SizeType;
-
 	ActionHandler(
+		ReaderHandler* master,
 		std::shared_ptr<Action>* action,
 		RE::TESForm* sourceForm,
 		const std::string& scriptName);
 
-	bool Complete();
-
-	bool Bool(bool b);
-	bool Int(int i);
-	bool Uint(unsigned i);
-	bool Double(double d);
 	bool String(const Ch* str, SizeType length, bool copy);
 	bool StartObject();
 	bool Key(const Ch* str, SizeType length, bool copy);
 	bool EndObject(SizeType memberCount);
-	bool StartArray();
-	bool EndArray(SizeType elementCount);
 
 private:
 	enum class State
@@ -48,14 +37,13 @@ private:
 		Script,
 		ScriptName,
 		Function,
-		Params,
 	};
 
 	State _state = State::End;
+	ReaderHandler* _master;
 	RE::TESForm* _sourceForm;
 	std::string _scriptName;
 
 	std::shared_ptr<Action>* _action;
 	ActionData _data;
-	std::unique_ptr<ParamsHandler> _params;
 };

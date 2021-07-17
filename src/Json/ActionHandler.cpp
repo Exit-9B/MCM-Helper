@@ -1,62 +1,23 @@
 #include "Json/ActionHandler.h"
+#include "Json/ParamsHandler.h"
 #include "Utils.h"
 
 ActionHandler::ActionHandler(
+	ReaderHandler* master,
 	std::shared_ptr<Action>* action,
 	RE::TESForm* sourceForm,
 	const std::string& scriptName) :
+	_master{ master },
 	_action{ action },
 	_sourceForm{ sourceForm },
 	_scriptName{ scriptName }
 {
 }
 
-bool ActionHandler::Complete()
-{
-	return _state == State::End;
-}
-
-bool ActionHandler::Bool(bool b)
-{
-	switch (_state) {
-	case State::Params:
-		return _params->Bool(b);
-	default:
-		return false;
-	}
-}
-
-bool ActionHandler::Int(int i)
-{
-	switch (_state) {
-	case State::Params:
-		return _params->Int(i);
-	default:
-		return false;
-	}
-}
-
-bool ActionHandler::Uint(unsigned i)
-{
-	switch (_state) {
-	case State::Params:
-		return _params->Uint(i);
-	default:
-		return false;
-	}
-}
-
-bool ActionHandler::Double(double d)
-{
-	switch (_state) {
-	case State::Params:
-		return _params->Double(d);
-	default:
-		return false;
-	}
-}
-
-bool ActionHandler::String(const Ch* str, SizeType length, bool copy)
+bool ActionHandler::String(
+	const Ch* str,
+	[[maybe_unused]] SizeType length,
+	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
 	case State::Type:
@@ -79,8 +40,6 @@ bool ActionHandler::String(const Ch* str, SizeType length, bool copy)
 		_data.Function = str;
 		_state = State::Start;
 		return true;
-	case State::Params:
-		return _params->String(str, length, copy);
 	default:
 		return false;
 	}
@@ -125,8 +84,7 @@ bool ActionHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "params") == 0) {
-			_params = std::make_unique<ParamsHandler>(&_data.Params);
-			_state = State::Params;
+			_master->PushHandler<ParamsHandler>(_master, &_data.Params);
 			return true;
 		}
 		else {
@@ -169,33 +127,8 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		(*_action)->Params = _data.Params;
 		(*_action)->Function = _data.Function;
 
-		_state = State::End;
+		_master->PopHandler();
 		return true;
-	default:
-		return false;
-	}
-}
-
-bool ActionHandler::StartArray()
-{
-	switch (_state) {
-	case State::Params:
-		return _params->StartArray();
-	default:
-		return false;
-	}
-}
-
-bool ActionHandler::EndArray(SizeType elementCount)
-{
-	switch (_state) {
-	case State::Params:
-	{
-		bool paramsOK = _params->EndArray(elementCount);
-		if (_params->Complete())
-			_state = State::Start;
-		return paramsOK;
-	}
 	default:
 		return false;
 	}

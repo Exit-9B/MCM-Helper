@@ -1,17 +1,18 @@
 #include "Json/ContentHandler.h"
+#include "Json/GroupConditionHandler.h"
+#include "Json/ActionHandler.h"
 #include "Utils.h"
 
-ContentHandler::ContentHandler(PageLayout* pageLayout, const ScriptObjectPtr& script) :
+ContentHandler::ContentHandler(
+	ReaderHandler* master,
+	PageLayout* pageLayout,
+	const ScriptObjectPtr& script) :
+	_master{ master },
 	_pageLayout{ pageLayout }
 {
 	_form = static_cast<RE::TESForm*>(script->Resolve(0));
 	_modName = Utils::GetModName(_form);
 	_scriptName = script->GetTypeInfo()->GetName();
-}
-
-bool ContentHandler::Complete()
-{
-	return _state == State::End;
 }
 
 bool ContentHandler::Bool(bool b)
@@ -21,22 +22,6 @@ bool ContentHandler::Bool(bool b)
 		_data.IgnoreConflicts = b;
 		_state = State::Control;
 		return true;
-	case State::Action:
-		return _action->Bool(b);
-	case State::ValueOptions:
-		return _action->Bool(b);
-	default:
-		return false;
-	}
-}
-
-bool ContentHandler::Int(int i)
-{
-	switch (_state) {
-	case State::Action:
-		return _action->Int(i);
-	case State::ValueOptions:
-		return _valueOptions->Int(i);
 	default:
 		return false;
 	}
@@ -53,35 +38,15 @@ bool ContentHandler::Uint(unsigned i)
 		_data.GroupControl = static_cast<std::uint32_t>(i);
 		_state = State::Control;
 		return true;
-	case State::GroupCondition:
-	{
-		bool groupConditionOK = _groupCondition->Uint(i);
-		if (_groupCondition->Complete())
-			_state = State::Control;
-		return groupConditionOK;
-	}
-	case State::Action:
-		return _action->Uint(i);
-	case State::ValueOptions:
-		return _valueOptions->Uint(i);
 	default:
 		return false;
 	}
 }
 
-bool ContentHandler::Double(double d)
-{
-	switch (_state) {
-	case State::Action:
-		return _action->Double(d);
-	case State::ValueOptions:
-		return _valueOptions->Double(d);
-	default:
-		return false;
-	}
-}
-
-bool ContentHandler::String(const Ch* str, SizeType length, bool copy)
+bool ContentHandler::String(
+	const Ch* str,
+	[[maybe_unused]] SizeType length,
+	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
 	case State::ID:
@@ -123,10 +88,6 @@ bool ContentHandler::String(const Ch* str, SizeType length, bool copy)
 		_data.FormatString = str;
 		_state = State::Control;
 		return true;
-	case State::Action:
-		return _action->String(str, length, copy);
-	case State::ValueOptions:
-		return _valueOptions->String(str, length, copy);
 	default:
 		return false;
 	}
@@ -138,18 +99,15 @@ bool ContentHandler::StartObject()
 	case State::Start:
 		_state = State::Control;
 		return true;
-	case State::GroupCondition:
-		return _groupCondition->StartObject();
-	case State::Action:
-		return _action->StartObject();
-	case State::ValueOptions:
-		return _valueOptions->StartObject();
 	default:
 		return false;
 	}
 }
 
-bool ContentHandler::Key(const Ch* str, SizeType length, bool copy)
+bool ContentHandler::Key(
+	const Ch* str,
+	[[maybe_unused]] SizeType length,
+	[[maybe_unused]] bool copy)
 {
 	switch (_state) {
 	case State::Control:
@@ -175,8 +133,7 @@ bool ContentHandler::Key(const Ch* str, SizeType length, bool copy)
 		}
 		else if (strcmp(str, "groupCondition") == 0) {
 			_data.GroupCondition = std::make_shared<GroupConditionTree>();
-			_groupCondition = std::make_unique<GroupConditionHandler>(_data.GroupCondition);
-			_state = State::GroupCondition;
+			_master->PushHandler<GroupConditionHandler>(_master, _data.GroupCondition);
 			return true;
 		}
 		else if (strcmp(str, "groupBehavior") == 0) {
@@ -196,13 +153,12 @@ bool ContentHandler::Key(const Ch* str, SizeType length, bool copy)
 			return true;
 		}
 		else if (strcmp(str, "action") == 0) {
-			_state = State::Action;
-			_action = std::make_unique<ActionHandler>(&_data.Action, _form, _scriptName);
+			_master->PushHandler<ActionHandler>(_master, &_data.Action, _form, _scriptName);
 			return true;
 		}
 		else if (strcmp(str, "valueOptions") == 0) {
-			_state = State::ValueOptions;
-			_valueOptions = std::make_unique<ValueOptionsHandler>(
+			_master->PushHandler<ValueOptionsHandler>(
+				_master,
 				&_data.ValueOptions,
 				_modName,
 				_data.ID,
@@ -213,18 +169,12 @@ bool ContentHandler::Key(const Ch* str, SizeType length, bool copy)
 		else {
 			return false;
 		}
-	case State::GroupCondition:
-		return _groupCondition->Key(str, length, copy);
-	case State::ValueOptions:
-		return _valueOptions->Key(str, length, copy);
-	case State::Action:
-		return _action->Key(str, length, copy);
 	default:
 		return false;
 	}
 }
 
-bool ContentHandler::EndObject(SizeType memberCount)
+bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 {
 	switch (_state) {
 	case State::Control:
@@ -336,27 +286,6 @@ bool ContentHandler::EndObject(SizeType memberCount)
 		_state = State::Start;
 		return true;
 	}
-	case State::GroupCondition:
-	{
-		bool groupConditionOK = _groupCondition->EndObject(memberCount);
-		if (_groupCondition->Complete())
-			_state = State::Control;
-		return groupConditionOK;
-	}
-	case State::ValueOptions:
-	{
-		bool valueOptionsOK = _valueOptions->EndObject(memberCount);
-		if (_valueOptions->Complete())
-			_state = State::Control;
-		return valueOptionsOK;
-	}
-	case State::Action:
-	{
-		bool actionOK = _action->EndObject(memberCount);
-		if (_action->Complete())
-			_state = State::Control;
-		return actionOK;
-	}
 	default:
 		return false;
 	}
@@ -368,25 +297,17 @@ bool ContentHandler::StartArray()
 	case State::End:
 		_state = State::Start;
 		return true;
-	case State::ValueOptions:
-		return _valueOptions->StartArray();
-	case State::Action:
-		return _action->StartArray();
 	default:
 		return false;
 	}
 }
 
-bool ContentHandler::EndArray(SizeType elementCount)
+bool ContentHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::Start:
-		_state = State::End;
+		_master->PopHandler();
 		return true;
-	case State::ValueOptions:
-		return _valueOptions->EndArray(elementCount);
-	case State::Action:
-		return _action->EndArray(elementCount);
 	default:
 		return false;
 	}
