@@ -9,7 +9,7 @@ ValueOptionsHandler::ValueOptionsHandler(
 	const std::string& id,
 	RE::TESForm* sourceForm,
 	const std::string& scriptName) :
-	_master{ master },
+	IHandler{ master },
 	_data{ data },
 	_modName{ modName },
 	_id{ id },

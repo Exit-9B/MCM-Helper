@@ -6,7 +6,7 @@ PagesHandler::PagesHandler(
 	ReaderHandler* master,
 	Config* config,
 	const ScriptObjectPtr& script) :
-	_master{ master },
+	IHandler{ master },
 	_config{ config },
 	_script{ script }
 {

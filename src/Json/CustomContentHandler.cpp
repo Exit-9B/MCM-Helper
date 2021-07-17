@@ -3,7 +3,7 @@
 CustomContentHandler::CustomContentHandler(
 	ReaderHandler* master,
 	CustomContent* customContent) :
-	_master{ master },
+	IHandler{ master },
 	_customContent{ customContent }
 {
 }

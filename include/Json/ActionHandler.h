@@ -40,7 +40,7 @@ private:
 	};
 
 	State _state = State::Init;
-	ReaderHandler* _master;
+
 	RE::TESForm* _sourceForm;
 	std::string _scriptName;
 

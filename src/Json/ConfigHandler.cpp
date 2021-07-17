@@ -9,7 +9,7 @@ ConfigHandler::ConfigHandler(
 	Config* config,
 	const std::string& modName,
 	const ScriptObjectPtr& script) :
-	_master{ master },
+	IHandler{ master },
 	_config{ config },
 	_modName{ modName },
 	_script{ script }

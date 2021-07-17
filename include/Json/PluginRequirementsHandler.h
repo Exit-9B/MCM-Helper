@@ -19,6 +19,4 @@ private:
 	};
 
 	State _state = State::Init;
-
-	ReaderHandler* _master;
 };

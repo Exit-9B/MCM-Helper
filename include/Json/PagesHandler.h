@@ -30,7 +30,6 @@ private:
 	State _state = State::Init;
 	ScriptObjectPtr _script;
 
-	ReaderHandler* _master;
 	Config* _config;
 	std::string _pageDisplayName;
 	SkyUI::CursorFillMode _cursorFillMode = SkyUI::CursorFillMode::LeftToRight;

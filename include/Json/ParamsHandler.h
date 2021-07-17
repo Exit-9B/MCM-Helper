@@ -24,6 +24,5 @@ private:
 
 	State _state = State::Init;
 
-	ReaderHandler* _master;
 	std::vector<std::string>* _params;
 };

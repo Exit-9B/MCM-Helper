@@ -1,5 +1,9 @@
 #include "Json/IHandler.h"
 
+IHandler::IHandler(ReaderHandler* master) : _master{ master }
+{
+}
+
 bool IHandler::Null()
 {
 	return false;

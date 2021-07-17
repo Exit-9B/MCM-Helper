@@ -3,7 +3,7 @@
 GroupConditionHandler::GroupConditionHandler(
 	ReaderHandler* master,
 	std::shared_ptr<GroupConditionTree> tree) :
-	_master{ master },
+	IHandler{ master },
 	_tree{ tree }
 {
 }

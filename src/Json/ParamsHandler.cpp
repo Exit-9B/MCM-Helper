@@ -1,7 +1,7 @@
 #include "Json/ParamsHandler.h"
 
 ParamsHandler::ParamsHandler(ReaderHandler* master, std::vector<std::string>* params) :
-	_master{ master },
+	IHandler{ master },
 	_params{ params }
 {
 }

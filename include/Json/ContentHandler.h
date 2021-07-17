@@ -57,7 +57,6 @@ private:
 
 	State _state = State::Init;
 
-	ReaderHandler* _master;
 	PageLayout* _pageLayout;
 	std::string _modName;
 	RE::TESForm* _form;

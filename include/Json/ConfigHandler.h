@@ -32,7 +32,6 @@ private:
 
 	State _state = State::Init;
 
-	ReaderHandler* _master;
 	Config* _config;
 	std::string _modName;
 	ScriptObjectPtr _script;

@@ -2,11 +2,15 @@
 
 #include <rapidjson/reader.h>
 
+class ReaderHandler;
+
 class IHandler
 {
 public:
 	using Ch = rapidjson::UTF8<>::Ch;
 	using SizeType = rapidjson::SizeType;
+
+	virtual ~IHandler() = default;
 
 	virtual bool Null();
 	virtual bool Bool(bool b);
@@ -22,4 +26,9 @@ public:
 	virtual bool EndObject(SizeType memberCount);
 	virtual bool StartArray();
 	virtual bool EndArray(SizeType elementCount);
+
+protected:
+	IHandler(ReaderHandler* master);
+
+	ReaderHandler* _master;
 };
