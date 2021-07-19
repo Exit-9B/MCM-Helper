@@ -503,19 +503,21 @@ namespace Papyrus
 				}
 			};
 
-			if (a_conflictControl != ""sv && !keymap->IgnoreConflicts)
+			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts)
 			{
 				std::string msg;
 				if (a_conflictName != ""sv)
 				{
-					msg = "$MCM_KeyAlreadyMappedByMod{" +
-						std::string{ a_conflictControl } + "}{" +
-						std::string{ a_conflictName } + "}";
+					msg = std::format(
+						"$MCM_KeyAlreadyMappedByMod{{}}{{}}"sv,
+						a_conflictControl,
+						a_conflictName);
 				}
 				else
 				{
-					msg = "$MCM_KeyAlreadyMapped{" +
-						std::string{ a_conflictControl } + "}";
+					msg = std::format(
+						"$MCM_KeyAlreadyMapped{{}}"sv,
+						a_conflictControl);
 				}
 
 				SkyUI::Config::ShowMessage(object, msg, updateKey);
