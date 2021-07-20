@@ -28,7 +28,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("%g(%#): [%^%l%$] %v"s);
 
-	logger::info("MCMHelper v1.0.0");
+	logger::info("MCMHelper v1.0.0"sv);
 
 	a_info->infoVersion = SKSE::PluginInfo::kVersion;
 	a_info->name = "MCMHelper";
@@ -42,15 +42,12 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 	const auto ver = a_skse->RuntimeVersion();
 #ifndef SKYRIMVR
 	if (ver < SKSE::RUNTIME_1_5_39) {
-		logger::critical(FMT_STRING("Unsupported runtime version {}"), ver.string());
-		return false;
-	}
 #else
 	if (ver != SKSE::RUNTIME_VR_1_4_15_1) {
-		logger::critical(FMT_STRING("Unsupported runtime version {}"), ver.string());
+#endif
+		logger::critical(FMT_STRING("Unsupported runtime version {}"sv), ver.string());
 		return false;
 	}
-#endif
 
 	return true;
 }
@@ -58,7 +55,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-	logger::info("MCMHelper loaded");
+	logger::info("MCMHelper loaded"sv);
 
 	SKSE::Init(a_skse);
 
