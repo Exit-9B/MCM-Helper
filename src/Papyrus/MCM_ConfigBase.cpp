@@ -506,17 +506,17 @@ namespace Papyrus
 			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts)
 			{
 				std::string msg;
-				if (a_conflictName != ""sv)
+				if (!a_conflictName.empty())
 				{
 					msg = std::format(
-						"$MCM_KeyAlreadyMappedByMod{{}}{{}}"sv,
+						"$MCM_KeyAlreadyMappedByMod{{{}}}{{{}}}"sv,
 						a_conflictControl,
 						a_conflictName);
 				}
 				else
 				{
 					msg = std::format(
-						"$MCM_KeyAlreadyMapped{{}}"sv,
+						"$MCM_KeyAlreadyMapped{{{}}}"sv,
 						a_conflictControl);
 				}
 
