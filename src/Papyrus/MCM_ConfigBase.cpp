@@ -9,6 +9,10 @@ namespace Papyrus
 {
 	void MCM_ConfigBase::RefreshMenu(RE::TESQuest* a_self)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+		if (a_self != configPageCache.GetCurrentForm())
+			return;
+
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
@@ -20,7 +24,7 @@ namespace Papyrus
 
 	void MCM_ConfigBase::SetMenuOptions(
 		RE::TESQuest* a_self,
-		std::string_view a_ID,
+		std::string a_ID,
 		std::vector<RE::BSFixedString> a_options,
 		std::vector<RE::BSFixedString> a_shortNames)
 	{
@@ -28,7 +32,6 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		std::string id{ a_ID };
 		std::vector<std::string> options;
 		options.reserve(a_options.size());
 		for (auto& option : a_options)
@@ -43,7 +46,7 @@ namespace Papyrus
 			shortNames.push_back(std::string{ shortName });
 		}
 
-		configPageCache.SetMenuOptions(id, options, shortNames);
+		configPageCache.SetMenuOptions(a_ID, options, shortNames);
 	}
 
 	auto MCM_ConfigBase::GetModSettingInt(
@@ -76,7 +79,7 @@ namespace Papyrus
 	auto MCM_ConfigBase::GetModSettingString(
 		RE::TESQuest* a_self,
 		std::string_view a_settingName)
-		-> std::string_view
+		-> std::string
 	{
 		auto modName = Utils::GetModName(a_self);
 		auto value = SettingStore::GetInstance().GetModSettingString(modName, a_settingName);
@@ -594,7 +597,8 @@ namespace Papyrus
 		}
 	}
 
-	std::string MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode)
+	auto MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode)
+		-> std::string
 	{
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 		return config ? config->GetCustomControl(a_keyCode) : ""s;

@@ -18,7 +18,7 @@ set(headers ${headers}
     include/Config/Action.inl
     include/Config/GroupConditionTree.h
 
-    include/Papyrus.h
+    include/Papyrus/RegisterFuncs.h
     include/Papyrus/MCM.h
     include/Papyrus/MCM_ConfigBase.h
 

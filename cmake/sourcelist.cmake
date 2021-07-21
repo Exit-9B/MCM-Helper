@@ -17,7 +17,7 @@ set(sources ${sources}
     src/Config/Action.cpp
     src/Config/GroupConditionTree.cpp
 
-    src/Papyrus.cpp
+    src/Papyrus/RegisterFuncs.cpp
     src/Papyrus/MCM.cpp
     src/Papyrus/MCM_ConfigBase.cpp
 

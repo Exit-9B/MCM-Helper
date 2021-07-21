@@ -12,7 +12,7 @@ namespace Papyrus
 
 		static void SetMenuOptions(
 			RE::TESQuest* a_self,
-			std::string_view a_ID,
+			std::string a_ID,
 			std::vector<RE::BSFixedString> a_options,
 			std::vector<RE::BSFixedString> a_shortNames);
 
@@ -35,7 +35,7 @@ namespace Papyrus
 		static auto GetModSettingString(
 			RE::TESQuest* a_self,
 			std::string_view a_settingName)
-			-> std::string_view;
+			-> std::string;
 
 		static void SetModSettingInt(
 			RE::TESQuest* a_self,
@@ -117,7 +117,7 @@ namespace Papyrus
 			std::int32_t a_option,
 			std::string_view a_input);
 
-		static std::string GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode);
+		static auto GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode) -> std::string;
 
 		// Helpers
 		static void SendSettingChangeEvent(

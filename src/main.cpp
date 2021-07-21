@@ -1,4 +1,4 @@
-﻿#include "Papyrus.h"
+﻿#include "Papyrus/RegisterFuncs.h"
 #include "SettingStore.h"
 #include "ConfigStore.h"
 
@@ -26,7 +26,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a
 #endif
 
 	spdlog::set_default_logger(std::move(log));
-	spdlog::set_pattern("%g(%#): [%^%l%$] %v"s);
+	spdlog::set_pattern("%s(%#): [%^%l%$] %v"s);
 
 	logger::info("MCMHelper v1.0.0"sv);
 
@@ -70,7 +70,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	SettingStore::GetInstance().ReadSettings();
 
-	SKSE::GetMessagingInterface()->RegisterListener([](SKSE::MessagingInterface::Message* a_msg)
+	SKSE::GetMessagingInterface()->RegisterListener(
+		[](SKSE::MessagingInterface::Message* a_msg)
 		{
 			if (a_msg->type == SKSE::MessagingInterface::kPostLoadGame)
 			{
