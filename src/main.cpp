@@ -1,4 +1,4 @@
-﻿#include "Papyrus.h"
+﻿#include "Papyrus/RegisterFuncs.h"
 #include "SettingStore.h"
 #include "ConfigStore.h"
 
@@ -66,7 +66,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	SettingStore::GetInstance().ReadSettings();
 
-	SKSE::GetMessagingInterface()->RegisterListener([](SKSE::MessagingInterface::Message* a_msg)
+	SKSE::GetMessagingInterface()->RegisterListener(
+		[](SKSE::MessagingInterface::Message* a_msg)
 		{
 			if (a_msg->type == SKSE::MessagingInterface::kPostLoadGame)
 			{
