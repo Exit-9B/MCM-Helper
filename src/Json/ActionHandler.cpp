@@ -14,6 +14,16 @@ ActionHandler::ActionHandler(
 {
 }
 
+ActionHandler::ActionHandler(
+	ReaderHandler* master,
+	std::shared_ptr<Action>* action,
+	const std::string& id) :
+	IHandler{ master },
+	_action{ action },
+	_id{ id }
+{
+}
+
 bool ActionHandler::String(
 	const Ch* str,
 	[[maybe_unused]] SizeType length,
@@ -40,6 +50,9 @@ bool ActionHandler::String(
 		_data.Function = str;
 		_state = State::Main;
 		return true;
+	case State::Command:
+		_data.Command = str;
+		_state = State::Main;
 	default:
 		return false;
 	}
@@ -83,6 +96,10 @@ bool ActionHandler::Key(
 			_state = State::Function;
 			return true;
 		}
+		else if (strcmp(str, "command") == 0) {
+			_state = State::Command;
+			return true;
+		}
 		else if (strcmp(str, "params") == 0) {
 			_master->PushHandler<ParamsHandler>(_master, &_data.Params);
 			return true;
@@ -100,6 +117,9 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 	switch (_state) {
 	case State::Main:
 		if (_data.Type == "CallFunction"s) {
+			if (_data.Function.empty())
+				return false;
+
 			auto callFunction = std::make_shared<CallFunction>();
 			*_action = callFunction;
 			if (_data.Form) {
@@ -112,20 +132,41 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 					!_data.Script.empty() ? _data.Script
 					: _scriptName;
 			}
+			callFunction->Params = _data.Params;
+			callFunction->Function = _data.Function;
 		}
 		else if (_data.Type == "CallGlobalFunction"s) {
+			if (_data.Function.empty())
+				return false;
+
 			auto callGlobalFunction = std::make_shared<CallGlobalFunction>();
 			*_action = callGlobalFunction;
 			callGlobalFunction->ScriptName =
 				!_data.Script.empty() ? _data.Script
 				: _scriptName;
+			callGlobalFunction->Params = _data.Params;
+			callGlobalFunction->Function = _data.Function;
+		}
+		else if (_data.Type == "RunConsoleCommand"s) {
+			if (_data.Command.empty())
+				return false;
+
+			auto runConsoleCommand = std::make_shared<RunConsoleCommand>();
+			*_action = runConsoleCommand;
+			runConsoleCommand->Command = _data.Command;
+		}
+		else if (_data.Type == "SendEvent"s) {
+			if (!_data.Form)
+				return false;
+
+			auto sendEvent = std::make_shared<SendEvent>();
+			*_action = sendEvent;
+			sendEvent->Control = _id;
+			sendEvent->Form = _data.Form;
 		}
 		else {
 			return false;
 		}
-
-		(*_action)->Params = _data.Params;
-		(*_action)->Function = _data.Function;
 
 		_master->PopHandler();
 		return true;

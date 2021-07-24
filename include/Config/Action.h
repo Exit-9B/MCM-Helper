@@ -5,6 +5,12 @@ class Action
 public:
 	using VM = RE::BSScript::IVirtualMachine;
 
+	virtual void SendControlEvent(bool a_up, float a_holdTime = 0.0f) = 0;
+};
+
+class Function : public Action
+{
+public:
 	class FunctionArguments : public RE::BSScript::IFunctionArguments
 	{
 	public:
@@ -15,6 +21,8 @@ public:
 		inline static auto Make(std::span<std::string> a_params, T a_value)
 			-> std::unique_ptr<FunctionArguments>;
 	};
+
+	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
 
 	virtual void InvokeBool(VM* a_vm, bool a_value) = 0;
 	virtual void InvokeInt(VM* a_vm, std::int32_t a_value) = 0;
@@ -28,7 +36,7 @@ public:
 	std::string ScriptName;
 };
 
-class CallFunction : public Action
+class CallFunction : public Function
 {
 public:
 	template <typename T>
@@ -42,7 +50,7 @@ public:
 	RE::TESForm* Form;
 };
 
-class CallGlobalFunction : public Action
+class CallGlobalFunction : public Function
 {
 public:
 	template <typename T>
@@ -52,6 +60,24 @@ public:
 	virtual void InvokeInt(VM* a_vm, std::int32_t a_value) override;
 	virtual void InvokeFloat(VM* a_vm, float a_value) override;
 	virtual void InvokeString(VM* a_vm, std::string_view a_value) override;
+};
+
+class SendEvent : public Action
+{
+public:
+	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
+
+	std::string Control;
+	RE::TESForm* Form;
+	std::string ScriptName;
+};
+
+class RunConsoleCommand : public Action
+{
+public:
+	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
+
+	std::string Command;
 };
 
 #include "Action.inl"

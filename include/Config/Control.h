@@ -33,7 +33,7 @@ public:
 	std::string Help;
 	std::shared_ptr<GroupConditionTree> GroupCondition;
 	Behavior GroupBehavior = Behavior::Disable;
-	std::shared_ptr<Action> Action;
+	std::shared_ptr<Function> Action;
 };
 
 class EmptyControl : public Control

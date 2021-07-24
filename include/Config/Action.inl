@@ -5,8 +5,8 @@
 #include "Utils.h"
 
 template <typename T>
-auto Action::FunctionArguments::Make(std::span<std::string> a_params, T a_value)
-	-> std::unique_ptr<Action::FunctionArguments>
+auto Function::FunctionArguments::Make(std::span<std::string> a_params, T a_value)
+	-> std::unique_ptr<Function::FunctionArguments>
 {
 	auto args = std::make_unique<FunctionArguments>();
 	args->Args.resize(static_cast<std::uint32_t>(a_params.size()));

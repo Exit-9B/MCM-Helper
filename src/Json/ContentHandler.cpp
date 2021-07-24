@@ -269,7 +269,15 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			control->Help = _data.Help;
 			control->GroupCondition = _data.GroupCondition;
 			control->GroupBehavior = _data.GroupBehavior;
-			control->Action = _data.Action;
+
+			if (_data.Action) {
+				auto function = std::dynamic_pointer_cast<Function>(_data.Action);
+				if (!function)
+					return false;
+
+				control->Action = function;
+			}
+
 			_pageLayout->Controls.push_back(control);
 
 			if (auto toggle = std::dynamic_pointer_cast<ToggleControl>(control)) {

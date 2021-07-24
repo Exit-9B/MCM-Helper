@@ -10,6 +10,7 @@ struct ActionData
 	std::string Script;
 	std::string ScriptName;
 	std::string Function;
+	std::string Command;
 	std::vector<std::string> Params;
 };
 
@@ -21,6 +22,11 @@ public:
 		std::shared_ptr<Action>* action,
 		RE::TESForm* sourceForm,
 		const std::string& scriptName);
+
+	ActionHandler(
+		ReaderHandler* master,
+		std::shared_ptr<Action>* action,
+		const std::string& id);
 
 	bool String(const Ch* str, SizeType length, bool copy);
 	bool StartObject();
@@ -37,12 +43,14 @@ private:
 		Script,
 		ScriptName,
 		Function,
+		Command,
 	};
 
 	State _state = State::Init;
 
 	RE::TESForm* _sourceForm;
 	std::string _scriptName;
+	std::string _id;
 
 	std::shared_ptr<Action>* _action;
 	ActionData _data;
