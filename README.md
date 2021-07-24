@@ -23,5 +23,10 @@ It is heavily inspired by
 git clone https://github.com/Exit-9B/MCM-Helper
 cd MCM-Helper
 git submodule update --init --recursive
+
+# Skyrim SE
 cmake -B build -S .
+
+# Skyrim VR
+cmake -B buildVR -S . -DBUILD_SKYRIMVR=ON
 ```
