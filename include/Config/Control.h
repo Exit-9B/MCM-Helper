@@ -176,6 +176,7 @@ public:
 
 	auto GetKeyCode() -> std::int32_t;
 
+	std::string ModName;
 	bool IgnoreConflicts = false;
 	std::shared_ptr<ValueSource> ValueSource;
 };

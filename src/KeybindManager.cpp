@@ -88,6 +88,14 @@ auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) -> KeybindInfo
 	return item != _lookup.end() ? item->second : KeybindInfo{};
 }
 
+auto KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
+	-> std::int32_t
+{
+	auto key = a_modName + ":"s + a_keybindID;
+	auto item = _modRegs.find(key);
+	return item != _modRegs.end() ? item->second : -1;
+}
+
 void KeybindManager::ClearKeybind(const std::string& a_modName, const std::string& a_keybindID)
 {
 	auto key = a_modName + ":"s + a_keybindID;

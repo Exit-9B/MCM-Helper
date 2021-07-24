@@ -2,6 +2,7 @@
 
 #include "Script/SkyUI.h"
 #include "SettingStore.h"
+#include "KeybindManager.h"
 #include "ConfigPageCache.h"
 
 void Control::Refresh(
@@ -462,7 +463,14 @@ void KeyMapControl::ResetToDefault()
 
 auto KeyMapControl::GetKeyCode() -> std::int32_t
 {
-	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
+	if (ValueSource)
+	{
+		return static_cast<std::int32_t>(ValueSource->GetValue());
+	}
+	else
+	{
+		return KeybindManager::GetInstance().GetRegisteredKey(ModName, ID);
+	}
 }
 
 auto InputControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t

@@ -252,6 +252,7 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		}
 		else if (_data.Type == "keymap"s) {
 			auto keymapOption = std::make_shared<KeyMapControl>();
+			keymapOption->ModName = _modName;
 			keymapOption->IgnoreConflicts = _data.IgnoreConflicts;
 			keymapOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = keymapOption;
