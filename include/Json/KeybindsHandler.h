@@ -1,16 +1,15 @@
 #pragma once
 
 #include "Json/IHandler.h"
-#include "Config/PageContent.h"
+#include "KeybindManager.h"
 
-class CustomContentHandler final : public IHandler
+class KeybindsHandler final : public IHandler
 {
 public:
-	CustomContentHandler(ReaderHandler* master, CustomContent* customContent);
+	KeybindsHandler(
+		ReaderHandler* master,
+		const std::string& modName);
 
-	bool Int(int i) override;
-	bool Uint(unsigned i) override;
-	bool Double(double d) override;
 	bool String(const Ch* str, SizeType length, bool copy) override;
 	bool StartObject() override;
 	bool Key(const Ch* str, SizeType length, bool copy) override;
@@ -21,12 +20,13 @@ private:
 	{
 		Init,
 		Main,
-		Source,
-		X,
-		Y,
+		ModName,
 	};
 
 	State _state = State::Init;
 
-	CustomContent* _customContent;
+	std::string _modName;
+	std::unordered_map<std::string, KeybindInfo> _modKeys;
+
+	bool _hasModName = false;
 };

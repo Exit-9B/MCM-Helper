@@ -35,7 +35,7 @@ bool ConfigHandler::String(
 	case State::ModName:
 		_hasModName = true;
 		_state = State::Main;
-		return strcmp(str, _modName.c_str()) == 0;
+		return str == _modName;
 	case State::DisplayName:
 	{
 		_hasDisplayName = true;

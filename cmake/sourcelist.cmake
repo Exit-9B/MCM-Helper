@@ -34,4 +34,6 @@ set(sources ${sources}
     src/Json/ActionHandler.cpp
     src/Json/ParamsHandler.cpp
     src/Json/GroupConditionHandler.cpp
+    src/Json/KeybindsHandler.cpp
+    src/Json/KeybindsArrayHandler.cpp
 )

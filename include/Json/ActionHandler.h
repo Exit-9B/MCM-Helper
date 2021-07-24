@@ -14,24 +14,19 @@ struct ActionData
 	std::vector<std::string> Params;
 };
 
-class ActionHandler : public IHandler
+class ActionHandler final : public IHandler
 {
 public:
 	ActionHandler(
 		ReaderHandler* master,
 		std::shared_ptr<Action>* action,
-		RE::TESForm* sourceForm,
-		const std::string& scriptName);
+		RE::TESForm* sourceForm = nullptr,
+		const std::string& scriptName = ""s);
 
-	ActionHandler(
-		ReaderHandler* master,
-		std::shared_ptr<Action>* action,
-		const std::string& id);
-
-	bool String(const Ch* str, SizeType length, bool copy);
-	bool StartObject();
-	bool Key(const Ch* str, SizeType length, bool copy);
-	bool EndObject(SizeType memberCount);
+	bool String(const Ch* str, SizeType length, bool copy) override;
+	bool StartObject() override;
+	bool Key(const Ch* str, SizeType length, bool copy) override;
+	bool EndObject(SizeType memberCount) override;
 
 private:
 	enum class State
@@ -50,7 +45,6 @@ private:
 
 	RE::TESForm* _sourceForm;
 	std::string _scriptName;
-	std::string _id;
 
 	std::shared_ptr<Action>* _action;
 	ActionData _data;

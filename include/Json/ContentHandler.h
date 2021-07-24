@@ -24,19 +24,19 @@ struct ControlData
 	ValueOptionsData ValueOptions;
 };
 
-class ContentHandler : public IHandler
+class ContentHandler final : public IHandler
 {
 public:
 	ContentHandler(ReaderHandler* master, PageLayout* pageLayout, const ScriptObjectPtr& script);
 
-	bool Bool(bool b);
-	bool Uint(unsigned i);
-	bool String(const Ch* str, SizeType length, bool copy);
-	bool StartObject();
-	bool Key(const Ch* str, SizeType length, bool copy);
-	bool EndObject(SizeType memberCount);
-	bool StartArray();
-	bool EndArray(SizeType elementCount);
+	bool Bool(bool b) override;
+	bool Uint(unsigned i) override;
+	bool String(const Ch* str, SizeType length, bool copy) override;
+	bool StartObject() override;
+	bool Key(const Ch* str, SizeType length, bool copy) override;
+	bool EndObject(SizeType memberCount) override;
+	bool StartArray() override;
+	bool EndArray(SizeType elementCount) override;
 
 private:
 	enum class State

@@ -1,4 +1,7 @@
 #include "KeybindManager.h"
+#include "Json/ReaderHandler.h"
+#include "Json/KeybindsHandler.h"
+#include <rapidjson/filereadstream.h>
 
 auto KeybindManager::GetInstance() -> KeybindManager&
 {
@@ -10,9 +13,33 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 {
 	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
 	auto keybindsLocation = configPath / a_modName / "keybinds.json"sv;
+
 	auto keybindsDirEntry = std::filesystem::directory_entry{ keybindsLocation };
 	if (!keybindsDirEntry.exists())
 		return;
+
+	ReaderHandler handler;
+	handler.PushHandler<KeybindsHandler>(std::addressof(handler), a_modName);
+
+	rapidjson::Reader reader;
+
+	FILE* fp = nullptr;
+	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
+	if (err != 0)
+	{
+		logger::warn("Failed to open keybinds for {}"sv, a_modName);
+		return;
+	}
+
+	char readBuffer[65536]{};
+	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
+
+	auto result = reader.Parse(is, handler);
+	fclose(fp);
+	if (!result)
+	{
+		logger::warn("Failed to parse keybinds for {}"sv, a_modName);
+	}
 }
 
 void KeybindManager::Register(
@@ -31,24 +58,28 @@ void KeybindManager::Register(
 	}
 
 	// Remove any previous binding then add the new one
-	auto& reg = _modRegs[a_modName + ":"s + a_keybindID];
+	auto key = a_modName + ":"s + a_keybindID;
+	auto& reg = _modRegs[key];
 	_lookup.erase(reg);
 	reg = a_keyCode;
-	_lookup[a_keyCode] = KeybindInfo{
-		.KeybindID = a_keybindID,
-		.ModName = a_modName,
-		.Action = _modKeys[a_modName + ":"s + a_keybindID],
-	};
+	_lookup[a_keyCode] = _modKeys[key];
+}
+
+void KeybindManager::AddKeybind(
+	const std::string& a_modName,
+	const std::string& a_keybindID,
+	const KeybindInfo& a_info)
+{
+	auto key = a_modName + ":"s + a_keybindID;
+	_modKeys[key] = a_info;
 }
 
 auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID)
 	-> KeybindInfo
 {
-	return KeybindInfo{
-		.KeybindID = a_keybindID,
-		.ModName = a_modName,
-		.Action = _modKeys[a_modName + ":"s + a_keybindID],
-	};
+	auto key = a_modName + ":"s + a_keybindID;
+	auto item = _modKeys.find(key);
+	return item != _modKeys.end() ? item->second : KeybindInfo{};
 }
 
 auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) -> KeybindInfo
@@ -71,8 +102,12 @@ void KeybindManager::ClearKeybind(const std::string& a_modName, const std::strin
 
 void KeybindManager::ClearKeybind(std::uint32_t a_keyCode)
 {
-	auto& params = _lookup[a_keyCode];
-	_modRegs.erase(params.ModName + ":"s + params.KeybindID);
+	auto item = _lookup.find(a_keyCode);
+	if (item != _lookup.end())
+	{
+		auto& params = item->second;
+		_modRegs.erase(params.ModName + ":"s + params.KeybindID);
+	}
 }
 
 void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event)

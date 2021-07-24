@@ -22,7 +22,7 @@ struct ValueOptionsData
 	std::shared_ptr<ValueSource> ValueSource;
 };
 
-class ValueOptionsHandler : public IHandler
+class ValueOptionsHandler final : public IHandler
 {
 public:
 	ValueOptionsHandler(
@@ -33,16 +33,16 @@ public:
 		RE::TESForm* sourceForm,
 		const std::string& scriptName);
 
-	bool Bool(bool b);
-	bool Int(int i);
-	bool Uint(unsigned i);
-	bool Double(double d);
-	bool String(const Ch* str, SizeType length, bool copy);
-	bool StartObject();
-	bool Key(const Ch* str, SizeType length, bool copy);
-	bool EndObject(SizeType memberCount);
-	bool StartArray();
-	bool EndArray(SizeType elementCount);
+	bool Bool(bool b) override;
+	bool Int(int i) override;
+	bool Uint(unsigned i) override;
+	bool Double(double d) override;
+	bool String(const Ch* str, SizeType length, bool copy) override;
+	bool StartObject() override;
+	bool Key(const Ch* str, SizeType length, bool copy) override;
+	bool EndObject(SizeType memberCount) override;
+	bool StartArray() override;
+	bool EndArray(SizeType elementCount) override;
 
 private:
 	enum class State

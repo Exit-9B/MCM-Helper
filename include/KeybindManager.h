@@ -44,6 +44,11 @@ public:
 		const std::string& a_modName,
 		const std::string& a_ID);
 
+	void AddKeybind(
+		const std::string& a_modName,
+		const std::string& a_keybindID,
+		const KeybindInfo& a_info);
+
 	auto GetKeybind(const std::string& a_modName, const std::string& a_keybindID) -> KeybindInfo;
 	auto GetKeybind(std::uint32_t a_keyCode) -> KeybindInfo;
 
@@ -54,7 +59,7 @@ public:
 	void ProcessButtonEvent(RE::ButtonEvent* a_event);
 
 private:
-	std::unordered_map<std::string, std::shared_ptr<Action>> _modKeys;
+	std::unordered_map<std::string, KeybindInfo> _modKeys;
 	std::unordered_map<std::string, std::uint32_t> _modRegs;
 	std::unordered_map<std::uint32_t, KeybindInfo> _lookup;
 };

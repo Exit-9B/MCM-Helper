@@ -35,4 +35,6 @@ set(headers ${headers}
     include/Json/ActionHandler.h
     include/Json/ParamsHandler.h
     include/Json/GroupConditionHandler.h
+    include/Json/KeybindsHandler.h
+    include/Json/KeybindsArrayHandler.h
 )

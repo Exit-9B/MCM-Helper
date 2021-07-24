@@ -14,16 +14,6 @@ ActionHandler::ActionHandler(
 {
 }
 
-ActionHandler::ActionHandler(
-	ReaderHandler* master,
-	std::shared_ptr<Action>* action,
-	const std::string& id) :
-	IHandler{ master },
-	_action{ action },
-	_id{ id }
-{
-}
-
 bool ActionHandler::String(
 	const Ch* str,
 	[[maybe_unused]] SizeType length,
@@ -161,7 +151,6 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 
 			auto sendEvent = std::make_shared<SendEvent>();
 			*_action = sendEvent;
-			sendEvent->Control = _id;
 			sendEvent->Form = _data.Form;
 		}
 		else {

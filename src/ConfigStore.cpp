@@ -72,8 +72,7 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 {
 	assert(a_configScript);
 
-	auto quest = GetFormFromScript(a_configScript);
-	auto plugin = Utils::GetModName(quest);
+	auto plugin = GetModName(a_configScript);
 
 	if (plugin.empty())
 		return false;
@@ -83,12 +82,16 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 
 	ReaderHandler handler;
 	auto config = std::make_shared<Config>();
-	handler.PushHandler<ConfigHandler>(&handler, config.get(), plugin, a_configScript);
+	handler.PushHandler<ConfigHandler>(
+		std::addressof(handler),
+		config.get(),
+		plugin,
+		a_configScript);
 
 	rapidjson::Reader reader;
 
 	FILE* fp = nullptr;
-	auto err = _wfopen_s(&fp, configLocation.c_str(), L"r");
+	auto err = _wfopen_s(std::addressof(fp), configLocation.c_str(), L"r");
 	if (err != 0)
 	{
 		logger::warn("Failed to open config for {}"sv, plugin);
@@ -101,7 +104,10 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 	auto result = reader.Parse(is, handler);
 	fclose(fp);
 	if (!result)
+	{
+		logger::warn("Failed to parse config for {}"sv, plugin);
 		return false;
+	}
 
 	_configStore[plugin] = config;
 

@@ -2,6 +2,7 @@
 #include "Script/SkyUI.h"
 #include "ConfigStore.h"
 #include "ConfigPageCache.h"
+#include "KeybindManager.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func)
 
@@ -128,6 +129,7 @@ namespace Papyrus
 		if (object)
 		{
 			auto startTime = std::chrono::steady_clock::now();
+			auto modName = Utils::GetModName(a_self);
 			ConfigStore::GetInstance().ReadConfig(object);
 
 			auto configManager = SkyUI::ConfigManager::GetInstance();
@@ -136,13 +138,15 @@ namespace Papyrus
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, object);
 			}
 
+			KeybindManager::GetInstance().ReadKeybinds(modName);
+
 			auto endTime = std::chrono::steady_clock::now();
 			auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(
 				endTime - startTime);
 
 			logger::info(
 				"Registered mod config for {} in {} us."sv,
-				Utils::GetModName(a_self),
+				modName,
 				elapsedMs.count());
 		}
 	}
