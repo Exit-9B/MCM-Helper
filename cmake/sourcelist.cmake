@@ -6,6 +6,8 @@ set(sources ${sources}
     src/SettingStore.cpp
     src/ConfigStore.cpp
     src/ConfigPageCache.cpp
+    src/KeybindManager.cpp
+    src/KeybindEventHandler.cpp
 
     src/Script/ScriptObject.cpp
     src/Script/SkyUI.cpp

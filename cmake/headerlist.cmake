@@ -6,6 +6,8 @@ set(headers ${headers}
     include/SettingStore.h
     include/ConfigStore.h
     include/ConfigPageCache.h
+    include/KeybindManager.h
+    include/KeybindEventHandler.h
 
     include/Script/ScriptObject.h
     include/Script/SkyUI.h
