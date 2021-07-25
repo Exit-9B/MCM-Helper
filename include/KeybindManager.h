@@ -2,27 +2,6 @@
 
 #include "Config/Action.h"
 
-struct ActionParameters
-{
-	enum class ParamType
-	{
-		None,
-		Int,
-		Float,
-		String,
-		Bool,
-	};
-
-	ParamType paramType;
-	std::variant<std::int32_t, bool, float, std::string> value;
-
-	ActionParameters()
-	{
-		paramType = ParamType::None;
-		value = 0;
-	}
-};
-
 class KeybindInfo
 {
 public:
