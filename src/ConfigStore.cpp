@@ -77,7 +77,7 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 	if (plugin.empty())
 		return false;
 
-	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto configLocation = configPath / plugin / "config.json"sv;
 
 	ReaderHandler handler;
