@@ -9,8 +9,7 @@ bool UserKeybindsHandler::Uint(unsigned i)
 {
 	switch (_state) {
 	case State::Version:
-		// are we supposed to validate this?
-		return true;
+		return i <= PLUGIN_VERSION;
 	default:
 		return false;
 	}

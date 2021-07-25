@@ -95,6 +95,8 @@ bool UserKeybindsArrayHandler::StartArray()
 bool UserKeybindsArrayHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
+	case State::Main:
+		return true;
 	default:
 		return false;
 	}

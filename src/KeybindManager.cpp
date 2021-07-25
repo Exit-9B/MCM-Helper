@@ -14,7 +14,7 @@ auto KeybindManager::GetInstance() -> KeybindManager&
 
 void KeybindManager::ReadKeybinds(const std::string& a_modName)
 {
-	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto keybindsLocation = configPath / a_modName / "keybinds.json"sv;
 
 	auto keybindsDirEntry = std::filesystem::directory_entry{ keybindsLocation };
@@ -202,7 +202,7 @@ auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo
 
 auto KeybindManager::GetRegisteredKey(
 	const std::string& a_modName,
-	const std::string& a_keybindID) const
+	const std::string& a_keybindID)
 	-> std::int32_t
 {
 	std::scoped_lock lock{ _mutex };

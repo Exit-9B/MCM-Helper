@@ -35,7 +35,7 @@ public:
 
 	auto GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo;
 
-	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID) const
+	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
 		-> std::int32_t;
 
 	void ClearKeybind(const std::string& a_modName, const std::string& a_keybindID);

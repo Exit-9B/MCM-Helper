@@ -504,6 +504,13 @@ namespace Papyrus
 					{
 						keymap->ValueSource->SetValue(static_cast<float>(a_keyCode));
 					}
+					else if (!keymap->ID.empty())
+					{
+						auto modName = Utils::GetModName(a_self);
+						auto& keybindManager = KeybindManager::GetInstance();
+						keybindManager.Register(a_keyCode, modName, keymap->ID);
+						keybindManager.CommitKeybinds();
+					}
 
 					keymap->Refresh(object, a_option);
 					SendSettingChangeEvent(a_vm, object, keymap->ID);
@@ -533,6 +540,11 @@ namespace Papyrus
 			{
 				updateKey(true);
 			}
+		}
+
+		if (control)
+		{
+			control->InvokeAction(a_vm);
 		}
 	}
 
