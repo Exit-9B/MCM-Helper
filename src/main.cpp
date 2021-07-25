@@ -57,7 +57,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	SKSE::GetPapyrusInterface()->Register(Papyrus::RegisterFuncs);
 
-	std::filesystem::path mcmPath{ "Data/MCM/"sv };
+	std::filesystem::path mcmPath{ "Data/MCM"sv };
 	std::filesystem::directory_entry mcmDirectory{ mcmPath };
 	if (!mcmDirectory.exists())
 	{

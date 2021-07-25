@@ -164,7 +164,7 @@ void SettingStore::ReloadDefault(
 	std::string_view a_modName,
 	std::string_view a_settingName)
 {
-	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto iniLocation = configPath / a_modName / "settings.ini"sv;
 
 	CSimpleIniA ini;
@@ -309,7 +309,7 @@ auto SettingStore::GetDefaultSetting(
 
 void SettingStore::LoadDefaults()
 {
-	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	std::filesystem::directory_entry configDirectory{ configPath };
 	if (!configDirectory.exists() || !configDirectory.is_directory())
 		return;
@@ -332,7 +332,7 @@ void SettingStore::LoadDefaults()
 
 void SettingStore::LoadUserSettings()
 {
-	std::filesystem::path modSettingsPath{ "Data/MCM/Settings/"sv };
+	std::filesystem::path modSettingsPath{ "Data/MCM/Settings"sv };
 	std::filesystem::directory_entry modSettingsDirectory{ modSettingsPath };
 	if (!modSettingsDirectory.exists() || !modSettingsDirectory.is_directory())
 		return;
@@ -457,7 +457,7 @@ void SettingStore::CommitModSetting(std::string_view a_modName, RE::Setting* a_m
 			return;
 		}
 
-		std::filesystem::path settingsPath{ "Data/MCM/Settings/"sv };
+		std::filesystem::path settingsPath{ "Data/MCM/Settings"sv };
 		std::filesystem::directory_entry settingsDirectory{ settingsPath };
 		if (!settingsDirectory.exists())
 		{
