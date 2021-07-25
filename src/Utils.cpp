@@ -54,16 +54,9 @@ auto Utils::GetScriptObject(RE::TESForm* a_form, const std::string& a_scriptName
 	}
 
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
-
-	if (!vm)
-	{
-		logger::warn("Failed to get VM implementation"sv);
-		return nullptr;
-	}
 
 	auto typeID = static_cast<RE::VMTypeID>(a_form->GetFormType());
-	auto handle = skyrimVM->handlePolicy.GetHandleForObject(typeID, a_form);
+	RE::VMHandle handle = skyrimVM->handlePolicy.GetHandleForObject(typeID, a_form);
 	auto scriptName = !a_scriptName.empty() ? a_scriptName.c_str() : nullptr;
 
 	ScriptObjectPtr object;
