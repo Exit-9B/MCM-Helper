@@ -130,7 +130,7 @@ namespace Papyrus
 		{
 			auto startTime = std::chrono::steady_clock::now();
 			auto modName = Utils::GetModName(a_self);
-			ConfigStore::GetInstance().ReadConfig(object);
+			ConfigStore::GetInstance().ReadConfig(modName, object);
 
 			auto configManager = SkyUI::ConfigManager::GetInstance();
 			if (configManager)
@@ -138,7 +138,12 @@ namespace Papyrus
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, object);
 			}
 
-			KeybindManager::GetInstance().ReadKeybinds(modName);
+			auto& keybindManager = KeybindManager::GetInstance();
+			keybindManager.ReadKeybinds(modName);
+			// TODO: There is a lot of redundancy doing this;
+			// ideally we should rework the function to work without preconditions, so it
+			// can just be called once.
+			keybindManager.ReadKeybindRegistrations();
 
 			auto endTime = std::chrono::steady_clock::now();
 			auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(

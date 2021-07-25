@@ -2,6 +2,7 @@
 #include "SettingStore.h"
 #include "ConfigStore.h"
 #include "KeybindEventHandler.h"
+#include "KeybindManager.h"
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
@@ -73,6 +74,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 			switch (a_msg->type) {
 			case SKSE::MessagingInterface::kPostLoadGame:
 				ConfigStore::GetInstance().ReadConfigs();
+				KeybindManager::GetInstance().ReadKeybindRegistrations();
 				break;
 			case SKSE::MessagingInterface::kInputLoaded:
 				KeybindEventHandler::GetInstance().Register();

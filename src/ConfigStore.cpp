@@ -1,4 +1,5 @@
 #include "ConfigStore.h"
+#include "KeybindManager.h"
 #include "Utils.h"
 #include "Script/SkyUI.h"
 #include "Json/ReaderHandler.h"
@@ -52,9 +53,11 @@ void ConfigStore::ReadConfigs()
 
 		if (configScript)
 		{
-			if (ReadConfig(configScript))
+			auto modName = GetModName(configScript);
+			if (ReadConfig(modName, configScript))
 			{
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
+				KeybindManager::GetInstance().ReadKeybinds(modName);
 			}
 		}
 	}
@@ -68,31 +71,26 @@ void ConfigStore::ReadConfigs()
 		elapsedMs.count());
 }
 
-bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
+bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_configScript)
 {
 	assert(a_configScript);
 
-	auto plugin = GetModName(a_configScript);
-
-	if (plugin.empty())
-		return false;
-
 	std::filesystem::path configPath{ "Data/MCM/Config"sv };
-	auto configLocation = configPath / plugin / "config.json"sv;
+	auto configLocation = configPath / a_modName / "config.json"sv;
 
 	ReaderHandler handler;
 	auto config = std::make_shared<Config>();
 	handler.PushHandler<ConfigHandler>(
 		std::addressof(handler),
 		config.get(),
-		plugin,
+		a_modName,
 		a_configScript);
 
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), configLocation.c_str(), L"r");
 	if (err != 0)
 	{
-		logger::warn("Failed to open config for {}"sv, plugin);
+		logger::warn("Failed to open config for {}"sv, a_modName);
 		return false;
 	}
 
@@ -104,11 +102,11 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 	fclose(fp);
 	if (!result)
 	{
-		logger::warn("Failed to parse config for {}"sv, plugin);
+		logger::warn("Failed to parse config for {}"sv, a_modName);
 		return false;
 	}
 
-	_configStore[plugin] = config;
+	_configStore[a_modName] = config;
 
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;

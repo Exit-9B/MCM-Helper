@@ -18,7 +18,7 @@ public:
 	static ConfigStore& GetInstance();
 
 	void ReadConfigs();
-	bool ReadConfig(ScriptObjectPtr a_configScript);
+	bool ReadConfig(const std::string& a_modName, ScriptObjectPtr a_configScript);
 	auto GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>;
 	auto GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>;
 

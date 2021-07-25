@@ -155,6 +155,9 @@ void KeybindManager::Register(
 	const std::string& a_modName,
 	const std::string& a_keybindID)
 {
+	if (GetRegisteredKey(a_modName, a_keybindID) == a_keyCode)
+		return;
+
 	std::scoped_lock lock{ _mutex };
 
 	// Only one action can be assigned to a key
