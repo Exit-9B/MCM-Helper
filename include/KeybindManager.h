@@ -17,6 +17,8 @@ public:
 	static auto GetInstance() -> KeybindManager&;
 
 	void ReadKeybinds(const std::string& a_modName);
+	void ReadKeybindRegistrations();
+	void CommitKeybinds();
 
 	void Register(
 		std::uint32_t a_keyCode,
@@ -28,20 +30,24 @@ public:
 		const std::string& a_keybindID,
 		const KeybindInfo& a_info);
 
-	auto GetKeybind(const std::string& a_modName, const std::string& a_keybindID) -> KeybindInfo;
-	auto GetKeybind(std::uint32_t a_keyCode) -> KeybindInfo;
+	auto GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
+		-> KeybindInfo;
 
-	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
+	auto GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo;
+
+	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID) const
 		-> std::int32_t;
 
 	void ClearKeybind(const std::string& a_modName, const std::string& a_keybindID);
 
 	void ClearKeybind(std::uint32_t a_keyCode);
 
-	void ProcessButtonEvent(RE::ButtonEvent* a_event);
+	void ProcessButtonEvent(RE::ButtonEvent* a_event) const;
 
 private:
+	bool _keybindsDirty;
+	std::mutex _mutex;
+	std::map<std::string, std::uint32_t> _modRegs;
 	std::unordered_map<std::string, KeybindInfo> _modKeys;
-	std::unordered_map<std::string, std::uint32_t> _modRegs;
 	std::unordered_map<std::uint32_t, KeybindInfo> _lookup;
 };

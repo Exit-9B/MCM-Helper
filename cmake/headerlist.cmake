@@ -36,4 +36,6 @@ set(headers ${headers}
     include/Json/GroupConditionHandler.h
     include/Json/KeybindsHandler.h
     include/Json/KeybindsArrayHandler.h
+    include/Json/UserKeybindsHandler.h
+    include/Json/UserKeybindsArrayHandler.h
 )

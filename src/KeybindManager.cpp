@@ -1,7 +1,10 @@
 #include "KeybindManager.h"
 #include "Json/ReaderHandler.h"
 #include "Json/KeybindsHandler.h"
+#include "Json/UserKeybindsHandler.h"
 #include <rapidjson/filereadstream.h>
+#include <rapidjson/filewritestream.h>
+#include <rapidjson/writer.h>
 
 auto KeybindManager::GetInstance() -> KeybindManager&
 {
@@ -21,8 +24,6 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 	ReaderHandler handler;
 	handler.PushHandler<KeybindsHandler>(std::addressof(handler), a_modName);
 
-	rapidjson::Reader reader;
-
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
 	if (err != 0)
@@ -33,6 +34,7 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 
 	char readBuffer[65536]{};
 	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
+	rapidjson::Reader reader;
 
 	auto result = reader.Parse(is, handler);
 	fclose(fp);
@@ -42,11 +44,119 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 	}
 }
 
+void KeybindManager::ReadKeybindRegistrations()
+{
+	// TODO any preconditions for Register are also preconditions for this
+	auto startTime = std::chrono::steady_clock::now();
+
+	auto settingsPath = std::filesystem::path{ "Data/MCM/Settings"sv };
+	auto keybindsLocation = settingsPath / "keybinds.json"sv;
+
+	ReaderHandler handler;
+	handler.PushHandler<UserKeybindsHandler>(std::addressof(handler));
+
+	FILE* fp = nullptr;
+	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
+	if (err != 0)
+	{
+		return;
+	}
+
+	char readBuffer[65536]{};
+	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
+	rapidjson::Reader reader;
+
+	auto result = reader.Parse(is, handler);
+	fclose(fp);
+	if (!result)
+	{
+		logger::warn("Failed to parse keybind registrations"sv);
+	}
+
+	auto endTime = std::chrono::steady_clock::now();
+	auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+
+	logger::info(
+		"Loaded keybind registrations in {} us."sv,
+		elapsedMs.count());
+}
+
+void KeybindManager::CommitKeybinds()
+{
+	if (!_keybindsDirty)
+		return;
+
+	auto startTime = std::chrono::steady_clock::now();
+
+	{
+		std::scoped_lock lock{ _mutex };
+
+		auto settingsPath = std::filesystem::path{ "Data/MCM/Settings"sv };
+		auto settingsEntry = std::filesystem::directory_entry{ settingsPath };
+		if (!settingsEntry.exists())
+		{
+			std::filesystem::create_directory(settingsPath);
+		}
+
+		auto keybindsLocation = settingsPath / "keybinds.json"sv;
+		FILE* fp = nullptr;
+		auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"w");
+		if (err != 0)
+		{
+			logger::error("Failed to open file for saving keybind registrations"sv);
+			return;
+		}
+
+		char writeBuffer[65536]{};
+		rapidjson::FileWriteStream os{ fp, writeBuffer, sizeof(writeBuffer) };
+		rapidjson::Writer<rapidjson::FileWriteStream> writer{ os };
+
+		writer.StartObject();
+		writer.Key("version");
+		writer.String(std::to_string(PLUGIN_VERSION).c_str());
+		writer.Key("keybinds");
+		writer.StartArray();
+
+		for (auto& [modKeybindID, keyCode] : _modRegs)
+		{
+			// TODO: Implement some better data structure so we're not doing this
+			std::string modName;
+			std::string keybindID;
+			std::istringstream ss{ modKeybindID };
+			std::getline(ss, modName, ':');
+			std::getline(ss, keybindID);
+
+			writer.StartObject();
+			writer.Key("keycode");
+			writer.Int(keyCode);
+			writer.Key("modName");
+			writer.String(modName.c_str());
+			writer.Key("id");
+			writer.String(keybindID.c_str());
+			writer.EndObject();
+		}
+
+		writer.EndArray();
+		writer.EndObject();
+
+		_keybindsDirty = false;
+	}
+
+	auto endTime = std::chrono::steady_clock::now();
+	auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+
+	logger::info(
+		"Saved keybind registrations in {} us."sv,
+		elapsedMs.count());
+}
+
 void KeybindManager::Register(
 	std::uint32_t a_keyCode,
 	const std::string& a_modName,
 	const std::string& a_keybindID)
 {
+	std::scoped_lock lock{ _mutex };
+
 	// Only one action can be assigned to a key
 	for (auto it = _modRegs.begin(); it != _modRegs.end(); ++it)
 	{
@@ -63,6 +173,8 @@ void KeybindManager::Register(
 	_lookup.erase(reg);
 	reg = a_keyCode;
 	_lookup[a_keyCode] = _modKeys[key];
+
+	_keybindsDirty = true;
 }
 
 void KeybindManager::AddKeybind(
@@ -74,7 +186,7 @@ void KeybindManager::AddKeybind(
 	_modKeys[key] = a_info;
 }
 
-auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID)
+auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
 	-> KeybindInfo
 {
 	auto key = a_modName + ":"s + a_keybindID;
@@ -82,15 +194,19 @@ auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string&
 	return item != _modKeys.end() ? item->second : KeybindInfo{};
 }
 
-auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) -> KeybindInfo
+auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo
 {
 	auto item = _lookup.find(a_keyCode);
 	return item != _lookup.end() ? item->second : KeybindInfo{};
 }
 
-auto KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
+auto KeybindManager::GetRegisteredKey(
+	const std::string& a_modName,
+	const std::string& a_keybindID) const
 	-> std::int32_t
 {
+	std::scoped_lock lock{ _mutex };
+
 	auto key = a_modName + ":"s + a_keybindID;
 	auto item = _modRegs.find(key);
 	return item != _modRegs.end() ? item->second : -1;
@@ -98,6 +214,8 @@ auto KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::s
 
 void KeybindManager::ClearKeybind(const std::string& a_modName, const std::string& a_keybindID)
 {
+	std::scoped_lock lock{ _mutex };
+
 	auto key = a_modName + ":"s + a_keybindID;
 	auto item = _modRegs.find(key);
 	if (item != _modRegs.end())
@@ -105,20 +223,26 @@ void KeybindManager::ClearKeybind(const std::string& a_modName, const std::strin
 		auto keyCode = item->second;
 		_lookup.erase(keyCode);
 		_modRegs.erase(item);
+
+		_keybindsDirty = true;
 	}
 }
 
 void KeybindManager::ClearKeybind(std::uint32_t a_keyCode)
 {
+	std::scoped_lock lock{ _mutex };
+
 	auto item = _lookup.find(a_keyCode);
 	if (item != _lookup.end())
 	{
 		auto& params = item->second;
 		_modRegs.erase(params.ModName + ":"s + params.KeybindID);
+
+		_keybindsDirty = true;
 	}
 }
 
-void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event)
+void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
 {
 	assert(a_event);
 

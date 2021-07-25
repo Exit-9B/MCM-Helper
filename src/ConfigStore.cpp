@@ -88,8 +88,6 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 		plugin,
 		a_configScript);
 
-	rapidjson::Reader reader;
-
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), configLocation.c_str(), L"r");
 	if (err != 0)
@@ -100,6 +98,7 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 
 	char readBuffer[65536]{};
 	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
+	rapidjson::Reader reader;
 
 	auto result = reader.Parse(is, handler);
 	fclose(fp);
