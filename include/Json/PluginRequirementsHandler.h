@@ -2,7 +2,7 @@
 
 #include "Json/IHandler.h"
 
-class PluginRequirementsHandler : public IHandler
+class PluginRequirementsHandler final : public IHandler
 {
 public:
 	PluginRequirementsHandler(ReaderHandler* master);
