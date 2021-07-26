@@ -150,7 +150,7 @@ void KeybindManager::Register(
 	if (GetRegisteredKey(a_modName, a_keybindID) == a_keyCode)
 		return;
 
-	ClearKeybind(a_modName, a_keybindID);
+	Unregister(a_modName, a_keybindID);
 
 	auto key = Keybind{ a_modName, a_keybindID };
 
@@ -203,7 +203,7 @@ auto KeybindManager::GetRegisteredKey(
 	return item != _modRegs.end() ? item->second : 0;
 }
 
-void KeybindManager::ClearKeybind(const std::string& a_modName, const std::string& a_keybindID)
+void KeybindManager::Unregister(const std::string& a_modName, const std::string& a_keybindID)
 {
 	std::scoped_lock lock{ _mutex };
 
@@ -230,7 +230,7 @@ void KeybindManager::ClearKeybind(const std::string& a_modName, const std::strin
 	}
 }
 
-void KeybindManager::ClearKeybind(std::uint32_t a_keyCode)
+void KeybindManager::Unregister(std::uint32_t a_keyCode)
 {
 	std::scoped_lock lock{ _mutex };
 
@@ -245,6 +245,12 @@ void KeybindManager::ClearKeybind(std::uint32_t a_keyCode)
 	{
 		_keybindsDirty = true;
 	}
+}
+
+void KeybindManager::ClearKeybinds()
+{
+	_modKeys.clear();
+	_lookup.clear();
 }
 
 void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const

@@ -52,9 +52,11 @@ public:
 	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
 		-> std::uint32_t;
 
-	void ClearKeybind(const std::string& a_modName, const std::string& a_keybindID);
+	void Unregister(const std::string& a_modName, const std::string& a_keybindID);
 
-	void ClearKeybind(std::uint32_t a_keyCode);
+	void Unregister(std::uint32_t a_keyCode);
+
+	void ClearKeybinds();
 
 	void ProcessButtonEvent(RE::ButtonEvent* a_event) const;
 
