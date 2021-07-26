@@ -468,17 +468,19 @@ void KeyMapControl::ResetToDefault()
 
 auto KeyMapControl::GetInfoText() -> std::string
 {
+	if (!Help.empty())
+	{
+		return Help;
+	}
+
 	if (!ValueSource && !ID.empty())
 	{
 		auto& keybindManager = KeybindManager::GetInstance();
 		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
-		if (!desc.empty())
-		{
-			return desc;
-		}
+		return desc;
 	}
 
-	return Help;
+	return ""s;
 }
 
 auto KeyMapControl::GetKeyCode() -> std::int32_t
