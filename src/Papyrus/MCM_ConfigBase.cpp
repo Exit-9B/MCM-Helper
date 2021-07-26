@@ -172,9 +172,10 @@ namespace Papyrus
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
-		if (control && !control->Help.empty())
+		auto infoText = control ? control->GetInfoText() : ""s;
+		if (control && !infoText.empty())
 		{
-			SkyUI::Config::SetInfoText(object, control->Help);
+			SkyUI::Config::SetInfoText(object, infoText);
 		}
 	}
 

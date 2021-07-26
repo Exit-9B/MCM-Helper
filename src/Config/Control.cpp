@@ -24,6 +24,11 @@ void Control::ResetToDefault()
 	// base behavior is to do nothing
 }
 
+auto Control::GetInfoText() -> std::string
+{
+	return Help;
+}
+
 auto Control::GetFlags() -> SkyUI::Flags
 {
 	if (GroupCondition && !GroupCondition->GetIsActive())
@@ -461,6 +466,21 @@ void KeyMapControl::ResetToDefault()
 	ValueSource->ResetToDefault();
 }
 
+auto KeyMapControl::GetInfoText() -> std::string
+{
+	if (!ValueSource && !ID.empty())
+	{
+		auto& keybindManager = KeybindManager::GetInstance();
+		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
+		if (!desc.empty())
+		{
+			return desc;
+		}
+	}
+
+	return Help;
+}
+
 auto KeyMapControl::GetKeyCode() -> std::int32_t
 {
 	if (ValueSource)
@@ -471,6 +491,21 @@ auto KeyMapControl::GetKeyCode() -> std::int32_t
 	{
 		return KeybindManager::GetInstance().GetRegisteredKey(ModName, ID);
 	}
+}
+
+auto KeyMapControl::GetDescription() -> std::string
+{
+	if (!ValueSource)
+	{
+		auto& keybindManager = KeybindManager::GetInstance();
+		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
+		if (!desc.empty())
+		{
+			return desc;
+		}
+	}
+
+	return Text;
 }
 
 auto InputControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t

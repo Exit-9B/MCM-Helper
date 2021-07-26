@@ -6,7 +6,6 @@ class KeybindInfo
 {
 public:
 	std::string KeybindID;
-	// TODO where is this used?
 	std::string KeybindDesc;
 	std::string ModName;
 	std::shared_ptr<Action> Action;
