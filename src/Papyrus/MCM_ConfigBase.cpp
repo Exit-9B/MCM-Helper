@@ -140,10 +140,6 @@ namespace Papyrus
 
 			auto& keybindManager = KeybindManager::GetInstance();
 			keybindManager.ReadKeybinds(modName);
-			// TODO: There is a lot of redundancy doing this;
-			// ideally we should rework the function to work without preconditions, so it
-			// can just be called once.
-			keybindManager.ReadKeybindRegistrations();
 
 			auto endTime = std::chrono::steady_clock::now();
 			auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(

@@ -46,7 +46,6 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 
 void KeybindManager::ReadKeybindRegistrations()
 {
-	// TODO any preconditions for Register are also preconditions for this
 	auto startTime = std::chrono::steady_clock::now();
 
 	auto settingsPath = std::filesystem::path{ "Data/MCM/Settings"sv };
@@ -128,7 +127,7 @@ void KeybindManager::CommitKeybinds()
 
 			writer.StartObject();
 			writer.Key("keycode");
-			writer.Int(keyCode);
+			writer.Uint(keyCode);
 			writer.Key("modName");
 			writer.String(modName.c_str());
 			writer.Key("id");
@@ -158,25 +157,33 @@ void KeybindManager::Register(
 	if (GetRegisteredKey(a_modName, a_keybindID) == a_keyCode)
 		return;
 
+	auto key = a_modName + ":"s + a_keybindID;
+
 	std::scoped_lock lock{ _mutex };
 
-	// Only one action can be assigned to a key
-	for (auto it = _modRegs.begin(); it != _modRegs.end(); ++it)
+	auto regIt = _modRegs.find(key);
+	auto keyIt = _modKeys.find(key);
+
+	// The keybind might not have been added yet
+	if (keyIt != _modKeys.end())
 	{
-		if (it->second == a_keyCode)
+		// A keybind can only have one key
+		if (regIt != _modRegs.end())
 		{
-			_modRegs.erase(it);
-			break;
+			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it)
+			{
+				if (it->second == keyIt->second)
+				{
+					_lookup.erase(it);
+					break;
+				}
+			}
 		}
+
+		_lookup.emplace(std::make_pair(a_keyCode, keyIt->second));
 	}
 
-	// Remove any previous binding then add the new one
-	auto key = a_modName + ":"s + a_keybindID;
-	auto& reg = _modRegs[key];
-	_lookup.erase(reg);
-	reg = a_keyCode;
-	_lookup[a_keyCode] = _modKeys[key];
-
+	_modRegs[key] = a_keyCode;
 	_keybindsDirty = true;
 }
 
@@ -187,6 +194,13 @@ void KeybindManager::AddKeybind(
 {
 	auto key = a_modName + ":"s + a_keybindID;
 	_modKeys[key] = a_info;
+
+	// Add to lookup if a key was already registered
+	auto regIt = _modRegs.find(key);
+	if (regIt != _modRegs.end())
+	{
+		_lookup.emplace(regIt->second, a_info);
+	}
 }
 
 auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
@@ -206,7 +220,7 @@ auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo
 auto KeybindManager::GetRegisteredKey(
 	const std::string& a_modName,
 	const std::string& a_keybindID)
-	-> std::int32_t
+	-> std::uint32_t
 {
 	std::scoped_lock lock{ _mutex };
 

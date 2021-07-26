@@ -6,9 +6,17 @@ class KeybindInfo
 {
 public:
 	std::string KeybindID;
+	// TODO where is this used?
 	std::string KeybindDesc;
 	std::string ModName;
 	std::shared_ptr<Action> Action;
+
+	bool operator==(const KeybindInfo& other)
+	{
+		return KeybindID == other.KeybindID &&
+			ModName == other.ModName &&
+			Action == other.Action;
+	}
 };
 
 class KeybindManager
@@ -36,7 +44,7 @@ public:
 	auto GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo;
 
 	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
-		-> std::int32_t;
+		-> std::uint32_t;
 
 	void ClearKeybind(const std::string& a_modName, const std::string& a_keybindID);
 
@@ -49,5 +57,5 @@ private:
 	std::mutex _mutex;
 	std::map<std::string, std::uint32_t> _modRegs;
 	std::unordered_map<std::string, KeybindInfo> _modKeys;
-	std::unordered_map<std::uint32_t, KeybindInfo> _lookup;
+	std::unordered_multimap<std::uint32_t, KeybindInfo> _lookup;
 };

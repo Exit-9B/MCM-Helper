@@ -67,6 +67,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	}
 
 	SettingStore::GetInstance().ReadSettings();
+	KeybindManager::GetInstance().ReadKeybindRegistrations();
 
 	SKSE::GetMessagingInterface()->RegisterListener(
 		[](SKSE::MessagingInterface::Message* a_msg)
@@ -74,7 +75,6 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 			switch (a_msg->type) {
 			case SKSE::MessagingInterface::kPostLoadGame:
 				ConfigStore::GetInstance().ReadConfigs();
-				KeybindManager::GetInstance().ReadKeybindRegistrations();
 				break;
 			case SKSE::MessagingInterface::kInputLoaded:
 				KeybindEventHandler::GetInstance().Register();
