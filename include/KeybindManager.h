@@ -41,8 +41,6 @@ public:
 	auto GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
 		-> KeybindInfo;
 
-	auto GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo;
-
 	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
 		-> std::uint32_t;
 

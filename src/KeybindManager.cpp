@@ -157,29 +157,16 @@ void KeybindManager::Register(
 	if (GetRegisteredKey(a_modName, a_keybindID) == a_keyCode)
 		return;
 
+	ClearKeybind(a_modName, a_keybindID);
+
 	auto key = a_modName + ":"s + a_keybindID;
 
 	std::scoped_lock lock{ _mutex };
 
-	auto regIt = _modRegs.find(key);
+	// Check if keybind has been added yet
 	auto keyIt = _modKeys.find(key);
-
-	// The keybind might not have been added yet
 	if (keyIt != _modKeys.end())
 	{
-		// A keybind can only have one key
-		if (regIt != _modRegs.end())
-		{
-			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it)
-			{
-				if (it->second == keyIt->second)
-				{
-					_lookup.erase(it);
-					break;
-				}
-			}
-		}
-
 		_lookup.emplace(std::make_pair(a_keyCode, keyIt->second));
 	}
 
@@ -211,12 +198,6 @@ auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string&
 	return item != _modKeys.end() ? item->second : KeybindInfo{};
 }
 
-auto KeybindManager::GetKeybind(std::uint32_t a_keyCode) const -> KeybindInfo
-{
-	auto item = _lookup.find(a_keyCode);
-	return item != _lookup.end() ? item->second : KeybindInfo{};
-}
-
 auto KeybindManager::GetRegisteredKey(
 	const std::string& a_modName,
 	const std::string& a_keybindID)
@@ -234,13 +215,24 @@ void KeybindManager::ClearKeybind(const std::string& a_modName, const std::strin
 	std::scoped_lock lock{ _mutex };
 
 	auto key = a_modName + ":"s + a_keybindID;
-	auto item = _modRegs.find(key);
-	if (item != _modRegs.end())
-	{
-		auto keyCode = item->second;
-		_lookup.erase(keyCode);
-		_modRegs.erase(item);
+	auto regIt = _modRegs.find(key);
+	auto keyIt = _modKeys.find(key);
 
+	if (regIt != _modRegs.end())
+	{
+		if (keyIt != _modKeys.end())
+		{
+			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it)
+			{
+				if (it->second == keyIt->second)
+				{
+					_lookup.erase(it);
+					break;
+				}
+			}
+		}
+
+		_modRegs.erase(regIt);
 		_keybindsDirty = true;
 	}
 }
@@ -249,12 +241,15 @@ void KeybindManager::ClearKeybind(std::uint32_t a_keyCode)
 {
 	std::scoped_lock lock{ _mutex };
 
-	auto item = _lookup.find(a_keyCode);
-	if (item != _lookup.end())
-	{
-		auto& params = item->second;
-		_modRegs.erase(params.ModName + ":"s + params.KeybindID);
+	_lookup.erase(a_keyCode);
 
+	const auto count = std::erase_if(_modRegs,
+		[=](const auto& item) {
+			return item.second == a_keyCode;
+		});
+
+	if (count > 0)
+	{
 		_keybindsDirty = true;
 	}
 }
@@ -263,10 +258,9 @@ void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
 {
 	assert(a_event);
 
-	auto item = _lookup.find(a_event->GetIDCode());
-	if (item != _lookup.end())
+	for (auto [it, end] = _lookup.equal_range(a_event->GetIDCode()); it != end; ++it)
 	{
-		auto& action = item->second.Action;
+		auto& action = it->second.Action;
 		if (action)
 		{
 			action->SendControlEvent(a_event->IsUp(), a_event->HeldDuration());
