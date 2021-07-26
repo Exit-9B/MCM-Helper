@@ -116,22 +116,15 @@ void KeybindManager::CommitKeybinds()
 		writer.Key("keybinds");
 		writer.StartArray();
 
-		for (auto& [modKeybindID, keyCode] : _modRegs)
+		for (auto& [keybind, keyCode] : _modRegs)
 		{
-			// TODO: Implement some better data structure so we're not doing this
-			std::string modName;
-			std::string keybindID;
-			std::istringstream ss{ modKeybindID };
-			std::getline(ss, modName, ':');
-			std::getline(ss, keybindID);
-
 			writer.StartObject();
 			writer.Key("keycode");
 			writer.Uint(keyCode);
 			writer.Key("modName");
-			writer.String(modName.c_str());
+			writer.String(keybind.ModName.c_str());
 			writer.Key("id");
-			writer.String(keybindID.c_str());
+			writer.String(keybind.KeybindID.c_str());
 			writer.EndObject();
 		}
 
@@ -159,7 +152,7 @@ void KeybindManager::Register(
 
 	ClearKeybind(a_modName, a_keybindID);
 
-	auto key = a_modName + ":"s + a_keybindID;
+	auto key = Keybind{ a_modName, a_keybindID };
 
 	std::scoped_lock lock{ _mutex };
 
@@ -179,7 +172,7 @@ void KeybindManager::AddKeybind(
 	const std::string& a_keybindID,
 	const KeybindInfo& a_info)
 {
-	auto key = a_modName + ":"s + a_keybindID;
+	auto key = Keybind{ a_modName, a_keybindID };
 	_modKeys[key] = a_info;
 
 	// Add to lookup if a key was already registered
@@ -193,7 +186,7 @@ void KeybindManager::AddKeybind(
 auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
 	-> KeybindInfo
 {
-	auto key = a_modName + ":"s + a_keybindID;
+	auto key = Keybind{ a_modName, a_keybindID };
 	auto item = _modKeys.find(key);
 	return item != _modKeys.end() ? item->second : KeybindInfo{};
 }
@@ -205,7 +198,7 @@ auto KeybindManager::GetRegisteredKey(
 {
 	std::scoped_lock lock{ _mutex };
 
-	auto key = a_modName + ":"s + a_keybindID;
+	auto key = Keybind{ a_modName, a_keybindID };
 	auto item = _modRegs.find(key);
 	return item != _modRegs.end() ? item->second : -1;
 }
@@ -214,7 +207,7 @@ void KeybindManager::ClearKeybind(const std::string& a_modName, const std::strin
 {
 	std::scoped_lock lock{ _mutex };
 
-	auto key = a_modName + ":"s + a_keybindID;
+	auto key = Keybind{ a_modName, a_keybindID };
 	auto regIt = _modRegs.find(key);
 	auto keyIt = _modKeys.find(key);
 
@@ -224,7 +217,7 @@ void KeybindManager::ClearKeybind(const std::string& a_modName, const std::strin
 		{
 			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it)
 			{
-				if (it->second == keyIt->second)
+				if (it->second.Keybind == keyIt->second.Keybind)
 				{
 					_lookup.erase(it);
 					break;

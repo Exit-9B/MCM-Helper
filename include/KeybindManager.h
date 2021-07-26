@@ -2,19 +2,28 @@
 
 #include "Config/Action.h"
 
-class KeybindInfo
+struct Keybind
 {
-public:
-	std::string KeybindID;
-	std::string KeybindDesc;
 	std::string ModName;
-	std::shared_ptr<Action> Action;
+	std::string KeybindID;
 
-	bool operator==(const KeybindInfo& other)
+	auto operator<=>(const Keybind& other) const = default;
+};
+
+struct KeybindInfo
+{
+	Keybind Keybind;
+	std::string KeybindDesc;
+	std::shared_ptr<Action> Action;
+};
+
+template <>
+struct std::hash<Keybind>
+{
+	std::size_t operator()(const Keybind& keybind) const noexcept
 	{
-		return KeybindID == other.KeybindID &&
-			ModName == other.ModName &&
-			Action == other.Action;
+		return std::hash<std::string>{}(keybind.ModName) ^
+			std::hash<std::string>{}(keybind.KeybindID);
 	}
 };
 
@@ -52,7 +61,7 @@ public:
 private:
 	bool _keybindsDirty;
 	std::mutex _mutex;
-	std::map<std::string, std::uint32_t> _modRegs;
-	std::unordered_map<std::string, KeybindInfo> _modKeys;
+	std::map<Keybind, std::uint32_t> _modRegs;
+	std::unordered_map<Keybind, KeybindInfo> _modKeys;
 	std::unordered_multimap<std::uint32_t, KeybindInfo> _lookup;
 };

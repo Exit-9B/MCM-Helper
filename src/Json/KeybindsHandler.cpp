@@ -66,7 +66,7 @@ bool KeybindsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 
 		auto& keybindManager = KeybindManager::GetInstance();
 		for (auto& [id, info] : _modKeys) {
-			info.ModName = _modName;
+			info.Keybind.ModName = _modName;
 			keybindManager.AddKeybind(_modName, id, info);
 		}
 

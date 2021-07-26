@@ -76,7 +76,7 @@ bool KeybindsArrayHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		}
 
 		(*_modKeys)[_id] = KeybindInfo{
-			.KeybindID = _id,
+			.Keybind = Keybind{ .KeybindID = _id, },
 			.KeybindDesc = _desc,
 			.Action = _action,
 		};
