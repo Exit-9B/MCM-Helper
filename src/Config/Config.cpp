@@ -34,7 +34,7 @@ void Config::RefreshPage(ScriptObjectPtr a_object) const
 		});
 }
 
-auto Config::GetCustomControl(std::int32_t a_keyCode) const -> std::string
+auto Config::GetCustomControl(std::uint32_t a_keyCode) const -> std::string
 {
 	if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(MainPage))
 	{

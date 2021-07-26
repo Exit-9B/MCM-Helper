@@ -104,7 +104,7 @@ namespace Papyrus
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
 			std::int32_t a_option,
-			std::int32_t a_keyCode,
+			std::uint32_t a_keyCode,
 			std::string_view a_conflictControl,
 			std::string_view a_conflictName);
 
@@ -117,7 +117,7 @@ namespace Papyrus
 			std::int32_t a_option,
 			std::string_view a_input);
 
-		static auto GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode) -> std::string;
+		static auto GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode) -> std::string;
 
 		// Helpers
 		static void SendSettingChangeEvent(

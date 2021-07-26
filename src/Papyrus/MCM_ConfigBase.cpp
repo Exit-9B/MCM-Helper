@@ -484,7 +484,7 @@ namespace Papyrus
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
 		std::int32_t a_option,
-		std::int32_t a_keyCode,
+		std::uint32_t a_keyCode,
 		std::string_view a_conflictControl,
 		std::string_view a_conflictName)
 	{
@@ -615,7 +615,7 @@ namespace Papyrus
 		}
 	}
 
-	auto MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode)
+	auto MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode)
 		-> std::string
 	{
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);

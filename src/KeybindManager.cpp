@@ -200,7 +200,7 @@ auto KeybindManager::GetRegisteredKey(
 
 	auto key = Keybind{ a_modName, a_keybindID };
 	auto item = _modRegs.find(key);
-	return item != _modRegs.end() ? item->second : -1;
+	return item != _modRegs.end() ? item->second : 0;
 }
 
 void KeybindManager::ClearKeybind(const std::string& a_modName, const std::string& a_keybindID)

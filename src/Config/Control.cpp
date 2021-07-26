@@ -457,7 +457,7 @@ void KeyMapControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->Invoke(a_vm, GetKeyCode());
+		Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
 	}
 }
 
@@ -483,11 +483,11 @@ auto KeyMapControl::GetInfoText() -> std::string
 	return ""s;
 }
 
-auto KeyMapControl::GetKeyCode() -> std::int32_t
+auto KeyMapControl::GetKeyCode() -> std::uint32_t
 {
 	if (ValueSource)
 	{
-		return static_cast<std::int32_t>(ValueSource->GetValue());
+		return static_cast<std::uint32_t>(ValueSource->GetValue());
 	}
 	else
 	{

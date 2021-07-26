@@ -175,7 +175,7 @@ public:
 	virtual void ResetToDefault() override;
 	virtual auto GetInfoText() -> std::string override;
 
-	auto GetKeyCode() -> std::int32_t;
+	auto GetKeyCode() -> std::uint32_t;
 	auto GetDescription() -> std::string;
 
 	std::string ModName;
