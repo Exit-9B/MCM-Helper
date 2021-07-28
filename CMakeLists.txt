@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.18)
 set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" CACHE STRING "")
 set(VCPKG_TARGET_TRIPLET "x64-windows-static" CACHE STRING "")
 
+# ---- Options ----
+
+option(BUILD_SKYRIMVR "Build the mod for Skyrim VR" OFF)
+
 # ---- Project ----
 
 project(
@@ -109,6 +113,10 @@ if (MSVC)
 		"$<$<CONFIG:Debug>:${LINK_OPTIONS_DEBUG}>"
 		"$<$<CONFIG:Release>:${LINK_OPTIONS_RELEASE}>"
 	)
+endif()
+
+if (BUILD_SKYRIMVR)
+	add_compile_definitions(SKYRIMVR)
 endif()
 
 add_subdirectory(extern/CommonLibSSE CommonLibSSE)

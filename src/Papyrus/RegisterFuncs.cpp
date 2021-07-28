@@ -7,5 +7,7 @@ bool Papyrus::RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
 	MCM::RegisterFuncs(a_vm);
 	MCM_ConfigBase::RegisterFuncs(a_vm);
 
+	logger::info("Registered Papyrus functions"sv);
+
 	return true;
 }

@@ -19,26 +19,42 @@
     <Script>MCM_ConfigBase.psc</Script>
     <Script>SKI_ConfigMenu.psc</Script>
   </Scripts>
-  <PreBuildEvent Description="Copy SKSE plugin to distribution" UseInBuild="true">
-    <Command>xcopy "build\Release\@filename.dll" "dist\Data\SKSE\Plugins\@filename.dll*" /Y</Command>
+  <PreBuildEvent Description="Build SKSE plugins and set up distribution" UseInBuild="true">
+    <Command>PreBuild.bat "@filename"</Command>
   </PreBuildEvent>
-  <Packages Output="dist\Data">
-    <Package Name="@filename" RootDir="dist\Data">
+  <PostBuildEvent Description="Clean copied files" UseInBuild="true">
+    <Command>PostBuild.bat "@filename"</Command>
+  </PostBuildEvent>
+  <Packages Output="dist">
+    <Package Name="SkyrimSE\@filename" RootDir="dist\Data">
+      <Match In="Interface\Translations">MCMHelper_*.txt</Match>
+      <Match In="Scripts">MCM*.pex</Match>
+      <Include>Scripts\SKI_ConfigMenu.pex</Include>
+    </Package>
+    <Package Name="SkyrimVR\@filename" RootDir="dist\Data">
       <Match In="Interface\Translations">MCMHelper_*.txt</Match>
       <Match In="Scripts">MCM*.pex</Match>
       <Include>Scripts\SKI_ConfigMenu.pex</Include>
     </Package>
   </Packages>
-  <ZipFiles Output="dist\Data">
-    <ZipFile Name="@modname" RootDir="dist\Data" Compression="deflate">
+  <ZipFiles Output="dist">
+    <ZipFile Name="@modname - SE" RootDir="dist\SkyrimSE" Compression="deflate">
       <Include>@filename.esp</Include>
       <Include>@filename.bsa</Include>
       <Include>SKSE\Plugins\@filename.dll</Include>
       <Include>MCM\Settings\readme.txt</Include>
       <Include>Source\Scripts\SKI_ConfigMenu.psc</Include>
-      <Include NoRecurse="false">MCM\Config\SkyUI_SE</Include>
-    <!--/ZipFile>
-    <ZipFile Name="MCM SDK" RootDir="dist\Data" Compression="deflate"-->
+      <Include NoRecurse="true">MCM\Config\SkyUI_SE</Include>
+    </ZipFile>
+    <ZipFile Name="@modname - VR" RootDir="dist\SkyrimVR" Compression="deflate">
+      <Include>@filename.esp</Include>
+      <Include>@filename.bsa</Include>
+      <Include>SKSE\Plugins\@filename.dll</Include>
+      <Include>MCM\Settings\readme.txt</Include>
+      <Include>Source\Scripts\SKI_ConfigMenu.psc</Include>
+      <Include NoRecurse="true">MCM\Config\SkyUI_SE</Include>
+    </ZipFile>
+    <ZipFile Name="MCM SDK" RootDir="dist\Data" Compression="deflate">
       <Include>Scripts\SKI_PlayerLoadGameAlias.pex</Include>
       <Include>Source\Scripts\MCM.psc</Include>
       <Include>Source\Scripts\MCM_ConfigBase.psc</Include>
