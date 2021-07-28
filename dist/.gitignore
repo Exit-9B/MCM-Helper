@@ -8,4 +8,7 @@ SkyrimVR/*
 *.zip
 *.bsa
 
+!Data/Scripts/SKI_ConfigBase.pex
+!Data/Scripts/SKI_ConfigManager.pex
 !Data/Scripts/SKI_PlayerLoadGameAlias.pex
+!Data/Scripts/SKI_QuestBase.pex
