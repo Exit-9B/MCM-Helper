@@ -1,14 +1,10 @@
 @echo off
 
-cmake -B build -S . -DBUILD_SKYRIMVR=OFF
-if %ERRORLEVEL% NEQ 0 exit 1
+cmake -B build -S . -DBUILD_SKYRIMVR=OFF --check-stamp-file "build/CMakeFiles/generate.stamp"
 cmake --build build --config Release
-if %ERRORLEVEL% NEQ 0 exit 1
 
-cmake -B buildVR -S . -DBUILD_SKYRIMVR=ON
-if %ERRORLEVEL% NEQ 0 exit 1
+cmake -B buildVR -S . -DBUILD_SKYRIMVR=ON --check-stamp-file "buildVR/CMakeFiles/generate.stamp"
 cmake --build buildVR --config Release
-if %ERRORLEVEL% NEQ 0 exit 1
 
 xcopy "dist\Data" "dist\SkyrimSE" /exclude:xcopy_exclude.txt /s /y
 xcopy "dist\Data" "dist\SkyrimVR" /exclude:xcopy_exclude.txt /s /y
