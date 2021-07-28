@@ -13,7 +13,7 @@ ConfigStore::ConfigStore()
 	logger::info("ModConfigStore initializing."sv);
 }
 
-ConfigStore& ConfigStore::GetInstance()
+auto ConfigStore::GetInstance() -> ConfigStore&
 {
 	static ConfigStore instance;
 	return instance;
@@ -54,7 +54,8 @@ void ConfigStore::ReadConfigs()
 		if (configScript)
 		{
 			auto modName = GetModName(configScript);
-			if (ReadConfig(modName, configScript))
+			if (Utils::HasScriptType(configScript, "MCM_ConfigBase") &&
+				ReadConfig(modName, configScript))
 			{
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
 				KeybindManager::GetInstance().ReadKeybinds(modName);

@@ -12,7 +12,7 @@ SettingStore::~SettingStore()
 	for (auto& [id, setting] : _settingStore)
 	{
 		delete[] setting->name;
-		RE::free(setting);
+		::free(setting);
 	}
 }
 
@@ -359,14 +359,14 @@ void SettingStore::RegisterModSetting(
 	std::string_view a_settingValue,
 	Storage& a_settingStore)
 {
-	auto newSetting = RE::malloc<RE::Setting>();
+	auto newSetting = static_cast<RE::Setting*>(::malloc(sizeof(RE::Setting)));
 
 	char* nameCopy = new char[a_settingName.size() + 1];
 	std::copy(a_settingName.begin(), a_settingName.end(), nameCopy);
 	nameCopy[a_settingName.size()] = '\0';
 	newSetting->name = nameCopy;
 
-	std::stringstream ssValue{ std::string{a_settingValue} };
+	std::istringstream ssValue{ std::string{a_settingValue} };
 
 	switch (newSetting->GetType()) {
 	case RE::Setting::Type::kSignedInteger:
@@ -403,7 +403,7 @@ void SettingStore::RegisterModSetting(
 			a_settingName,
 			a_modName);
 		delete[] newSetting->name;
-		RE::free(newSetting);
+		::free(newSetting);
 		return;
 	}
 
@@ -413,7 +413,7 @@ void SettingStore::RegisterModSetting(
 	if (it != a_settingStore.end())
 	{
 		delete[] it->second->name;
-		RE::free(it->second);
+		::free(it->second);
 		a_settingStore.erase(it);
 	}
 

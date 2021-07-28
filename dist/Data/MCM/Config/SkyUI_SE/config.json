@@ -10,7 +10,7 @@
       "cursorFillMode": "topToBottom",
       "content": [
         {
-          "text": "Item List",
+          "text": "$Item List",
           "type": "header"
         },
         {
