@@ -15,7 +15,6 @@ set(headers ${headers}
     include/Config/Control.h
     include/Config/ValueSource.h
     include/Config/Action.h
-    include/Config/Action.inl
     include/Config/GroupConditionTree.h
 
     include/Papyrus/RegisterFuncs.h

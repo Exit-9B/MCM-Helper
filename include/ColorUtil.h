@@ -38,12 +38,6 @@ inline std::istream& operator>>(std::istream& _Istr, RE::Color& _Val)
 	std::getline(_Istr, token, ',');
 	std::stringstream{ token } >> _Val.blue;
 
-	if (!_Istr.eof())
-	{
-		std::getline(_Istr, token, ',');
-		std::stringstream{ token } >> _Val.alpha;
-	}
-
 	return _Istr;
 }
 
@@ -55,11 +49,6 @@ namespace std
 		ssColor << static_cast<std::uint32_t>(_Val.red) << ","
 			<< static_cast<std::uint32_t>(_Val.green) << ","
 			<< static_cast<std::uint32_t>(_Val.blue);
-
-		if (_Val.alpha != 0)
-		{
-			ssColor << "," << static_cast<std::uint32_t>(_Val.alpha);
-		}
 
 		return ssColor.str();
 	}

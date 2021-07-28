@@ -13,7 +13,7 @@ struct ActionData
 	std::vector<std::string> Params;
 };
 
-class ActionHandler : public IHandler
+class ActionHandler final : public IHandler
 {
 public:
 	ActionHandler(
@@ -22,10 +22,10 @@ public:
 		RE::TESForm* sourceForm,
 		const std::string& scriptName);
 
-	bool String(const Ch* str, SizeType length, bool copy);
-	bool StartObject();
-	bool Key(const Ch* str, SizeType length, bool copy);
-	bool EndObject(SizeType memberCount);
+	bool String(const Ch* str, SizeType length, bool copy) override;
+	bool StartObject() override;
+	bool Key(const Ch* str, SizeType length, bool copy) override;
+	bool EndObject(SizeType memberCount) override;
 
 private:
 	enum class State

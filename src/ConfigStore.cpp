@@ -78,17 +78,19 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 	if (plugin.empty())
 		return false;
 
-	std::filesystem::path configPath{ "Data/MCM/Config/"sv };
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto configLocation = configPath / plugin / "config.json"sv;
 
 	ReaderHandler handler;
 	auto config = std::make_shared<Config>();
-	handler.PushHandler<ConfigHandler>(&handler, config.get(), plugin, a_configScript);
-
-	rapidjson::Reader reader;
+	handler.PushHandler<ConfigHandler>(
+		std::addressof(handler),
+		config.get(),
+		plugin,
+		a_configScript);
 
 	FILE* fp = nullptr;
-	auto err = _wfopen_s(&fp, configLocation.c_str(), L"r");
+	auto err = _wfopen_s(std::addressof(fp), configLocation.c_str(), L"r");
 	if (err != 0)
 	{
 		logger::warn("Failed to open config for {}"sv, plugin);
@@ -97,6 +99,7 @@ bool ConfigStore::ReadConfig(ScriptObjectPtr a_configScript)
 
 	char readBuffer[65536]{};
 	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
+	rapidjson::Reader reader;
 
 	auto result = reader.Parse(is, handler);
 	fclose(fp);

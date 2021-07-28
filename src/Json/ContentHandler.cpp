@@ -153,13 +153,17 @@ bool ContentHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "action") == 0) {
-			_master->PushHandler<ActionHandler>(_master, &_data.Action, _form, _scriptName);
+			_master->PushHandler<ActionHandler>(
+				_master,
+				std::addressof(_data.Action),
+				_form,
+				_scriptName);
 			return true;
 		}
 		else if (strcmp(str, "valueOptions") == 0) {
 			_master->PushHandler<ValueOptionsHandler>(
 				_master,
-				&_data.ValueOptions,
+				std::addressof(_data.ValueOptions),
 				_modName,
 				_data.ID,
 				_form,

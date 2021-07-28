@@ -4,7 +4,7 @@
 #include "Config/Config.h"
 #include "Script/SkyUI.h"
 
-class ConfigHandler : public IHandler
+class ConfigHandler final : public IHandler
 {
 public:
 	ConfigHandler(
@@ -13,11 +13,11 @@ public:
 		const std::string& modName,
 		const ScriptObjectPtr& script);
 
-	bool Uint(unsigned i);
-	bool String(const Ch* str, SizeType length, bool copy);
-	bool StartObject();
-	bool Key(const Ch* str, SizeType length, bool copy);
-	bool EndObject(SizeType memberCount);
+	bool Uint(unsigned i) override;
+	bool String(const Ch* str, SizeType length, bool copy) override;
+	bool StartObject() override;
+	bool Key(const Ch* str, SizeType length, bool copy) override;
+	bool EndObject(SizeType memberCount) override;
 
 private:
 	enum class State

@@ -104,7 +104,7 @@ void TextControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeString(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
@@ -165,7 +165,7 @@ void ToggleControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeBool(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
@@ -199,7 +199,7 @@ void SliderControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeFloat(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
@@ -233,7 +233,7 @@ void StepperControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeInt(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
@@ -278,7 +278,7 @@ void MenuControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeString(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
@@ -369,7 +369,7 @@ void EnumControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeInt(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
@@ -417,7 +417,7 @@ void ColorControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeInt(a_vm, static_cast<std::int32_t>(GetColor()));
+		Action->Invoke(a_vm, static_cast<std::int32_t>(GetColor()));
 	}
 }
 
@@ -451,7 +451,7 @@ void KeyMapControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeInt(a_vm, GetKeyCode());
+		Action->Invoke(a_vm, GetKeyCode());
 	}
 }
 
@@ -483,7 +483,7 @@ void InputControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->InvokeString(a_vm, GetValue());
+		Action->Invoke(a_vm, GetValue());
 	}
 }
 
