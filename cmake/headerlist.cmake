@@ -6,6 +6,8 @@ set(headers ${headers}
     include/SettingStore.h
     include/ConfigStore.h
     include/ConfigPageCache.h
+    include/KeybindManager.h
+    include/KeybindEventHandler.h
 
     include/Script/ScriptObject.h
     include/Script/SkyUI.h
@@ -32,4 +34,8 @@ set(headers ${headers}
     include/Json/ActionHandler.h
     include/Json/ParamsHandler.h
     include/Json/GroupConditionHandler.h
+    include/Json/KeybindsHandler.h
+    include/Json/KeybindsArrayHandler.h
+    include/Json/UserKeybindsHandler.h
+    include/Json/UserKeybindsArrayHandler.h
 )

@@ -2,6 +2,7 @@
 #include "Script/SkyUI.h"
 #include "ConfigStore.h"
 #include "ConfigPageCache.h"
+#include "KeybindManager.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func)
 
@@ -128,7 +129,8 @@ namespace Papyrus
 		if (object)
 		{
 			auto startTime = std::chrono::steady_clock::now();
-			ConfigStore::GetInstance().ReadConfig(object);
+			auto modName = Utils::GetModName(a_self);
+			ConfigStore::GetInstance().ReadConfig(modName, object);
 
 			auto configManager = SkyUI::ConfigManager::GetInstance();
 			if (configManager)
@@ -136,13 +138,16 @@ namespace Papyrus
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, object);
 			}
 
+			auto& keybindManager = KeybindManager::GetInstance();
+			keybindManager.ReadKeybinds(modName);
+
 			auto endTime = std::chrono::steady_clock::now();
-			auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(
+			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
 				endTime - startTime);
 
 			logger::info(
-				"Registered mod config for {} in {} us."sv,
-				Utils::GetModName(a_self),
+				"Registered mod config for {} in {} ms."sv,
+				modName,
 				elapsedMs.count());
 		}
 	}
@@ -167,9 +172,10 @@ namespace Papyrus
 		auto object = Utils::GetScriptObject(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
-		if (control && !control->Help.empty())
+		auto infoText = control ? control->GetInfoText() : ""s;
+		if (control && !infoText.empty())
 		{
-			SkyUI::Config::SetInfoText(object, control->Help);
+			SkyUI::Config::SetInfoText(object, infoText);
 		}
 	}
 
@@ -478,7 +484,7 @@ namespace Papyrus
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
 		std::int32_t a_option,
-		std::int32_t a_keyCode,
+		std::uint32_t a_keyCode,
 		std::string_view a_conflictControl,
 		std::string_view a_conflictName)
 	{
@@ -499,6 +505,13 @@ namespace Papyrus
 					if (keymap->ValueSource)
 					{
 						keymap->ValueSource->SetValue(static_cast<float>(a_keyCode));
+					}
+					else if (!keymap->ID.empty())
+					{
+						auto modName = Utils::GetModName(a_self);
+						auto& keybindManager = KeybindManager::GetInstance();
+						keybindManager.Register(a_keyCode, modName, keymap->ID);
+						keybindManager.CommitKeybinds();
 					}
 
 					keymap->Refresh(object, a_option);
@@ -529,6 +542,11 @@ namespace Papyrus
 			{
 				updateKey(true);
 			}
+		}
+
+		if (control)
+		{
+			control->InvokeAction(a_vm);
 		}
 	}
 
@@ -597,7 +615,7 @@ namespace Papyrus
 		}
 	}
 
-	auto MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::int32_t a_keyCode)
+	auto MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode)
 		-> std::string
 	{
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);

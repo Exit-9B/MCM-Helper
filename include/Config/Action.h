@@ -4,8 +4,14 @@ class Action
 {
 public:
 	using VM = RE::BSScript::IVirtualMachine;
-	using FunctionParam = std::variant<std::int32_t, bool, float, std::string>;
 
+	virtual void SendControlEvent(bool a_up, float a_holdTime = 0.0f) = 0;
+};
+
+class Function : public Action
+{
+public:
+	using FunctionParam = std::variant<std::int32_t, bool, float, std::string>;
 	class FunctionArguments : public RE::BSScript::IFunctionArguments
 	{
 	public:
@@ -16,6 +22,7 @@ public:
 			-> std::unique_ptr<FunctionArguments>;
 	};
 
+	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
 	virtual void Invoke(VM* a_vm, FunctionParam a_value = "{value}"s) = 0;
 
 	std::vector<std::string> Params;
@@ -23,7 +30,7 @@ public:
 	std::string ScriptName;
 };
 
-class CallFunction : public Action
+class CallFunction : public Function
 {
 public:
 	void Invoke(VM* a_vm, FunctionParam a_value) override;
@@ -31,8 +38,26 @@ public:
 	RE::TESForm* Form;
 };
 
-class CallGlobalFunction : public Action
+class CallGlobalFunction : public Function
 {
 public:
 	void Invoke(VM* a_vm, FunctionParam a_value) override;
+};
+
+class SendEvent : public Action
+{
+public:
+	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
+
+	std::string Control;
+	RE::TESForm* Form;
+	std::string ScriptName;
+};
+
+class RunConsoleCommand : public Action
+{
+public:
+	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
+
+	std::string Command;
 };

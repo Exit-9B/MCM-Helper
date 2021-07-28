@@ -22,6 +22,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
 	virtual void InvokeAction(VM* a_vm);
 	virtual void ResetToDefault();
+	virtual auto GetInfoText() -> std::string;
 
 	auto GetFlags() -> SkyUI::Flags;
 	auto GetDesiredBehavior() -> Behavior;
@@ -33,7 +34,7 @@ public:
 	std::string Help;
 	std::shared_ptr<GroupConditionTree> GroupCondition;
 	Behavior GroupBehavior = Behavior::Disable;
-	std::shared_ptr<Action> Action;
+	std::shared_ptr<Function> Action;
 };
 
 class EmptyControl : public Control
@@ -125,7 +126,6 @@ public:
 	auto GetValue() -> std::string;
 	auto GetDefaultValue() -> std::string;
 	auto GetShortText() -> std::string;
-	auto GetIndex(const std::string&) -> std::int32_t;
 
 	std::vector<std::string> Options;
 	std::vector<std::string> ShortNames;
@@ -173,9 +173,12 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetInfoText() -> std::string override;
 
-	auto GetKeyCode() -> std::int32_t;
+	auto GetKeyCode() -> std::uint32_t;
+	auto GetDescription() -> std::string;
 
+	std::string ModName;
 	bool IgnoreConflicts = false;
 	std::shared_ptr<ValueSource> ValueSource;
 };

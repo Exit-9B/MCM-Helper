@@ -1,6 +1,8 @@
 ﻿#include "Papyrus/RegisterFuncs.h"
 #include "SettingStore.h"
 #include "ConfigStore.h"
+#include "KeybindEventHandler.h"
+#include "KeybindManager.h"
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
@@ -69,13 +71,19 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 	}
 
 	SettingStore::GetInstance().ReadSettings();
+	KeybindManager::GetInstance().ReadKeybindRegistrations();
 
 	SKSE::GetMessagingInterface()->RegisterListener(
 		[](SKSE::MessagingInterface::Message* a_msg)
 		{
-			if (a_msg->type == SKSE::MessagingInterface::kPostLoadGame)
-			{
+			switch (a_msg->type) {
+			case SKSE::MessagingInterface::kPostLoadGame:
+				KeybindManager::GetInstance().ClearKeybinds();
 				ConfigStore::GetInstance().ReadConfigs();
+				break;
+			case SKSE::MessagingInterface::kInputLoaded:
+				KeybindEventHandler::GetInstance().Register();
+				break;
 			}
 		});
 

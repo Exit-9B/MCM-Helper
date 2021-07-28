@@ -6,6 +6,8 @@ set(sources ${sources}
     src/SettingStore.cpp
     src/ConfigStore.cpp
     src/ConfigPageCache.cpp
+    src/KeybindManager.cpp
+    src/KeybindEventHandler.cpp
 
     src/Script/ScriptObject.cpp
     src/Script/SkyUI.cpp
@@ -32,4 +34,8 @@ set(sources ${sources}
     src/Json/ActionHandler.cpp
     src/Json/ParamsHandler.cpp
     src/Json/GroupConditionHandler.cpp
+    src/Json/KeybindsHandler.cpp
+    src/Json/KeybindsArrayHandler.cpp
+    src/Json/UserKeybindsHandler.cpp
+    src/Json/UserKeybindsArrayHandler.cpp
 )

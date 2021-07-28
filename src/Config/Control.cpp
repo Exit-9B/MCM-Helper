@@ -2,6 +2,7 @@
 
 #include "Script/SkyUI.h"
 #include "SettingStore.h"
+#include "KeybindManager.h"
 #include "ConfigPageCache.h"
 
 void Control::Refresh(
@@ -21,6 +22,11 @@ void Control::InvokeAction(VM* a_vm)
 void Control::ResetToDefault()
 {
 	// base behavior is to do nothing
+}
+
+auto Control::GetInfoText() -> std::string
+{
+	return Help;
 }
 
 auto Control::GetFlags() -> SkyUI::Flags
@@ -451,7 +457,7 @@ void KeyMapControl::InvokeAction(VM* a_vm)
 {
 	if (Action)
 	{
-		Action->Invoke(a_vm, GetKeyCode());
+		Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
 	}
 }
 
@@ -460,9 +466,48 @@ void KeyMapControl::ResetToDefault()
 	ValueSource->ResetToDefault();
 }
 
-auto KeyMapControl::GetKeyCode() -> std::int32_t
+auto KeyMapControl::GetInfoText() -> std::string
 {
-	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
+	if (!Help.empty())
+	{
+		return Help;
+	}
+
+	if (!ValueSource && !ID.empty())
+	{
+		auto& keybindManager = KeybindManager::GetInstance();
+		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
+		return desc;
+	}
+
+	return ""s;
+}
+
+auto KeyMapControl::GetKeyCode() -> std::uint32_t
+{
+	if (ValueSource)
+	{
+		return static_cast<std::uint32_t>(ValueSource->GetValue());
+	}
+	else
+	{
+		return KeybindManager::GetInstance().GetRegisteredKey(ModName, ID);
+	}
+}
+
+auto KeyMapControl::GetDescription() -> std::string
+{
+	if (!ValueSource)
+	{
+		auto& keybindManager = KeybindManager::GetInstance();
+		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
+		if (!desc.empty())
+		{
+			return desc;
+		}
+	}
+
+	return Text;
 }
 
 auto InputControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t

@@ -3,8 +3,8 @@
 #include "ColorUtil.h"
 #include "Utils.h"
 
-auto Action::FunctionArguments::Make(std::span<std::string> a_params, FunctionParam a_value)
-	-> std::unique_ptr<Action::FunctionArguments>
+auto Function::FunctionArguments::Make(std::span<std::string> a_params, FunctionParam a_value)
+	-> std::unique_ptr<Function::FunctionArguments>
 {
 	auto args = std::make_unique<FunctionArguments>();
 	args->Args.resize(static_cast<std::uint32_t>(a_params.size()));
@@ -66,10 +66,23 @@ auto Action::FunctionArguments::Make(std::span<std::string> a_params, FunctionPa
 	return args;
 }
 
-bool Action::FunctionArguments::operator()(RE::BSScrapArray<RE::BSScript::Variable>& a_dst) const
+bool Function::FunctionArguments::operator()(RE::BSScrapArray<RE::BSScript::Variable>& a_dst) const
 {
 	a_dst = Args;
 	return true;
+}
+
+void Function::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)
+{
+	if (a_up)
+		return;
+
+	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	if (vm)
+	{
+		Invoke(vm.get());
+	}
 }
 
 void CallFunction::Invoke(VM* a_vm, FunctionParam a_value)
@@ -98,5 +111,41 @@ void CallGlobalFunction::Invoke(VM* a_vm, FunctionParam a_value)
 
 		ScriptCallbackPtr nullCallback;
 		a_vm->DispatchStaticCall(ScriptName, Function, args.get(), nullCallback);
+	}
+}
+
+void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
+{
+	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	auto object = Utils::GetScriptObject(Form, ScriptName);
+
+	if (!vm || !object)
+		return;
+
+	RE::BSFixedString control{ Control };
+	auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
+
+	auto args =
+		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
+		: RE::MakeFunctionArguments(std::move(control));
+
+	ScriptCallbackPtr nullCallback;
+	vm->DispatchMethodCall(object, fnName, args, nullCallback);
+	delete args;
+}
+
+void RunConsoleCommand::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)
+{
+	if (a_up)
+		return;
+
+	const auto scriptFactory = RE::IFormFactory::GetConcreteFormFactoryByType<RE::Script>();
+	const auto script = scriptFactory ? scriptFactory->Create() : nullptr;
+	if (script)
+	{
+		script->SetCommand(Command);
+		script->CompileAndRun(nullptr);
+		delete script;
 	}
 }
