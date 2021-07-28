@@ -117,27 +117,22 @@ void CallGlobalFunction::Invoke(VM* a_vm, FunctionParam a_value)
 void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
 {
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	auto object = Utils::GetScriptObject(Form, ScriptName);
 
-	if (vm)
-	{
-		auto typeID = static_cast<RE::VMTypeID>(Form->GetFormType());
-		auto handle = skyrimVM->handlePolicy.GetHandleForObject(typeID, Form);
+	if (!vm || !object)
+		return;
 
-		if (handle)
-		{
-			RE::BSFixedString control{ Control };
-			auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
+	RE::BSFixedString control{ Control };
+	auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
 
-			auto args =
-				a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
-				: RE::MakeFunctionArguments(std::move(control));
+	auto args =
+		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
+		: RE::MakeFunctionArguments(std::move(control));
 
-			ScriptCallbackPtr nullCallback;
-			vm->DispatchMethodCall(handle, ScriptName, fnName, args, nullCallback);
-			delete args;
-		}
-	}
+	ScriptCallbackPtr nullCallback;
+	vm->DispatchMethodCall(object, fnName, args, nullCallback);
+	delete args;
 }
 
 void RunConsoleCommand::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)

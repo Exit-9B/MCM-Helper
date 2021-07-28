@@ -142,11 +142,11 @@ namespace Papyrus
 			keybindManager.ReadKeybinds(modName);
 
 			auto endTime = std::chrono::steady_clock::now();
-			auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(
+			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
 				endTime - startTime);
 
 			logger::info(
-				"Registered mod config for {} in {} us."sv,
+				"Registered mod config for {} in {} ms."sv,
 				modName,
 				elapsedMs.count());
 		}

@@ -43,6 +43,7 @@ bool ActionHandler::String(
 	case State::Command:
 		_data.Command = str;
 		_state = State::Main;
+		return true;
 	default:
 		return false;
 	}
@@ -152,6 +153,7 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			auto sendEvent = std::make_shared<SendEvent>();
 			*_action = sendEvent;
 			sendEvent->Form = _data.Form;
+			sendEvent->ScriptName = _data.ScriptName;
 		}
 		else {
 			return false;

@@ -1,4 +1,5 @@
 #include "KeybindEventHandler.h"
+#include "KeybindManager.h"
 
 auto KeybindEventHandler::GetInstance() -> KeybindEventHandler&
 {
@@ -37,12 +38,7 @@ auto KeybindEventHandler::ProcessEvent(
 			return RE::BSEventNotifyControl::kContinue;
 		}
 
-		if (deviceType == RE::INPUT_DEVICE::kMouse)
-		{
-			auto keyMask = idCode - 256;
-			if (keyMask < 2 || keyMask > 7)
-				return RE::BSEventNotifyControl::kContinue;
-		}
+		KeybindManager::GetInstance().ProcessButtonEvent(buttonEvent);
 	}
 
 	return RE::BSEventNotifyControl::kContinue;

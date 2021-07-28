@@ -17,9 +17,11 @@ bool KeybindsArrayHandler::String(
 	switch (_state) {
 	case State::ID:
 		_id = str;
+		_state = State::Keybind;
 		return true;
 	case State::Desc:
 		_desc = str;
+		_state = State::Keybind;
 		return true;
 	default:
 		return false;

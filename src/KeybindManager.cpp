@@ -262,7 +262,14 @@ void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
 		auto& action = it->second.Action;
 		if (action)
 		{
-			action->SendControlEvent(a_event->IsUp(), a_event->HeldDuration());
+			if (a_event->IsDown())
+			{
+				action->SendControlEvent(false);
+			}
+			else if (a_event->IsUp())
+			{
+				action->SendControlEvent(true, a_event->HeldDuration());
+			}
 		}
 	}
 }
