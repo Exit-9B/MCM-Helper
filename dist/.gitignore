@@ -1,0 +1,11 @@
+SkyrimSE/*
+SkyrimVR/*
+
+!SkyrimSE/MCMHelper.esp
+!SkyrimVR/MCMHelper.esp
+
+*.pex
+*.zip
+*.bsa
+
+!Data/Scripts/SKI_PlayerLoadGameAlias.pex
