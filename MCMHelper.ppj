@@ -22,6 +22,9 @@
   <PreBuildEvent Description="Build SKSE plugins and set up distribution" UseInBuild="true">
     <Command>PreBuild.bat "@filename"</Command>
   </PreBuildEvent>
+  <PostBuildEvent Description="Clean copied files" UseInBuild="true">
+    <Command>PostBuild.bat "@filename"</Command>
+  </PostBuildEvent>
   <Packages Output="dist">
     <Package Name="SkyrimSE\@filename" RootDir="dist\Data">
       <Match In="Interface\Translations">MCMHelper_*.txt</Match>
