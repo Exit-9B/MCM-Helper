@@ -31,4 +31,9 @@ namespace Utils
 		ScriptObjectPtr a_object,
 		std::string_view a_variableName)
 		-> RE::BSScript::Variable*;
+
+	auto HasScriptType(
+		ScriptObjectPtr a_object,
+		const char* a_scriptName)
+		-> bool;
 }

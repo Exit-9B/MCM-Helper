@@ -152,3 +152,19 @@ auto Utils::GetVariable(
 
 	return std::addressof(a_object->variables[offset + idx]);
 }
+
+auto Utils::HasScriptType(
+	ScriptObjectPtr a_object,
+	const char* a_scriptName)
+	-> bool
+{
+	for (auto cls = a_object ? a_object->type.get() : nullptr; cls; cls = cls->GetParent())
+	{
+		if (_stricmp(cls->GetName(), a_scriptName) == 0)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

@@ -52,7 +52,8 @@ void ConfigStore::ReadConfigs()
 
 		if (configScript)
 		{
-			if (ReadConfig(configScript))
+			if (Utils::HasScriptType(configScript, "MCM_ConfigBase") &&
+				ReadConfig(configScript))
 			{
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
 			}
