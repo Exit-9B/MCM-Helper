@@ -11,7 +11,7 @@ public:
 	SettingStore& operator=(const SettingStore&) = delete;
 	SettingStore& operator=(SettingStore&&) = delete;
 
-	static SettingStore& GetInstance();
+	static auto GetInstance() -> SettingStore&;
 
 	void ReadSettings();
 

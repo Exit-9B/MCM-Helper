@@ -12,7 +12,7 @@ ConfigStore::ConfigStore()
 	logger::info("ModConfigStore initializing."sv);
 }
 
-ConfigStore& ConfigStore::GetInstance()
+auto ConfigStore::GetInstance() -> ConfigStore&
 {
 	static ConfigStore instance;
 	return instance;

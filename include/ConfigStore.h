@@ -15,7 +15,7 @@ public:
 	ConfigStore& operator=(const ConfigStore&) = delete;
 	ConfigStore& operator=(ConfigStore&&) = delete;
 
-	static ConfigStore& GetInstance();
+	static auto GetInstance() -> ConfigStore&;
 
 	void ReadConfigs();
 	bool ReadConfig(ScriptObjectPtr a_configScript);

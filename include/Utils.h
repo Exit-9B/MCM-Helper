@@ -3,28 +3,32 @@
 namespace Utils
 {
 	// Form Management
-	RE::TESForm* GetFormFromIdentifier(const std::string& a_identifier);
+	auto GetFormFromIdentifier(const std::string& a_identifier) -> RE::TESForm*;
 
-	std::string GetIdentifierFromForm(RE::TESForm* a_form);
+	auto GetIdentifierFromForm(RE::TESForm* a_form) -> std::string;
 
-	std::string GetModName(RE::TESForm* a_form);
+	auto GetModName(RE::TESForm* a_form) -> std::string;
 
 	// Papyrus
 	auto GetScriptObject(
 		RE::TESForm* a_form,
-		const std::string& a_scriptName) -> ScriptObjectPtr;
+		const std::string& a_scriptName)
+		-> ScriptObjectPtr;
 
-	RE::BSScript::Variable* GetScriptProperty(
+	auto GetScriptProperty(
 		RE::TESForm* a_form,
 		const std::string& a_scriptName,
-		std::string_view a_propertyName);
+		std::string_view a_propertyName)
+		-> RE::BSScript::Variable*;
 
-	RE::BSScript::Variable* GetScriptVariable(
+	auto GetScriptVariable(
 		RE::TESForm* a_form,
 		const std::string& a_scriptName,
-		std::string_view a_variableName);
+		std::string_view a_variableName)
+		-> RE::BSScript::Variable*;
 
-	RE::BSScript::Variable* GetVariable(
+	auto GetVariable(
 		ScriptObjectPtr a_object,
-		std::string_view a_variableName);
+		std::string_view a_variableName)
+		-> RE::BSScript::Variable*;
 }

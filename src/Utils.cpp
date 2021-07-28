@@ -1,6 +1,6 @@
 #include "Utils.h"
 
-RE::TESForm* Utils::GetFormFromIdentifier(const std::string& a_identifier)
+auto Utils::GetFormFromIdentifier(const std::string& a_identifier) -> RE::TESForm*
 {
 	std::istringstream ss{ a_identifier };
 	std::string plugin, id;
@@ -13,7 +13,7 @@ RE::TESForm* Utils::GetFormFromIdentifier(const std::string& a_identifier)
 	return dataHandler ? dataHandler->LookupForm(relativeID, plugin) : nullptr;
 }
 
-std::string Utils::GetIdentifierFromForm(RE::TESForm* a_form)
+auto Utils::GetIdentifierFromForm(RE::TESForm* a_form) -> std::string
 {
 	if (!a_form)
 	{
@@ -36,7 +36,7 @@ std::string Utils::GetIdentifierFromForm(RE::TESForm* a_form)
 	return ss.str();
 }
 
-std::string Utils::GetModName(RE::TESForm* a_form)
+auto Utils::GetModName(RE::TESForm* a_form) -> std::string
 {
 	auto file = a_form ? a_form->GetFile() : nullptr;
 	auto fileName = file ? file->fileName : nullptr;
@@ -83,10 +83,11 @@ auto Utils::GetScriptObject(RE::TESForm* a_form, const std::string& a_scriptName
 	return object;
 }
 
-RE::BSScript::Variable* Utils::GetScriptProperty(
+auto Utils::GetScriptProperty(
 	RE::TESForm* a_form,
 	const std::string& a_scriptName,
 	std::string_view a_propertyName)
+	-> RE::BSScript::Variable*
 {
 	auto scriptName = !a_scriptName.empty() ? a_scriptName.c_str() : nullptr;
 	auto script = Utils::GetScriptObject(a_form, scriptName);
@@ -107,9 +108,10 @@ RE::BSScript::Variable* Utils::GetScriptVariable(
 	return GetVariable(object, a_variableName);
 }
 
-RE::BSScript::Variable* Utils::GetVariable(
+auto Utils::GetVariable(
 	ScriptObjectPtr a_object,
 	std::string_view a_variableName)
+	-> RE::BSScript::Variable*
 {
 	constexpr auto INVALID = static_cast<std::uint32_t>(-1);
 	auto idx = INVALID;
