@@ -82,7 +82,6 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 	ReaderHandler handler;
 	auto config = std::make_shared<Config>();
 	handler.PushHandler<ConfigHandler>(
-		std::addressof(handler),
 		config.get(),
 		a_modName,
 		a_configScript);

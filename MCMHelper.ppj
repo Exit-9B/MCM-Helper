@@ -38,7 +38,7 @@
     </Package>
   </Packages>
   <ZipFiles Output="dist">
-    <ZipFile Name="@modname - SE" RootDir="dist\SkyrimSE" Compression="deflate">
+    <ZipFile Name="@modname SE" RootDir="dist\SkyrimSE" Compression="deflate">
       <Include>@filename.esp</Include>
       <Include>@filename.bsa</Include>
       <Include>SKSE\Plugins\@filename.dll</Include>
@@ -46,7 +46,7 @@
       <Include>Source\Scripts\SKI_ConfigMenu.psc</Include>
       <Include NoRecurse="true">MCM\Config\SkyUI_SE</Include>
     </ZipFile>
-    <ZipFile Name="@modname - VR" RootDir="dist\SkyrimVR" Compression="deflate">
+    <ZipFile Name="@modname VR" RootDir="dist\SkyrimVR" Compression="deflate">
       <Include>@filename.esp</Include>
       <Include>@filename.bsa</Include>
       <Include>SKSE\Plugins\@filename.dll</Include>

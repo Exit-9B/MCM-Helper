@@ -39,7 +39,7 @@ bool GroupConditionHandler::StartObject()
 	{
 		auto tree = std::make_shared<GroupConditionTree>();
 		_tree->SubTrees.push_back(tree);
-		_master->PushHandler<GroupConditionHandler>(_master, tree);
+		_master->PushHandler<GroupConditionHandler>(tree);
 		return true;
 	}
 	default:

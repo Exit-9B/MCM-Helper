@@ -92,7 +92,7 @@ bool ActionHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "params") == 0) {
-			_master->PushHandler<ParamsHandler>(_master, std::addressof(_data.Params));
+			_master->PushHandler<ParamsHandler>(std::addressof(_data.Params));
 			return true;
 		}
 		else {

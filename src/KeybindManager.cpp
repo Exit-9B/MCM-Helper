@@ -22,7 +22,7 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 		return;
 
 	ReaderHandler handler;
-	handler.PushHandler<KeybindsHandler>(std::addressof(handler), a_modName);
+	handler.PushHandler<KeybindsHandler>(a_modName);
 
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
@@ -52,7 +52,7 @@ void KeybindManager::ReadKeybindRegistrations()
 	auto keybindsLocation = settingsPath / "keybinds.json"sv;
 
 	ReaderHandler handler;
-	handler.PushHandler<UserKeybindsHandler>(std::addressof(handler));
+	handler.PushHandler<UserKeybindsHandler>();
 
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
@@ -73,10 +73,10 @@ void KeybindManager::ReadKeybindRegistrations()
 	}
 
 	auto endTime = std::chrono::steady_clock::now();
-	auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+	auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
 	logger::info(
-		"Loaded keybind registrations in {} us."sv,
+		"Loaded keybind registrations in {} ms."sv,
 		elapsedMs.count());
 }
 
@@ -135,10 +135,10 @@ void KeybindManager::CommitKeybinds()
 	}
 
 	auto endTime = std::chrono::steady_clock::now();
-	auto elapsedMs = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+	auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
 	logger::info(
-		"Saved keybind registrations in {} us."sv,
+		"Saved keybind registrations in {} ms."sv,
 		elapsedMs.count());
 }
 

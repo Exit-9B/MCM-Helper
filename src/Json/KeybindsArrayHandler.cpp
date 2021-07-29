@@ -55,7 +55,7 @@ bool KeybindsArrayHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "action") == 0) {
-			_master->PushHandler<ActionHandler>(_master, std::addressof(_action));
+			_master->PushHandler<ActionHandler>(std::addressof(_action));
 			return true;
 		}
 		else {

@@ -66,13 +66,13 @@ bool PagesHandler::Key(
 		else if (strcmp(str, "content") == 0) {
 			auto pageLayout = std::make_shared<PageLayout>();
 			_pageContent = pageLayout;
-			_master->PushHandler<ContentHandler>(_master, pageLayout.get(), _script);
+			_master->PushHandler<ContentHandler>(pageLayout.get(), _script);
 			return true;
 		}
 		else if (strcmp(str, "customContent") == 0) {
 			auto customContent = std::make_shared<CustomContent>();
 			_pageContent = customContent;
-			_master->PushHandler<CustomContentHandler>(_master, customContent.get());
+			_master->PushHandler<CustomContentHandler>(customContent.get());
 			return true;
 		}
 		else if (strcmp(str, "cursorFillMode") == 0) {

@@ -12,7 +12,7 @@ public:
 	template <typename T, typename... Args>
 	void PushHandler(Args&&... args)
 	{
-		_handlers.emplace(new T(std::forward<Args>(args)...));
+		_handlers.emplace(new T(this, std::forward<Args>(args)...));
 	}
 
 	void PopHandler()

@@ -96,19 +96,19 @@ bool ConfigHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "pluginRequirements") == 0) {
-			_master->PushHandler<PluginRequirementsHandler>(_master);
+			_master->PushHandler<PluginRequirementsHandler>();
 			return true;
 		}
 		else if (strcmp(str, "content") == 0) {
 			auto pageLayout = std::make_shared<PageLayout>();
 			_config->MainPage = pageLayout;
-			_master->PushHandler<ContentHandler>(_master, pageLayout.get(), _script);
+			_master->PushHandler<ContentHandler>(pageLayout.get(), _script);
 			return true;
 		}
 		else if (strcmp(str, "customContent") == 0) {
 			auto customContent = std::make_shared<CustomContent>();
 			_config->MainPage = customContent;
-			_master->PushHandler<CustomContentHandler>(_master, customContent.get());
+			_master->PushHandler<CustomContentHandler>(customContent.get());
 			return true;
 		}
 		else if (strcmp(str, "cursorFillMode") == 0) {
@@ -116,7 +116,7 @@ bool ConfigHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "pages") == 0) {
-			_master->PushHandler<PagesHandler>(_master, _config, _script);
+			_master->PushHandler<PagesHandler>(_config, _script);
 			return true;
 		}
 		else {

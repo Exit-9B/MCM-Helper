@@ -38,7 +38,7 @@ bool UserKeybindsHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "keybinds") == 0) {
-			_master->PushHandler<UserKeybindsArrayHandler>(_master);
+			_master->PushHandler<UserKeybindsArrayHandler>();
 			return true;
 		}
 		else {

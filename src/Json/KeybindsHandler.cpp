@@ -45,7 +45,7 @@ bool KeybindsHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "keybinds") == 0) {
-			_master->PushHandler<KeybindsArrayHandler>(_master, std::addressof(_modKeys));
+			_master->PushHandler<KeybindsArrayHandler>(std::addressof(_modKeys));
 			return true;
 		}
 		else {

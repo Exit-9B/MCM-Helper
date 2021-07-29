@@ -308,11 +308,8 @@ namespace Papyrus
 			slider->Refresh(object, a_option);
 
 			SendSettingChangeEvent(a_vm, object, slider->ID);
-		}
 
-		if (control)
-		{
-			control->InvokeAction(a_vm);
+			slider->InvokeAction(a_vm);
 		}
 	}
 
@@ -402,6 +399,8 @@ namespace Papyrus
 			menu->Refresh(object, a_option);
 
 			SendSettingChangeEvent(a_vm, object, menu->ID);
+
+			menu->InvokeAction(a_vm);
 		}
 		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control))
 		{
@@ -413,11 +412,8 @@ namespace Papyrus
 			menuEnum->Refresh(object, a_option);
 
 			SendSettingChangeEvent(a_vm, object, menuEnum->ID);
-		}
 
-		if (control)
-		{
-			control->InvokeAction(a_vm);
+			menuEnum->InvokeAction(a_vm);
 		}
 	}
 
@@ -471,11 +467,8 @@ namespace Papyrus
 			color->Refresh(object, a_option);
 
 			SendSettingChangeEvent(a_vm, object, color->ID);
-		}
 
-		if (control)
-		{
-			control->InvokeAction(a_vm);
+			color->InvokeAction(a_vm);
 		}
 	}
 
@@ -542,11 +535,8 @@ namespace Papyrus
 			{
 				updateKey(true);
 			}
-		}
 
-		if (control)
-		{
-			control->InvokeAction(a_vm);
+			keymap->InvokeAction(a_vm);
 		}
 	}
 
@@ -607,11 +597,8 @@ namespace Papyrus
 			}
 
 			SendSettingChangeEvent(a_vm, object, input->ID);
-		}
 
-		if (control)
-		{
-			control->InvokeAction(a_vm);
+			input->InvokeAction(a_vm);
 		}
 	}
 

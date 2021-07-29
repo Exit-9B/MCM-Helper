@@ -133,7 +133,7 @@ bool ContentHandler::Key(
 		}
 		else if (strcmp(str, "groupCondition") == 0) {
 			_data.GroupCondition = std::make_shared<GroupConditionTree>();
-			_master->PushHandler<GroupConditionHandler>(_master, _data.GroupCondition);
+			_master->PushHandler<GroupConditionHandler>(_data.GroupCondition);
 			return true;
 		}
 		else if (strcmp(str, "groupBehavior") == 0) {
@@ -154,7 +154,6 @@ bool ContentHandler::Key(
 		}
 		else if (strcmp(str, "action") == 0) {
 			_master->PushHandler<ActionHandler>(
-				_master,
 				std::addressof(_data.Action),
 				_form,
 				_scriptName);
@@ -162,7 +161,6 @@ bool ContentHandler::Key(
 		}
 		else if (strcmp(str, "valueOptions") == 0) {
 			_master->PushHandler<ValueOptionsHandler>(
-				_master,
 				std::addressof(_data.ValueOptions),
 				_modName,
 				_data.ID,
