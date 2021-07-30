@@ -1,8 +1,9 @@
 #include "Config/ValueSource.h"
 #include "ConfigPageCache.h"
 #include "ColorUtil.h"
+#include "Script/ScriptObject.h"
 
-float ValueSource::GetDefaultValue()
+auto ValueSource::GetDefaultValue() -> float
 {
 	return GetValue();
 }
@@ -12,9 +13,10 @@ void ValueSource::ResetToDefault()
 	SetValue(GetDefaultValue());
 }
 
-float PropertyValue::GetValue()
+auto PropertyValue::GetValue() -> float
 {
-	auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
+	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable)
 	{
 		return GetValue(*variable);
@@ -25,19 +27,20 @@ float PropertyValue::GetValue()
 
 void PropertyValue::SetValue(float a_value)
 {
-	auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
+	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable)
 	{
 		SetValue(*variable, a_value);
 	}
 }
 
-float PropertyValue::GetDefaultValue()
+auto PropertyValue::GetDefaultValue() -> float
 {
 	return DefaultValue;
 }
 
-float PropertyValueBool::GetValue(RE::BSScript::Variable& a_variable)
+auto PropertyValueBool::GetValue(RE::BSScript::Variable& a_variable) -> float
 {
 	if (a_variable.IsBool())
 	{
@@ -52,7 +55,7 @@ void PropertyValueBool::SetValue(RE::BSScript::Variable& a_variable, float a_val
 	a_variable.SetBool(a_value);
 }
 
-float PropertyValueInt::GetValue(RE::BSScript::Variable& a_variable)
+auto PropertyValueInt::GetValue(RE::BSScript::Variable& a_variable) -> float
 {
 	if (a_variable.IsInt())
 	{
@@ -67,7 +70,7 @@ void PropertyValueInt::SetValue(RE::BSScript::Variable& a_variable, float a_valu
 	a_variable.SetSInt(static_cast<std::int32_t>(a_value));
 }
 
-float PropertyValueFloat::GetValue(RE::BSScript::Variable& a_variable)
+auto PropertyValueFloat::GetValue(RE::BSScript::Variable& a_variable) -> float
 {
 	if (a_variable.IsFloat())
 	{
@@ -82,7 +85,7 @@ void PropertyValueFloat::SetValue(RE::BSScript::Variable& a_variable, float a_va
 	a_variable.SetFloat(a_value);
 }
 
-float ModSettingBool::GetValue()
+auto ModSettingBool::GetValue() -> float
 {
 	auto boolValue = SettingStore::GetInstance().GetModSettingBool(ModName, ID);
 	return boolValue ? 1.0f : 0.0f;
@@ -93,7 +96,7 @@ void ModSettingBool::SetValue(float a_value)
 	SettingStore::GetInstance().SetModSettingBool(ModName, ID, a_value);
 }
 
-float ModSettingBool::GetDefaultValue()
+auto ModSettingBool::GetDefaultValue() -> float
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting)
@@ -106,7 +109,7 @@ float ModSettingBool::GetDefaultValue()
 	}
 }
 
-float ModSettingInt::GetValue()
+auto ModSettingInt::GetValue() -> float
 {
 	auto intValue = SettingStore::GetInstance().GetModSettingInt(ModName, ID);
 	return static_cast<float>(intValue);
@@ -117,7 +120,7 @@ void ModSettingInt::SetValue(float a_value)
 	SettingStore::GetInstance().SetModSettingInt(ModName, ID, static_cast<std::int32_t>(a_value));
 }
 
-float ModSettingInt::GetDefaultValue()
+auto ModSettingInt::GetDefaultValue() -> float
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting)
@@ -137,7 +140,7 @@ float ModSettingInt::GetDefaultValue()
 	}
 }
 
-float ModSettingFloat::GetValue()
+auto ModSettingFloat::GetValue() -> float
 {
 	return SettingStore::GetInstance().GetModSettingFloat(ModName, ID);
 }
@@ -147,7 +150,7 @@ void ModSettingFloat::SetValue(float a_value)
 	SettingStore::GetInstance().SetModSettingFloat(ModName, ID, a_value);
 }
 
-float ModSettingFloat::GetDefaultValue()
+auto ModSettingFloat::GetDefaultValue() -> float
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting)
@@ -160,7 +163,7 @@ float ModSettingFloat::GetDefaultValue()
 	}
 }
 
-float GlobalValue::GetValue()
+auto GlobalValue::GetValue() -> float
 {
 	return SourceForm ? SourceForm->value : 0.0f;
 }
@@ -173,7 +176,7 @@ void GlobalValue::SetValue(float a_value)
 	}
 }
 
-float GlobalValue::GetDefaultValue()
+auto GlobalValue::GetDefaultValue() -> float
 {
 	return DefaultValue;
 }

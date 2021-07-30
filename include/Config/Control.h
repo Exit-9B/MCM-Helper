@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Config/ValueSource.h"
+#include "Config/TextSource.h"
 #include "Config/GroupConditionTree.h"
 #include "Config/Action.h"
 #include "Script/SkyUI.h"
@@ -61,12 +62,7 @@ public:
 	auto GetValue() -> std::string;
 
 	std::string Value;
-	std::string DefaultValue;
-
-	std::string ModName;
-	RE::TESForm* SourceForm;
-	std::string ScriptName;
-	std::string PropertyName;
+	std::shared_ptr<TextSource> ValueSource;
 };
 
 class ToggleControl : public Control
@@ -129,12 +125,7 @@ public:
 
 	std::vector<std::string> Options;
 	std::vector<std::string> ShortNames;
-	std::string DefaultValue;
-
-	std::string ModName;
-	RE::TESForm* SourceForm;
-	std::string ScriptName;
-	std::string PropertyName;
+	std::shared_ptr<TextSource> ValueSource;
 };
 
 class EnumControl : public Control
@@ -193,12 +184,7 @@ public:
 
 	auto GetValue() -> std::string;
 
-	std::string DefaultValue;
-
-	std::string ModName;
-	RE::TESForm* SourceForm;
-	std::string ScriptName;
-	std::string PropertyName;
+	std::shared_ptr<TextSource> ValueSource;
 };
 
 class HiddenToggleControl : public ToggleControl

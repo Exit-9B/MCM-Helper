@@ -116,39 +116,15 @@ void TextControl::InvokeAction(VM* a_vm)
 
 void TextControl::ResetToDefault()
 {
-	if (!PropertyName.empty())
+	if (ValueSource)
 	{
-		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
-		if (variable)
-		{
-			variable->SetString(DefaultValue);
-		}
-	}
-	else if (!ID.empty())
-	{
-		SettingStore::GetInstance().ResetToDefault(ModName, ID);
+		ValueSource->ResetToDefault();
 	}
 }
 
 auto TextControl::GetValue() -> std::string
 {
-	if (!PropertyName.empty())
-	{
-		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
-		if (variable && variable->IsString())
-		{
-			return std::string{ variable->GetString() };
-		}
-
-		return ""s;
-	}
-
-	if (!ID.empty())
-	{
-		return SettingStore::GetInstance().GetModSettingString(ModName, ID);
-	}
-
-	return Value;
+	return ValueSource ? ValueSource->GetValue() : Value;
 }
 
 auto ToggleControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
@@ -177,7 +153,10 @@ void ToggleControl::InvokeAction(VM* a_vm)
 
 void ToggleControl::ResetToDefault()
 {
-	ValueSource->ResetToDefault();
+	if (ValueSource)
+	{
+		ValueSource->ResetToDefault();
+	}
 }
 
 auto ToggleControl::GetValue() -> bool
@@ -211,7 +190,10 @@ void SliderControl::InvokeAction(VM* a_vm)
 
 void SliderControl::ResetToDefault()
 {
-	ValueSource->ResetToDefault();
+	if (ValueSource)
+	{
+		ValueSource->ResetToDefault();
+	}
 }
 
 auto SliderControl::GetValue() -> float
@@ -245,7 +227,10 @@ void StepperControl::InvokeAction(VM* a_vm)
 
 void StepperControl::ResetToDefault()
 {
-	ValueSource->ResetToDefault();
+	if (ValueSource)
+	{
+		ValueSource->ResetToDefault();
+	}
 }
 
 auto StepperControl::GetValue() -> std::int32_t
@@ -290,53 +275,20 @@ void MenuControl::InvokeAction(VM* a_vm)
 
 void MenuControl::ResetToDefault()
 {
-	if (!PropertyName.empty())
+	if (ValueSource)
 	{
-		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
-		if (variable)
-		{
-			variable->SetString(DefaultValue);
-		}
-	}
-	else if (!ID.empty())
-	{
-		SettingStore::GetInstance().ResetToDefault(ModName, ID);
+		ValueSource->ResetToDefault();
 	}
 }
 
 auto MenuControl::GetValue() -> std::string
 {
-	if (!PropertyName.empty())
-	{
-		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
-		if (variable && variable->IsString())
-		{
-			return std::string{ variable->GetString() };
-		}
-
-		return ""s;
-	}
-
-	if (!ID.empty())
-	{
-		return SettingStore::GetInstance().GetModSettingString(ModName, ID);
-	}
-
-	return ""s;
+	return ValueSource ? ValueSource->GetValue() : ""s;
 }
 
 auto MenuControl::GetDefaultValue() -> std::string
 {
-	if (!ID.empty())
-	{
-		auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
-		if (setting && setting->GetType() == RE::Setting::Type::kString)
-		{
-			return setting->GetString();
-		}
-	}
-
-	return ""s;
+	return ValueSource ? ValueSource->GetDefaultValue() : ""s;
 }
 
 auto MenuControl::GetShortText() -> std::string
@@ -381,7 +333,10 @@ void EnumControl::InvokeAction(VM* a_vm)
 
 void EnumControl::ResetToDefault()
 {
-	ValueSource->ResetToDefault();
+	if (ValueSource)
+	{
+		ValueSource->ResetToDefault();
+	}
 }
 
 auto EnumControl::GetValue() -> std::int32_t
@@ -429,7 +384,10 @@ void ColorControl::InvokeAction(VM* a_vm)
 
 void ColorControl::ResetToDefault()
 {
-	ValueSource->ResetToDefault();
+	if (ValueSource)
+	{
+		ValueSource->ResetToDefault();
+	}
 }
 
 auto ColorControl::GetColor() -> std::uint32_t
@@ -463,7 +421,10 @@ void KeyMapControl::InvokeAction(VM* a_vm)
 
 void KeyMapControl::ResetToDefault()
 {
-	ValueSource->ResetToDefault();
+	if (ValueSource)
+	{
+		ValueSource->ResetToDefault();
+	}
 }
 
 auto KeyMapControl::GetInfoText() -> std::string
@@ -534,39 +495,15 @@ void InputControl::InvokeAction(VM* a_vm)
 
 void InputControl::ResetToDefault()
 {
-	if (!PropertyName.empty())
+	if (ValueSource)
 	{
-		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
-		if (variable)
-		{
-			variable->SetString(DefaultValue);
-		}
-	}
-	else if (!ID.empty())
-	{
-		SettingStore::GetInstance().ResetToDefault(ModName, ID);
+		ValueSource->ResetToDefault();
 	}
 }
 
 auto InputControl::GetValue() -> std::string
 {
-	if (!PropertyName.empty())
-	{
-		auto variable = Utils::GetScriptProperty(SourceForm, ScriptName, PropertyName);
-		if (variable && variable->IsString())
-		{
-			return std::string{ variable->GetString() };
-		}
-
-		return ""s;
-	}
-
-	if (!ID.empty())
-	{
-		return SettingStore::GetInstance().GetModSettingString(ModName, ID);
-	}
-
-	return ""s;
+	return ValueSource ? ValueSource->GetValue() : ""s;
 }
 
 auto HiddenToggleControl::Add(

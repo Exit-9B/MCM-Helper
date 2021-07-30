@@ -1,8 +1,10 @@
 #include "Papyrus/MCM_ConfigBase.h"
 #include "Script/SkyUI.h"
+#include "Script/ScriptObject.h"
 #include "ConfigStore.h"
 #include "ConfigPageCache.h"
 #include "KeybindManager.h"
+#include "Utils.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func)
 
@@ -14,7 +16,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		if (config)
@@ -125,7 +127,7 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnConfigRegister(RE::TESQuest* a_self)
 	{
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 		if (object)
 		{
 			auto startTime = std::chrono::steady_clock::now();
@@ -154,7 +156,7 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnPageReset(RE::TESQuest* a_self, std::string a_page)
 	{
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		if (config)
@@ -169,7 +171,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 		auto infoText = control ? control->GetInfoText() : ""s;
@@ -189,7 +191,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -246,7 +248,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -263,7 +265,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -294,7 +296,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -319,7 +321,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -370,30 +372,16 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
 		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
 		{
 			auto options = configPageCache.GetMenuOptions(menu.get());
-			auto value = menu->GetValue();
-			if (!menu->PropertyName.empty())
+			if (a_index >= 0 && a_index < options.size() && menu->ValueSource)
 			{
-				auto variable = Utils::GetScriptProperty(
-					menu->SourceForm,
-					menu->ScriptName,
-					menu->PropertyName);
-
-				if (variable)
-				{
-					variable->SetString(value);
-				}
-			}
-			else if (!menu->ID.empty())
-			{
-				auto modName = Utils::GetModName(a_self);
-				SettingStore::GetInstance().SetModSettingString(modName, menu->ID, value);
+				menu->ValueSource->SetValue(options[a_index]);
 			}
 
 			menu->Refresh(object, a_option);
@@ -423,7 +411,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -453,7 +441,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -485,7 +473,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -546,7 +534,7 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
@@ -572,28 +560,15 @@ namespace Papyrus
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		auto object = Utils::GetScriptObject(a_self, ScriptName);
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
 		if (auto input = std::dynamic_pointer_cast<InputControl>(control))
 		{
-			if (!input->PropertyName.empty())
+			if (input->ValueSource)
 			{
-				auto variable = Utils::GetScriptProperty(
-					input->SourceForm,
-					input->ScriptName,
-					input->PropertyName);
-
-				if (variable)
-				{
-					variable->SetString(a_input);
-				}
-			}
-			else if (!input->ID.empty())
-			{
-				auto modName = Utils::GetModName(a_self);
-				SettingStore::GetInstance().SetModSettingString(modName, input->ID, a_input);
+				input->ValueSource->SetValue(a_input);
 			}
 
 			SendSettingChangeEvent(a_vm, object, input->ID);

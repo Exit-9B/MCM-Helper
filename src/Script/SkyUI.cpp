@@ -1,16 +1,16 @@
 #include "Script/SkyUI.h"
 
-#include "Utils.h"
-
 namespace SkyUI
 {
 	auto ConfigManager::GetInstance() -> ScriptObjectPtr
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
-		auto configManagerInstance = dataHandler->LookupForm(0x00000802, SkyUI::PluginName);
+		auto configManagerInstance =
+			dataHandler ? dataHandler->LookupForm(0x00000802, SkyUI::PluginName) : nullptr;
+
 		return
 			configManagerInstance
-			? Utils::GetScriptObject(configManagerInstance, "SKI_ConfigManager")
+			? ScriptObject::FromForm(configManagerInstance, "SKI_ConfigManager")
 			: nullptr;
 	}
 
@@ -19,8 +19,8 @@ namespace SkyUI
 		assert(a_configManager);
 		assert(a_config);
 
-		auto configIDVar = Utils::GetVariable(a_config, "_configID"sv);
-		auto modNamesVar = Utils::GetVariable(a_configManager, "_modNames"sv);
+		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		auto modNamesVar = ScriptObject::GetVariable(a_configManager, "_modNames"sv);
 		auto modNameVar = a_config->GetProperty("ModName"sv);
 		if (configIDVar && modNamesVar && modNameVar)
 		{

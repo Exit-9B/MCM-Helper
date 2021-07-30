@@ -492,7 +492,7 @@ void SettingStore::CommitModSetting(std::string_view a_modName, RE::Setting* a_m
 	}
 	else
 	{
-		logger::warn("Error: Section could not be resolved."sv);
+		logger::warn("Section could not be resolved."sv);
 	}
 }
 

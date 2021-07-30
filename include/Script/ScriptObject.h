@@ -2,6 +2,21 @@
 
 namespace ScriptObject
 {
+	auto FromForm(
+		RE::TESForm* a_form,
+		const std::string& a_scriptName)
+		-> ScriptObjectPtr;
+
+	auto GetVariable(
+		ScriptObjectPtr a_object,
+		std::string_view a_variableName)
+		-> RE::BSScript::Variable*;
+
+	auto IsType(
+		ScriptObjectPtr a_object,
+		const char* a_scriptName)
+		-> bool;
+
 	auto GetBool(ScriptObjectPtr a_object, std::string_view a_variableName) -> bool;
 
 	void SetBool(ScriptObjectPtr a_object, std::string_view a_variableName, bool a_value);

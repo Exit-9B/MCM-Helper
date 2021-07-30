@@ -29,7 +29,6 @@ public:
 		ReaderHandler* master,
 		ValueOptionsData* data,
 		const std::string& modName,
-		const std::string& id,
 		RE::TESForm* sourceForm,
 		const std::string& scriptName);
 
@@ -68,7 +67,6 @@ private:
 
 	ValueOptionsData* _data;
 	std::string _modName;
-	std::string _id;
 	RE::TESForm* _sourceForm;
 	std::string _scriptName;
 };

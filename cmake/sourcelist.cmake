@@ -16,6 +16,7 @@ set(sources ${sources}
     src/Config/PageContent.cpp
     src/Config/Control.cpp
     src/Config/ValueSource.cpp
+    src/Config/TextSource.cpp
     src/Config/Action.cpp
     src/Config/GroupConditionTree.cpp
 

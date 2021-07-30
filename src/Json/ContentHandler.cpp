@@ -163,7 +163,6 @@ bool ContentHandler::Key(
 			_master->PushHandler<ValueOptionsHandler>(
 				std::addressof(_data.ValueOptions),
 				_modName,
-				_data.ID,
 				_form,
 				_scriptName);
 			return true;
@@ -181,6 +180,29 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 	switch (_state) {
 	case State::Control:
 	{
+		if (auto modSetting =
+			std::dynamic_pointer_cast<ModSetting>(_data.ValueOptions.ValueSource)) {
+			modSetting->ID = _data.ID;
+		}
+
+		std::shared_ptr<TextSource> textSource;
+		if (!_data.ValueOptions.ValueSource) {
+			if (!_data.ValueOptions.PropertyName.empty()) {
+				auto propertyString = std::make_shared<PropertyString>();
+				propertyString->SourceForm = _data.ValueOptions.SourceForm;
+				propertyString->ScriptName = _data.ValueOptions.ScriptName;
+				propertyString->PropertyName = _data.ValueOptions.PropertyName;
+				propertyString->DefaultValue = _data.ValueOptions.DefaultValueStr;
+				textSource = propertyString;
+			}
+			else if (!_data.ID.empty()) {
+				auto modSettingString = std::make_shared<ModSettingString>();
+				modSettingString->ID = _data.ID;
+				modSettingString->ModName = _modName;
+				textSource = modSettingString;
+			}
+		}
+
 		std::shared_ptr<Control> control;
 		if (_data.Type == "empty"s) {
 			control = std::make_shared<EmptyControl>();
@@ -191,11 +213,7 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		else if (_data.Type == "text"s) {
 			auto textOption = std::make_shared<TextControl>();
 			textOption->Value = _data.ValueOptions.Value;
-			textOption->DefaultValue = _data.ValueOptions.DefaultValueStr;
-			textOption->ModName = _modName;
-			textOption->SourceForm = _data.ValueOptions.SourceForm;
-			textOption->ScriptName = _data.ValueOptions.ScriptName;
-			textOption->PropertyName = _data.ValueOptions.PropertyName;
+			textOption->ValueSource = textSource;
 			control = textOption;
 		}
 		else if (_data.Type == "toggle"s) {
@@ -227,13 +245,9 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		}
 		else if (_data.Type == "menu"s) {
 			auto menuOption = std::make_shared<MenuControl>();
-			menuOption->ModName = _modName;
-			menuOption->SourceForm = _data.ValueOptions.SourceForm;
-			menuOption->ScriptName = _data.ValueOptions.ScriptName;
-			menuOption->PropertyName = _data.ValueOptions.PropertyName;
 			menuOption->Options = _data.ValueOptions.Options;
 			menuOption->ShortNames = _data.ValueOptions.ShortNames;
-			menuOption->DefaultValue = _data.ValueOptions.DefaultValueStr;
+			menuOption->ValueSource = textSource;
 			control = menuOption;
 		}
 		else if (_data.Type == "enum"s) {
@@ -257,11 +271,7 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		}
 		else if (_data.Type == "input"s) {
 			auto inputOption = std::make_shared<InputControl>();
-			inputOption->DefaultValue = _data.ValueOptions.DefaultValueStr;
-			inputOption->ModName = _modName;
-			inputOption->SourceForm = _data.ValueOptions.SourceForm;
-			inputOption->ScriptName = _data.ValueOptions.ScriptName;
-			inputOption->PropertyName = _data.ValueOptions.PropertyName;
+			inputOption->ValueSource = textSource;
 			control = inputOption;
 		}
 

@@ -1,14 +1,13 @@
 #pragma once
 
 #include "SettingStore.h"
-#include "Utils.h"
 
 class ValueSource
 {
 public:
-	virtual float GetValue() = 0;
+	virtual auto GetValue() -> float = 0;
 	virtual void SetValue(float a_value) = 0;
-	virtual float GetDefaultValue();
+	virtual auto GetDefaultValue() -> float;
 	void ResetToDefault();
 };
 
@@ -20,33 +19,33 @@ public:
 	std::string PropertyName;
 	float DefaultValue;
 
-	virtual float GetValue() override;
+	virtual auto GetValue() -> float override;
 	virtual void SetValue(float a_value) override;
-	virtual float GetDefaultValue() override;
+	virtual auto GetDefaultValue() -> float override;
 
-	virtual float GetValue(RE::BSScript::Variable& a_variable) = 0;
+	virtual auto GetValue(RE::BSScript::Variable& a_variable) -> float = 0;
 	virtual void SetValue(RE::BSScript::Variable& a_variable, float a_value) = 0;
 };
 
 class PropertyValueBool : public PropertyValue
 {
 public:
-	virtual float GetValue(RE::BSScript::Variable& a_variable) override;
-	virtual void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
+	auto GetValue(RE::BSScript::Variable& a_variable) -> float override;
+	void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
 };
 
 class PropertyValueInt : public PropertyValue
 {
 public:
-	virtual float GetValue(RE::BSScript::Variable& a_variable) override;
-	virtual void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
+	auto GetValue(RE::BSScript::Variable& a_variable) -> float override;
+	void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
 };
 
 class PropertyValueFloat : public PropertyValue
 {
 public:
-	virtual float GetValue(RE::BSScript::Variable& a_variable) override;
-	virtual void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
+	auto GetValue(RE::BSScript::Variable& a_variable) -> float override;
+	void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
 };
 
 class ModSetting : public ValueSource
@@ -59,25 +58,25 @@ public:
 class ModSettingBool : public ModSetting
 {
 public:
-	virtual float GetValue() override;
-	virtual void SetValue(float a_value) override;
-	virtual float GetDefaultValue() override;
+	auto GetValue() -> float override;
+	void SetValue(float a_value) override;
+	auto GetDefaultValue() -> float override;
 };
 
 class ModSettingInt : public ModSetting
 {
 public:
-	virtual float GetValue() override;
-	virtual void SetValue(float a_value) override;
-	virtual float GetDefaultValue() override;
+	auto GetValue() -> float override;
+	void SetValue(float a_value) override;
+	auto GetDefaultValue() -> float override;
 };
 
 class ModSettingFloat : public ModSetting
 {
 public:
-	virtual float GetValue() override;
-	virtual void SetValue(float a_value) override;
-	virtual float GetDefaultValue() override;
+	auto GetValue() -> float override;
+	void SetValue(float a_value) override;
+	auto GetDefaultValue() -> float override;
 };
 
 class GlobalValue : public ValueSource
@@ -86,7 +85,7 @@ public:
 	RE::TESGlobal* SourceForm;
 	float DefaultValue;
 
-	virtual float GetValue() override;
-	virtual void SetValue(float a_value) override;
-	virtual float GetDefaultValue() override;
+	auto GetValue() -> float override;
+	void SetValue(float a_value) override;
+	auto GetDefaultValue() -> float override;
 };

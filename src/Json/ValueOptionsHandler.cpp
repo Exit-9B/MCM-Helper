@@ -6,13 +6,11 @@ ValueOptionsHandler::ValueOptionsHandler(
 	ReaderHandler* master,
 	ValueOptionsData* data,
 	const std::string& modName,
-	const std::string& id,
 	RE::TESForm* sourceForm,
 	const std::string& scriptName) :
 	IHandler{ master },
 	_data{ data },
 	_modName{ modName },
-	_id{ id },
 	_sourceForm{ sourceForm },
 	_scriptName{ scriptName }
 {
@@ -296,7 +294,6 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			}
 
 			modSetting->ModName = _modName;
-			modSetting->ID = _id;
 
 			_data->ValueSource = modSetting;
 		}

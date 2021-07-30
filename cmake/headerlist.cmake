@@ -16,6 +16,7 @@ set(headers ${headers}
     include/Config/PageContent.h
     include/Config/Control.h
     include/Config/ValueSource.h
+    include/Config/TextSource.h
     include/Config/Action.h
     include/Config/GroupConditionTree.h
 

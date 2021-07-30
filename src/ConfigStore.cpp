@@ -2,6 +2,7 @@
 #include "KeybindManager.h"
 #include "Utils.h"
 #include "Script/SkyUI.h"
+#include "Script/ScriptObject.h"
 #include "Json/ReaderHandler.h"
 #include "Json/ConfigHandler.h"
 #include <rapidjson/filereadstream.h>
@@ -31,7 +32,7 @@ void ConfigStore::ReadConfigs()
 		return;
 	}
 
-	auto modConfigsVar = Utils::GetVariable(configManager, "_modConfigs"sv);
+	auto modConfigsVar = ScriptObject::GetVariable(configManager, "_modConfigs"sv);
 	if (!modConfigsVar || !modConfigsVar->IsObjectArray())
 	{
 		// Something else went wrong
@@ -54,7 +55,7 @@ void ConfigStore::ReadConfigs()
 		if (configScript)
 		{
 			auto modName = GetModName(configScript);
-			if (Utils::HasScriptType(configScript, "MCM_ConfigBase") &&
+			if (ScriptObject::IsType(configScript, "MCM_ConfigBase") &&
 				ReadConfig(modName, configScript))
 			{
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
