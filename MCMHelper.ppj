@@ -8,6 +8,7 @@
   <Variables>
     <Variable Name="modname" Value="MCM Helper"/>
     <Variable Name="filename" Value="MCMHelper"/>
+    <Variable Name="temppath" Value="dist\temp"/>
   </Variables>
   <Imports>
     <Import>dist\Data\Source\Scripts</Import>
@@ -20,12 +21,12 @@
     <Script>SKI_ConfigMenu.psc</Script>
   </Scripts>
   <PreBuildEvent Description="Build SKSE plugins and set up distribution" UseInBuild="true">
-    <Command>PreBuild.bat "@filename"</Command>
+    <Command>PreBuild.bat "@filename" "@temppath"</Command>
   </PreBuildEvent>
-  <PostBuildEvent Description="Clean copied files" UseInBuild="true">
-    <Command>PostBuild.bat "@filename"</Command>
+  <PostBuildEvent Description="Clean temporary files" UseInBuild="true">
+    <Command>rmdir "@temppath" /s /q</Command>
   </PostBuildEvent>
-  <Packages Output="dist">
+  <Packages Output="@temppath">
     <Package Name="SkyrimSE\@filename" RootDir="dist\Data">
       <Match In="Interface\Translations">MCMHelper_*.txt</Match>
       <Match In="Scripts">MCM*.pex</Match>
@@ -38,7 +39,7 @@
     </Package>
   </Packages>
   <ZipFiles Output="dist">
-    <ZipFile Name="@modname SE" RootDir="dist\SkyrimSE" Compression="deflate">
+    <ZipFile Name="@modname SE" RootDir="@temppath\SkyrimSE" Compression="deflate">
       <Include>@filename.esp</Include>
       <Include>@filename.bsa</Include>
       <Include>SKSE\Plugins\@filename.dll</Include>
@@ -46,7 +47,7 @@
       <Include>Source\Scripts\SKI_ConfigMenu.psc</Include>
       <Include NoRecurse="true">MCM\Config\SkyUI_SE</Include>
     </ZipFile>
-    <ZipFile Name="@modname VR" RootDir="dist\SkyrimVR" Compression="deflate">
+    <ZipFile Name="@modname VR" RootDir="@temppath\SkyrimVR" Compression="deflate">
       <Include>@filename.esp</Include>
       <Include>@filename.bsa</Include>
       <Include>SKSE\Plugins\@filename.dll</Include>
