@@ -19,16 +19,13 @@ void PageLayout::Draw(ScriptObjectPtr a_object) const
 
 	SkyUI::Config::SetCursorFillMode(a_object, CursorFillMode);
 
-	for (auto& control : Controls)
-	{
-		if (control->Position >= 0)
-		{
+	for (auto& control : Controls) {
+		if (control->Position >= 0) {
 			SkyUI::Config::SetCursorPosition(a_object, control->Position);
 		}
 
 		auto id = control->Add(a_object);
-		if (id >= 0)
-		{
+		if (id >= 0) {
 			configPageCache.AddControl(id, control);
 		}
 	}

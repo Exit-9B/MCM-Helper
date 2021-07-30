@@ -54,8 +54,7 @@ auto ConfigPageCache::GetCurrentScriptName() const -> const std::string&
 auto ConfigPageCache::GetGroups() const -> std::unordered_set<std::uint32_t>
 {
 	std::unordered_set<std::uint32_t> groups;
-	for (auto& [group, control] : _groupControls)
-	{
+	for (auto& [group, control] : _groupControls) {
 		groups.insert(group);
 	}
 
@@ -98,8 +97,7 @@ auto ConfigPageCache::GetMenuShortNames(MenuControl* a_control) const -> std::ve
 void ConfigPageCache::ForEach(
 	std::function<void(std::int32_t, std::shared_ptr<Control>)> a_func) const
 {
-	for (auto& [id, control] : _pageCache)
-	{
+	for (auto& [id, control] : _pageCache) {
 		a_func(id, control);
 	}
 }

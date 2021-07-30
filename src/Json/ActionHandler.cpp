@@ -119,9 +119,7 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			}
 			else {
 				callFunction->Form = _sourceForm;
-				callFunction->ScriptName =
-					!_data.Script.empty() ? _data.Script
-					: _scriptName;
+				callFunction->ScriptName = !_data.Script.empty() ? _data.Script : _scriptName;
 			}
 			callFunction->Params = _data.Params;
 			callFunction->Function = _data.Function;
@@ -132,9 +130,7 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 
 			auto callGlobalFunction = std::make_shared<CallGlobalFunction>();
 			*_action = callGlobalFunction;
-			callGlobalFunction->ScriptName =
-				!_data.Script.empty() ? _data.Script
-				: _scriptName;
+			callGlobalFunction->ScriptName = !_data.Script.empty() ? _data.Script : _scriptName;
 			callGlobalFunction->Params = _data.Params;
 			callGlobalFunction->Function = _data.Function;
 		}

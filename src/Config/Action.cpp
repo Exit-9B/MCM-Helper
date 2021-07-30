@@ -8,8 +8,7 @@ auto Function::FunctionArguments::Make(std::span<std::string> a_params, Function
 {
 	auto args = std::make_unique<FunctionArguments>();
 	args->Args.resize(static_cast<std::uint32_t>(a_params.size()));
-	for (std::uint32_t i = 0; i < a_params.size(); i++)
-	{
+	for (std::uint32_t i = 0; i < a_params.size(); i++) {
 		auto& var = args->Args[i];
 		auto& param = a_params[i];
 		if (param == "{value}") {
@@ -79,8 +78,7 @@ void Function::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)
 
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
-	if (vm)
-	{
+	if (vm) {
 		Invoke(vm.get());
 	}
 }
@@ -91,8 +89,7 @@ void CallFunction::Invoke(VM* a_vm, FunctionParam a_value)
 		return;
 
 	auto object = ScriptObject::FromForm(Form, ScriptName);
-	if (object)
-	{
+	if (object) {
 		auto args = FunctionArguments::Make(Params, a_value);
 
 		ScriptCallbackPtr nullCallback;
@@ -105,8 +102,7 @@ void CallGlobalFunction::Invoke(VM* a_vm, FunctionParam a_value)
 	if (!a_vm || Function.empty())
 		return;
 
-	if (!ScriptName.empty())
-	{
+	if (!ScriptName.empty()) {
 		auto args = FunctionArguments::Make(Params, a_value);
 
 		ScriptCallbackPtr nullCallback;
@@ -126,9 +122,8 @@ void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
 	RE::BSFixedString control{ Control };
 	auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
 
-	auto args =
-		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
-		: RE::MakeFunctionArguments(std::move(control));
+	auto args = a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime)) :
+                       RE::MakeFunctionArguments(std::move(control));
 
 	ScriptCallbackPtr nullCallback;
 	vm->DispatchMethodCall(object, fnName, args, nullCallback);
@@ -142,8 +137,7 @@ void RunConsoleCommand::SendControlEvent(bool a_up, [[maybe_unused]] float a_hol
 
 	const auto scriptFactory = RE::IFormFactory::GetConcreteFormFactoryByType<RE::Script>();
 	const auto script = scriptFactory ? scriptFactory->Create() : nullptr;
-	if (script)
-	{
+	if (script) {
 		script->SetCommand(Command);
 		script->CompileAndRun(nullptr);
 		delete script;

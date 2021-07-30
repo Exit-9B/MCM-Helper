@@ -6,8 +6,7 @@ auto PropertyString::GetValue() -> std::string
 {
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
-	if (variable && variable->IsString())
-	{
+	if (variable && variable->IsString()) {
 		return std::string{ variable->GetString() };
 	}
 
@@ -19,8 +18,7 @@ void PropertyString::SetValue(std::string_view a_value)
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 
-	if (variable)
-	{
+	if (variable) {
 		variable->SetString(a_value);
 	}
 }
@@ -34,8 +32,7 @@ void PropertyString::ResetToDefault()
 {
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
-	if (variable)
-	{
+	if (variable) {
 		variable->SetString(DefaultValue);
 	}
 }

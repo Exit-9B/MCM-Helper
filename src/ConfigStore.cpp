@@ -25,16 +25,14 @@ void ConfigStore::ReadConfigs()
 	auto startTime = std::chrono::steady_clock::now();
 
 	auto configManager = SkyUI::ConfigManager::GetInstance();
-	if (!configManager)
-	{
+	if (!configManager) {
 		// Didn't find SkyUI
 		logger::warn("Could not find SkyUI Config Manager."sv);
 		return;
 	}
 
 	auto modConfigsVar = ScriptObject::GetVariable(configManager, "_modConfigs"sv);
-	if (!modConfigsVar || !modConfigsVar->IsObjectArray())
-	{
+	if (!modConfigsVar || !modConfigsVar->IsObjectArray()) {
 		// Something else went wrong
 		logger::warn("Could not find registered mod configs."sv);
 		return;
@@ -42,22 +40,18 @@ void ConfigStore::ReadConfigs()
 
 	auto modConfigs = modConfigsVar->GetArray();
 
-	if (!modConfigs)
-	{
+	if (!modConfigs) {
 		logger::warn("SkyUI Config Manager is not ready"sv);
 		return;
 	}
 
-	for (auto& modConfig : *modConfigs)
-	{
+	for (auto& modConfig : *modConfigs) {
 		auto configScript = modConfig.GetObject();
 
-		if (configScript)
-		{
+		if (configScript) {
 			auto modName = GetModName(configScript);
 			if (ScriptObject::IsType(configScript, "MCM_ConfigBase") &&
-				ReadConfig(modName, configScript))
-			{
+				ReadConfig(modName, configScript)) {
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
 				KeybindManager::GetInstance().ReadKeybinds(modName);
 			}
@@ -67,10 +61,7 @@ void ConfigStore::ReadConfigs()
 	auto endTime = std::chrono::steady_clock::now();
 	auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-	logger::info(
-		"Registered {} mod configs in {} ms."sv,
-		_configStore.size(),
-		elapsedMs.count());
+	logger::info("Registered {} mod configs in {} ms."sv, _configStore.size(), elapsedMs.count());
 }
 
 bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_configScript)
@@ -82,15 +73,11 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 
 	ReaderHandler handler;
 	auto config = std::make_shared<Config>();
-	handler.PushHandler<ConfigHandler>(
-		config.get(),
-		a_modName,
-		a_configScript);
+	handler.PushHandler<ConfigHandler>(config.get(), a_modName, a_configScript);
 
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), configLocation.c_str(), L"r");
-	if (err != 0)
-	{
+	if (err != 0) {
 		logger::warn("Failed to open config for {}"sv, a_modName);
 		return false;
 	}
@@ -101,8 +88,7 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 
 	auto result = reader.Parse(is, handler);
 	fclose(fp);
-	if (!result)
-	{
+	if (!result) {
 		logger::warn("Failed to parse config for {}"sv, a_modName);
 		return false;
 	}
@@ -113,8 +99,7 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 	auto pagesVariable = a_configScript->GetProperty("Pages");
 
-	if (vm && pagesVariable)
-	{
+	if (vm && pagesVariable) {
 		ScriptArrayPtr pagesArray;
 		vm->CreateArray(
 			RE::BSScript::TypeInfo{ RE::BSScript::TypeInfo::RawType::kString },
@@ -122,8 +107,7 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 			pagesArray);
 
 		std::uint32_t index = 0;
-		for (auto& [pageDisplayName, pageContent] : config->SubPages)
-		{
+		for (auto& [pageDisplayName, pageContent] : config->SubPages) {
 			pagesArray->data()[index].SetString(pageDisplayName);
 			index++;
 		}
@@ -137,12 +121,10 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 auto ConfigStore::GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>
 {
 	auto it = _configStore.find(a_modName);
-	if (it != _configStore.end())
-	{
+	if (it != _configStore.end()) {
 		return it->second;
 	}
-	else
-	{
+	else {
 		return nullptr;
 	}
 }

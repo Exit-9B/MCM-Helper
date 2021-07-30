@@ -6,7 +6,7 @@
 #include "KeybindManager.h"
 #include "Utils.h"
 
-#define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func ## sv, ScriptName, func)
+#define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func)
 
 namespace Papyrus
 {
@@ -19,8 +19,7 @@ namespace Papyrus
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		if (config)
-		{
+		if (config) {
 			config->RefreshPage(object);
 		}
 	}
@@ -37,51 +36,41 @@ namespace Papyrus
 
 		std::vector<std::string> options;
 		options.reserve(a_options.size());
-		for (auto& option : a_options)
-		{
+		for (auto& option : a_options) {
 			options.push_back(std::string{ option });
 		}
 
 		std::vector<std::string> shortNames;
 		shortNames.reserve(a_shortNames.size());
-		for (auto& shortName : a_shortNames)
-		{
+		for (auto& shortName : a_shortNames) {
 			shortNames.push_back(std::string{ shortName });
 		}
 
 		configPageCache.SetMenuOptions(a_ID, options, shortNames);
 	}
 
-	auto MCM_ConfigBase::GetModSettingInt(
-		RE::TESQuest* a_self,
-		std::string_view a_settingName)
+	auto MCM_ConfigBase::GetModSettingInt(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> std::int32_t
 	{
 		auto modName = Utils::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingInt(modName, a_settingName);
 	}
 
-	auto MCM_ConfigBase::GetModSettingBool(
-		RE::TESQuest* a_self,
-		std::string_view a_settingName)
+	auto MCM_ConfigBase::GetModSettingBool(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> bool
 	{
 		auto modName = Utils::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingBool(modName, a_settingName);
 	}
 
-	auto MCM_ConfigBase::GetModSettingFloat(
-		RE::TESQuest* a_self,
-		std::string_view a_settingName)
+	auto MCM_ConfigBase::GetModSettingFloat(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> float
 	{
 		auto modName = Utils::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingFloat(modName, a_settingName);
 	}
 
-	auto MCM_ConfigBase::GetModSettingString(
-		RE::TESQuest* a_self,
-		std::string_view a_settingName)
+	auto MCM_ConfigBase::GetModSettingString(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> std::string
 	{
 		auto modName = Utils::GetModName(a_self);
@@ -128,15 +117,13 @@ namespace Papyrus
 	void MCM_ConfigBase::OnConfigRegister(RE::TESQuest* a_self)
 	{
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
-		if (object)
-		{
+		if (object) {
 			auto startTime = std::chrono::steady_clock::now();
 			auto modName = Utils::GetModName(a_self);
 			ConfigStore::GetInstance().ReadConfig(modName, object);
 
 			auto configManager = SkyUI::ConfigManager::GetInstance();
-			if (configManager)
-			{
+			if (configManager) {
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, object);
 			}
 
@@ -147,10 +134,7 @@ namespace Papyrus
 			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
 				endTime - startTime);
 
-			logger::info(
-				"Registered mod config for {} in {} ms."sv,
-				modName,
-				elapsedMs.count());
+			logger::info("Registered mod config for {} in {} ms."sv, modName, elapsedMs.count());
 		}
 	}
 
@@ -159,8 +143,7 @@ namespace Papyrus
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
-		if (config)
-		{
+		if (config) {
 			config->ShowPage(object, a_page);
 		}
 	}
@@ -175,8 +158,7 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 		auto infoText = control ? control->GetInfoText() : ""s;
-		if (control && !infoText.empty())
-		{
+		if (control && !infoText.empty()) {
 			SkyUI::Config::SetInfoText(object, infoText);
 		}
 	}
@@ -195,37 +177,29 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto toggle = std::dynamic_pointer_cast<ToggleControl>(control))
-		{
-			if (toggle->ValueSource)
-			{
-				if (toggle->ValueSource->GetValue() == 0.0f)
-				{
+		if (auto toggle = std::dynamic_pointer_cast<ToggleControl>(control)) {
+			if (toggle->ValueSource) {
+				if (toggle->ValueSource->GetValue() == 0.0f) {
 					toggle->ValueSource->SetValue(1.0f);
 				}
-				else
-				{
+				else {
 					toggle->ValueSource->SetValue(0.0f);
 				}
 			}
 
 			toggle->Refresh(object, a_option);
 
-			if (toggle->GroupControl)
-			{
+			if (toggle->GroupControl) {
 				auto config = ConfigStore::GetInstance().GetConfig(a_self);
-				if (config)
-				{
+				if (config) {
 					config->RefreshPage(object);
 				}
 			}
 
 			SendSettingChangeEvent(a_vm, object, toggle->ID);
 		}
-		else if (auto stepper = std::dynamic_pointer_cast<StepperControl>(control))
-		{
-			if (stepper->ValueSource && !stepper->Options.empty())
-			{
+		else if (auto stepper = std::dynamic_pointer_cast<StepperControl>(control)) {
+			if (stepper->ValueSource && !stepper->Options.empty()) {
 				std::int32_t index = static_cast<std::int32_t>(stepper->GetValue());
 				std::int32_t nextIndex = (index + 1) % stepper->Options.size();
 				stepper->ValueSource->SetValue(static_cast<float>(nextIndex));
@@ -236,8 +210,7 @@ namespace Papyrus
 			SendSettingChangeEvent(a_vm, object, stepper->ID);
 		}
 
-		if (control)
-		{
+		if (control) {
 			control->InvokeAction(a_vm);
 		}
 	}
@@ -252,8 +225,7 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (control)
-		{
+		if (control) {
 			control->ResetToDefault();
 			control->Refresh(object, a_option);
 		}
@@ -269,10 +241,8 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto slider = std::dynamic_pointer_cast<SliderControl>(control))
-		{
-			if (slider->ValueSource)
-			{
+		if (auto slider = std::dynamic_pointer_cast<SliderControl>(control)) {
+			if (slider->ValueSource) {
 				auto startValue = slider->ValueSource->GetValue();
 				SkyUI::Config::SetSliderDialogStartValue(object, startValue);
 
@@ -300,10 +270,8 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto slider = std::dynamic_pointer_cast<SliderControl>(control))
-		{
-			if (slider->ValueSource)
-			{
+		if (auto slider = std::dynamic_pointer_cast<SliderControl>(control)) {
+			if (slider->ValueSource) {
 				slider->ValueSource->SetValue(a_value);
 			}
 
@@ -325,35 +293,29 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
-		{
+		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control)) {
 			auto options = configPageCache.GetMenuOptions(menu.get());
 			auto item = std::find(options.begin(), options.end(), menu->GetValue());
 			SkyUI::Config::SetMenuDialogOptions(object, options);
-			if (item != options.end())
-			{
+			if (item != options.end()) {
 				auto index = static_cast<std::int32_t>(item - options.begin());
 				SkyUI::Config::SetMenuDialogStartIndex(object, index);
 			}
 
-			if (!menu->ID.empty())
-			{
+			if (!menu->ID.empty()) {
 				auto defaultValue = menu->GetDefaultValue();
-				if (!defaultValue.empty())
-				{
+				if (!defaultValue.empty()) {
 					item = std::find(options.begin(), options.end(), defaultValue);
 					auto index = static_cast<std::int32_t>(item - options.begin());
 					SkyUI::Config::SetMenuDialogDefaultIndex(object, index);
 				}
 			}
 		}
-		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control))
-		{
+		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control)) {
 			SkyUI::Config::SetMenuDialogOptions(object, menuEnum->Options);
 			SkyUI::Config::SetMenuDialogStartIndex(object, menuEnum->GetValue());
 
-			if (menuEnum->ValueSource)
-			{
+			if (menuEnum->ValueSource) {
 				auto defaultValue = static_cast<std::int32_t>(
 					menuEnum->ValueSource->GetDefaultValue());
 				SkyUI::Config::SetMenuDialogDefaultIndex(object, defaultValue);
@@ -376,11 +338,9 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control))
-		{
+		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control)) {
 			auto options = configPageCache.GetMenuOptions(menu.get());
-			if (a_index >= 0 && a_index < options.size() && menu->ValueSource)
-			{
+			if (a_index >= 0 && a_index < options.size() && menu->ValueSource) {
 				menu->ValueSource->SetValue(options[a_index]);
 			}
 
@@ -390,10 +350,8 @@ namespace Papyrus
 
 			menu->InvokeAction(a_vm);
 		}
-		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control))
-		{
-			if (menuEnum->ValueSource)
-			{
+		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control)) {
+			if (menuEnum->ValueSource) {
 				menuEnum->ValueSource->SetValue(static_cast<float>(a_index));
 			}
 
@@ -415,12 +373,9 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto color = std::dynamic_pointer_cast<ColorControl>(control))
-		{
-			if (color->ValueSource)
-			{
-				auto startValue = static_cast<std::uint32_t>(
-					color->ValueSource->GetValue());
+		if (auto color = std::dynamic_pointer_cast<ColorControl>(control)) {
+			if (color->ValueSource) {
+				auto startValue = static_cast<std::uint32_t>(color->ValueSource->GetValue());
 				SkyUI::Config::SetColorDialogStartColor(object, startValue);
 
 				auto defaultValue = static_cast<std::uint32_t>(
@@ -445,10 +400,8 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto color = std::dynamic_pointer_cast<ColorControl>(control))
-		{
-			if (color->ValueSource)
-			{
+		if (auto color = std::dynamic_pointer_cast<ColorControl>(control)) {
+			if (color->ValueSource) {
 				color->ValueSource->SetValue(static_cast<float>(a_color));
 			}
 
@@ -477,18 +430,14 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control))
-		{
+		if (auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control)) {
 			std::function<void(bool)> updateKey = [=](bool confirm)
 			{
-				if (confirm)
-				{
-					if (keymap->ValueSource)
-					{
+				if (confirm) {
+					if (keymap->ValueSource) {
 						keymap->ValueSource->SetValue(static_cast<float>(a_keyCode));
 					}
-					else if (!keymap->ID.empty())
-					{
+					else if (!keymap->ID.empty()) {
 						auto modName = Utils::GetModName(a_self);
 						auto& keybindManager = KeybindManager::GetInstance();
 						keybindManager.Register(a_keyCode, modName, keymap->ID);
@@ -500,27 +449,21 @@ namespace Papyrus
 				}
 			};
 
-			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts)
-			{
+			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts) {
 				std::string msg;
-				if (!a_conflictName.empty())
-				{
+				if (!a_conflictName.empty()) {
 					msg = std::format(
 						"$MCM_KeyAlreadyMappedByMod{{{}}}{{{}}}"sv,
 						a_conflictControl,
 						a_conflictName);
 				}
-				else
-				{
-					msg = std::format(
-						"$MCM_KeyAlreadyMapped{{{}}}"sv,
-						a_conflictControl);
+				else {
+					msg = std::format("$MCM_KeyAlreadyMapped{{{}}}"sv, a_conflictControl);
 				}
 
 				SkyUI::Config::ShowMessage(object, msg, updateKey);
 			}
-			else
-			{
+			else {
 				updateKey(true);
 			}
 
@@ -538,10 +481,8 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto input = std::dynamic_pointer_cast<InputControl>(control))
-		{
-			if (!input->ID.empty())
-			{
+		if (auto input = std::dynamic_pointer_cast<InputControl>(control)) {
+			if (!input->ID.empty()) {
 				auto modName = Utils::GetModName(a_self);
 				auto text = SettingStore::GetInstance().GetModSettingString(modName, input->ID);
 				SkyUI::Config::SetInputDialogStartText(object, text);
@@ -564,10 +505,8 @@ namespace Papyrus
 
 		auto control = configPageCache.GetControl(a_option);
 
-		if (auto input = std::dynamic_pointer_cast<InputControl>(control))
-		{
-			if (input->ValueSource)
-			{
+		if (auto input = std::dynamic_pointer_cast<InputControl>(control)) {
+			if (input->ValueSource) {
 				input->ValueSource->SetValue(a_input);
 			}
 

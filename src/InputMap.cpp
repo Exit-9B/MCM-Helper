@@ -2,6 +2,8 @@
 #include <windows.h>
 #include <xinput.h>
 
+// clang-format off
+
 std::uint32_t InputMap::GamepadMaskToKeycode(std::uint32_t keyMask)
 {
 	switch (keyMask)

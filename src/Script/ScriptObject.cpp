@@ -1,10 +1,10 @@
 #include "Script/ScriptObject.h"
 #include "Utils.h"
 
-auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName) -> ScriptObjectPtr
+auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName)
+	-> ScriptObjectPtr
 {
-	if (!a_form)
-	{
+	if (!a_form) {
 		logger::warn("Cannot retrieve script object from a None form."sv);
 
 		return nullptr;
@@ -12,8 +12,7 @@ auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName
 
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
-	if (!vm)
-	{
+	if (!vm) {
 		return nullptr;
 	}
 
@@ -23,52 +22,39 @@ auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName
 	ScriptObjectPtr object;
 	vm->FindBoundObject(handle, a_scriptName.c_str(), object);
 
-	if (!object)
-	{
+	if (!object) {
 		std::string formIdentifier = Utils::GetIdentifierFromForm(a_form);
-		logger::warn(
-			"Script {} is not attached to form. {}"sv,
-			a_scriptName,
-			formIdentifier);
+		logger::warn("Script {} is not attached to form. {}"sv, a_scriptName, formIdentifier);
 	}
 
 	return object;
 }
 
-auto ScriptObject::GetVariable(
-	ScriptObjectPtr a_object,
-	std::string_view a_variableName)
+auto ScriptObject::GetVariable(ScriptObjectPtr a_object, std::string_view a_variableName)
 	-> RE::BSScript::Variable*
 {
 	constexpr auto INVALID = static_cast<std::uint32_t>(-1);
 	auto idx = INVALID;
 	decltype(idx) offset = 0;
-	for (auto cls = a_object->type.get(); cls; cls = cls->GetParent())
-	{
+	for (auto cls = a_object->type.get(); cls; cls = cls->GetParent()) {
 		const auto vars = cls->GetVariableIter();
-		if (idx == INVALID)
-		{
-			if (vars)
-			{
-				for (std::uint32_t i = 0; i < cls->GetNumVariables(); i++)
-				{
+		if (idx == INVALID) {
+			if (vars) {
+				for (std::uint32_t i = 0; i < cls->GetNumVariables(); i++) {
 					const auto& var = vars[i];
-					if (var.name == a_variableName)
-					{
+					if (var.name == a_variableName) {
 						idx = i;
 						break;
 					}
 				}
 			}
 		}
-		else
-		{
+		else {
 			offset += cls->GetNumVariables();
 		}
 	}
 
-	if (idx == INVALID)
-	{
+	if (idx == INVALID) {
 		logger::warn(
 			"Variable {} does not exist on script {}"sv,
 			a_variableName,
@@ -80,15 +66,10 @@ auto ScriptObject::GetVariable(
 	return std::addressof(a_object->variables[offset + idx]);
 }
 
-auto ScriptObject::IsType(
-	ScriptObjectPtr a_object,
-	const char* a_scriptName)
-	-> bool
+auto ScriptObject::IsType(ScriptObjectPtr a_object, const char* a_scriptName) -> bool
 {
-	for (auto cls = a_object ? a_object->type.get() : nullptr; cls; cls = cls->GetParent())
-	{
-		if (_stricmp(cls->GetName(), a_scriptName) == 0)
-		{
+	for (auto cls = a_object ? a_object->type.get() : nullptr; cls; cls = cls->GetParent()) {
+		if (_stricmp(cls->GetName(), a_scriptName) == 0) {
 			return true;
 		}
 	}
@@ -109,7 +90,8 @@ void ScriptObject::SetBool(ScriptObjectPtr a_object, std::string_view a_variable
 		variable->SetBool(a_value);
 }
 
-auto ScriptObject::GetInt(ScriptObjectPtr a_object, std::string_view a_variableName) -> std::int32_t
+auto ScriptObject::GetInt(ScriptObjectPtr a_object, std::string_view a_variableName)
+	-> std::int32_t
 {
 	auto variable = GetVariable(a_object, a_variableName);
 	return variable ? variable->GetSInt() : 0;
@@ -173,8 +155,7 @@ void ScriptObject::RegisterForModEvent(
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
-	if (vm)
-	{
+	if (vm) {
 		auto args = RE::MakeFunctionArguments(std::move(a_eventName), std::move(a_callbackName));
 		ScriptCallbackPtr nullCallback;
 		vm->DispatchMethodCall(a_object, "RegisterForModEvent"sv, args, nullCallback);
@@ -182,15 +163,12 @@ void ScriptObject::RegisterForModEvent(
 	}
 }
 
-void ScriptObject::UnregisterForModEvent(
-	ScriptObjectPtr a_object,
-	RE::BSFixedString a_eventName)
+void ScriptObject::UnregisterForModEvent(ScriptObjectPtr a_object, RE::BSFixedString a_eventName)
 {
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
-	if (vm)
-	{
+	if (vm) {
 		auto args = RE::MakeFunctionArguments(std::move(a_eventName));
 		ScriptCallbackPtr nullCallback;
 		vm->DispatchMethodCall(a_object, "UnregisterForModEvent"sv, args, nullCallback);

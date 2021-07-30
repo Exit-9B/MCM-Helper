@@ -6,9 +6,7 @@
 class KeybindsHandler final : public IHandler
 {
 public:
-	KeybindsHandler(
-		ReaderHandler* master,
-		const std::string& modName);
+	KeybindsHandler(ReaderHandler* master, const std::string& modName);
 
 	bool String(const Ch* str, SizeType length, bool copy) override;
 	bool StartObject() override;

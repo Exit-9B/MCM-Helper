@@ -13,8 +13,7 @@ void Control::Refresh(
 
 void Control::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm);
 	}
 }
@@ -31,8 +30,7 @@ auto Control::GetInfoText() -> std::string
 
 auto Control::GetFlags() -> SkyUI::Flags
 {
-	if (GroupCondition && !GroupCondition->GetIsActive())
-	{
+	if (GroupCondition && !GroupCondition->GetIsActive()) {
 		switch (GroupBehavior) {
 		case Behavior::Disable:
 			return SkyUI::Flags::Disable;
@@ -46,8 +44,7 @@ auto Control::GetFlags() -> SkyUI::Flags
 
 auto Control::GetDesiredBehavior() -> Behavior
 {
-	if (GroupCondition && !GroupCondition->GetIsActive())
-	{
+	if (GroupCondition && !GroupCondition->GetIsActive()) {
 		return GroupBehavior;
 	}
 
@@ -56,8 +53,7 @@ auto Control::GetDesiredBehavior() -> Behavior
 
 void Control::RefreshFlags(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	if (GroupCondition > 0)
-	{
+	if (GroupCondition > 0) {
 		if (GetDesiredBehavior() == Behavior::Skip)
 			return;
 
@@ -70,8 +66,7 @@ auto EmptyControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	if (Position >= 0)
-	{
+	if (Position >= 0) {
 		SkyUI::Config::SetCursorPosition(a_configScript, Position);
 	}
 	return SkyUI::Config::AddEmptyOption(a_configScript);
@@ -108,16 +103,14 @@ void TextControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 
 void TextControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void TextControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -145,16 +138,14 @@ void ToggleControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 
 void ToggleControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void ToggleControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -182,16 +173,14 @@ void SliderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 
 void SliderControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void SliderControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -219,16 +208,14 @@ void StepperControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t
 
 void StepperControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void StepperControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -241,8 +228,7 @@ auto StepperControl::GetValue() -> std::int32_t
 auto StepperControl::GetText() -> std::string
 {
 	auto value = GetValue();
-	if (value >= 0 && value < Options.size())
-	{
+	if (value >= 0 && value < Options.size()) {
 		return Options[value];
 	}
 
@@ -267,16 +253,14 @@ void MenuControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 
 void MenuControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void MenuControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -325,16 +309,14 @@ void EnumControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 
 void EnumControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void EnumControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -347,8 +329,7 @@ auto EnumControl::GetValue() -> std::int32_t
 auto EnumControl::GetShortText() -> std::string
 {
 	auto value = GetValue();
-	if (value >= 0 && value < Options.size())
-	{
+	if (value >= 0 && value < Options.size()) {
 		if (ShortNames.size() == Options.size())
 			return ShortNames[value];
 		else
@@ -376,16 +357,14 @@ void ColorControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 
 void ColorControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, static_cast<std::int32_t>(GetColor()));
 	}
 }
 
 void ColorControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -413,29 +392,25 @@ void KeyMapControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 
 void KeyMapControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
 	}
 }
 
 void KeyMapControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
 
 auto KeyMapControl::GetInfoText() -> std::string
 {
-	if (!Help.empty())
-	{
+	if (!Help.empty()) {
 		return Help;
 	}
 
-	if (!ValueSource && !ID.empty())
-	{
+	if (!ValueSource && !ID.empty()) {
 		auto& keybindManager = KeybindManager::GetInstance();
 		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
 		return desc;
@@ -446,24 +421,20 @@ auto KeyMapControl::GetInfoText() -> std::string
 
 auto KeyMapControl::GetKeyCode() -> std::uint32_t
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		return static_cast<std::uint32_t>(ValueSource->GetValue());
 	}
-	else
-	{
+	else {
 		return KeybindManager::GetInstance().GetRegisteredKey(ModName, ID);
 	}
 }
 
 auto KeyMapControl::GetDescription() -> std::string
 {
-	if (!ValueSource)
-	{
+	if (!ValueSource) {
 		auto& keybindManager = KeybindManager::GetInstance();
 		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
-		if (!desc.empty())
-		{
+		if (!desc.empty()) {
 			return desc;
 		}
 	}
@@ -487,16 +458,14 @@ void InputControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 
 void InputControl::InvokeAction(VM* a_vm)
 {
-	if (Action)
-	{
+	if (Action) {
 		Action->Invoke(a_vm, GetValue());
 	}
 }
 
 void InputControl::ResetToDefault()
 {
-	if (ValueSource)
-	{
+	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
 }
@@ -506,8 +475,7 @@ auto InputControl::GetValue() -> std::string
 	return ValueSource ? ValueSource->GetValue() : ""s;
 }
 
-auto HiddenToggleControl::Add(
-	[[maybe_unused]] const ScriptObjectPtr& a_configScript)
+auto HiddenToggleControl::Add([[maybe_unused]] const ScriptObjectPtr& a_configScript)
 	-> std::int32_t
 {
 	return -1;

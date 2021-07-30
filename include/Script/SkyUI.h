@@ -10,6 +10,7 @@ namespace SkyUI
 
 	constexpr std::string_view PluginName = "SkyUI_SE.esp"sv;
 
+	// clang-format off
 	enum class Flags : std::int32_t
 	{
 		None      = 0x00,
@@ -46,6 +47,7 @@ namespace SkyUI
 		KeyMap = 7,
 		Input  = 8,
 	};
+	// clang-format on
 
 	class ConfigManager
 	{
@@ -60,7 +62,6 @@ namespace SkyUI
 	class Config
 	{
 	public:
-
 		Config() = delete;
 
 		static void ForcePageReset();
@@ -78,58 +79,50 @@ namespace SkyUI
 		static auto AddHeaderOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddTextOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::string_view a_value,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddToggleOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			bool a_checked,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddSliderOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			float a_value,
 			std::string_view a_formatString = "{0}",
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddMenuOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::string_view a_value,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddColorOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::uint32_t a_color,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddKeyMapOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::int32_t a_keyCode,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static auto AddInputOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::string_view a_value,
-			Flags a_flags = Flags::None)
-			-> std::int32_t;
+			Flags a_flags = Flags::None) -> std::int32_t;
 
 		static void LoadCustomContent(
 			std::string_view a_source,
@@ -247,8 +240,7 @@ namespace SkyUI
 			std::string_view a_text,
 			std::string_view a_strValue,
 			float a_numValue,
-			Flags a_flags)
-			-> std::int32_t;
+			Flags a_flags) -> std::int32_t;
 
 		static void SetOptionStrValue(
 			ScriptObjectPtr a_object,
@@ -271,7 +263,8 @@ namespace SkyUI
 	};
 }
 
-inline static auto operator|(SkyUI::Flags lhs, SkyUI::Flags rhs) -> SkyUI::Flags {
+inline static auto operator|(SkyUI::Flags lhs, SkyUI::Flags rhs) -> SkyUI::Flags
+{
 	return static_cast<SkyUI::Flags>(
 		static_cast<std::int32_t>(lhs) | static_cast<std::int32_t>(rhs));
 }

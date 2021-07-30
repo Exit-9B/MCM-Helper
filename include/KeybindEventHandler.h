@@ -8,8 +8,6 @@ public:
 	static auto GetInstance() -> KeybindEventHandler&;
 	void Register();
 
-	auto ProcessEvent(
-		const Event* a_event,
-		RE::BSTEventSource<Event>* a_eventSource)
+	auto ProcessEvent(const Event* a_event, RE::BSTEventSource<Event>* a_eventSource)
 		-> RE::BSEventNotifyControl override;
 };

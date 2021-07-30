@@ -16,8 +16,7 @@ auto Utils::GetFormFromIdentifier(const std::string& a_identifier) -> RE::TESFor
 
 auto Utils::GetIdentifierFromForm(RE::TESForm* a_form) -> std::string
 {
-	if (!a_form)
-	{
+	if (!a_form) {
 		return ""s;
 	}
 
@@ -28,8 +27,7 @@ auto Utils::GetIdentifierFromForm(RE::TESForm* a_form) -> std::string
 	RE::FormID relativeID = formID & 0x00FFFFFF;
 
 #ifndef SKYRIMVR
-	if (file && file->recordFlags.all(RE::TESFile::RecordFlag::kSmallFile))
-	{
+	if (file && file->recordFlags.all(RE::TESFile::RecordFlag::kSmallFile)) {
 		relativeID &= 0x00000FFF;
 	}
 #endif

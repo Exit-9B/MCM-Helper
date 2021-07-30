@@ -4,7 +4,8 @@
 #include "KeybindEventHandler.h"
 #include "KeybindManager.h"
 
-extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
+extern "C" DLLEXPORT bool SKSEAPI
+	SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
 #ifndef NDEBUG
 	auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
@@ -65,8 +66,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 
 	std::filesystem::path mcmPath{ "Data/MCM"sv };
 	std::filesystem::directory_entry mcmDirectory{ mcmPath };
-	if (!mcmDirectory.exists())
-	{
+	if (!mcmDirectory.exists()) {
 		std::filesystem::create_directory(mcmPath);
 	}
 

@@ -8,18 +8,14 @@ auto GroupConditionTree::GetIsActive() -> bool const
 	switch (Conjunction) {
 	case ConjunctionType::OR:
 	{
-		for (auto operand : TopLevelOperands)
-		{
-			if (configPageCache.IsGroupActive(operand))
-			{
+		for (auto operand : TopLevelOperands) {
+			if (configPageCache.IsGroupActive(operand)) {
 				return true;
 			}
 		}
 
-		for (auto& subtree : SubTrees)
-		{
-			if (!subtree || subtree->GetIsActive())
-			{
+		for (auto& subtree : SubTrees) {
+			if (!subtree || subtree->GetIsActive()) {
 				return true;
 			}
 		}
@@ -29,21 +25,17 @@ auto GroupConditionTree::GetIsActive() -> bool const
 
 	case ConjunctionType::AND:
 	{
-		for (auto operand : TopLevelOperands)
-		{
-			if (!configPageCache.IsGroupActive(operand))
-			{
+		for (auto operand : TopLevelOperands) {
+			if (!configPageCache.IsGroupActive(operand)) {
 				return false;
 			}
 		}
 
-		for (auto& subtree : SubTrees)
-		{
+		for (auto& subtree : SubTrees) {
 			if (!subtree)
 				continue;
 
-			if (!subtree->GetIsActive())
-			{
+			if (!subtree->GetIsActive()) {
 				return false;
 			}
 		}
@@ -53,27 +45,22 @@ auto GroupConditionTree::GetIsActive() -> bool const
 
 	case ConjunctionType::ONLY:
 	{
-		if (!SubTrees.empty())
-		{
+		if (!SubTrees.empty()) {
 			return false;
 		}
 
 		auto groups = configPageCache.GetGroups();
 
-		for (auto operand : TopLevelOperands)
-		{
-			if (!configPageCache.IsGroupActive(operand))
-			{
+		for (auto operand : TopLevelOperands) {
+			if (!configPageCache.IsGroupActive(operand)) {
 				return false;
 			}
 
 			groups.erase(operand);
 		}
 
-		for (auto group : groups)
-		{
-			if (configPageCache.IsGroupActive(group))
-			{
+		for (auto group : groups) {
+			if (configPageCache.IsGroupActive(group)) {
 				return false;
 			}
 		}
@@ -83,21 +70,17 @@ auto GroupConditionTree::GetIsActive() -> bool const
 
 	case ConjunctionType::NOT:
 	{
-		for (auto operand : TopLevelOperands)
-		{
-			if (configPageCache.IsGroupActive(operand))
-			{
+		for (auto operand : TopLevelOperands) {
+			if (configPageCache.IsGroupActive(operand)) {
 				return false;
 			}
 		}
 
-		for (auto& subtree : SubTrees)
-		{
+		for (auto& subtree : SubTrees) {
 			if (!subtree)
 				continue;
 
-			if (subtree->GetIsActive())
-			{
+			if (subtree->GetIsActive()) {
 				return false;
 			}
 		}
@@ -109,6 +92,5 @@ auto GroupConditionTree::GetIsActive() -> bool const
 	{
 		return true;
 	}
-
 	}
 }

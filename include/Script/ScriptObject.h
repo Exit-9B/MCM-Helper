@@ -2,20 +2,12 @@
 
 namespace ScriptObject
 {
-	auto FromForm(
-		RE::TESForm* a_form,
-		const std::string& a_scriptName)
-		-> ScriptObjectPtr;
+	auto FromForm(RE::TESForm* a_form, const std::string& a_scriptName) -> ScriptObjectPtr;
 
-	auto GetVariable(
-		ScriptObjectPtr a_object,
-		std::string_view a_variableName)
+	auto GetVariable(ScriptObjectPtr a_object, std::string_view a_variableName)
 		-> RE::BSScript::Variable*;
 
-	auto IsType(
-		ScriptObjectPtr a_object,
-		const char* a_scriptName)
-		-> bool;
+	auto IsType(ScriptObjectPtr a_object, const char* a_scriptName) -> bool;
 
 	auto GetBool(ScriptObjectPtr a_object, std::string_view a_variableName) -> bool;
 
@@ -43,7 +35,5 @@ namespace ScriptObject
 		RE::BSFixedString a_eventName,
 		RE::BSFixedString a_callbackName);
 
-	void UnregisterForModEvent(
-		ScriptObjectPtr a_object,
-		RE::BSFixedString a_eventName);
+	void UnregisterForModEvent(ScriptObjectPtr a_object, RE::BSFixedString a_eventName);
 }

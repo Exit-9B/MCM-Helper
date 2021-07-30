@@ -2,10 +2,7 @@
 #include "Json/ContentHandler.h"
 #include "Json/CustomContentHandler.h"
 
-PagesHandler::PagesHandler(
-	ReaderHandler* master,
-	Config* config,
-	const ScriptObjectPtr& script) :
+PagesHandler::PagesHandler(ReaderHandler* master, Config* config, const ScriptObjectPtr& script) :
 	IHandler{ master },
 	_config{ config },
 	_script{ script }
@@ -52,10 +49,7 @@ bool PagesHandler::StartObject()
 	}
 }
 
-bool PagesHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool PagesHandler::Key(const Ch* str, [[maybe_unused]] SizeType length, [[maybe_unused]] bool copy)
 {
 	switch (_state) {
 	case State::Page:

@@ -10,16 +10,14 @@ auto KeybindEventHandler::GetInstance() -> KeybindEventHandler&
 void KeybindEventHandler::Register()
 {
 	const auto inputDeviceManager = RE::BSInputDeviceManager::GetSingleton();
-	if (inputDeviceManager)
-	{
+	if (inputDeviceManager) {
 		inputDeviceManager->AddEventSink(this);
 	}
 }
 
 auto KeybindEventHandler::ProcessEvent(
 	const Event* a_event,
-	[[maybe_unused]] RE::BSTEventSource<Event>* a_eventSource)
-	-> RE::BSEventNotifyControl
+	[[maybe_unused]] RE::BSTEventSource<Event>* a_eventSource) -> RE::BSEventNotifyControl
 {
 	const auto ui = RE::UI::GetSingleton();
 	if (!ui || ui->GameIsPaused())
@@ -28,13 +26,11 @@ auto KeybindEventHandler::ProcessEvent(
 	auto inputEvent = a_event ? *a_event : nullptr;
 	auto buttonEvent = inputEvent ? inputEvent->AsButtonEvent() : nullptr;
 
-	if (buttonEvent)
-	{
+	if (buttonEvent) {
 		auto idCode = buttonEvent->GetIDCode();
 		auto deviceType = buttonEvent->device;
 
-		if (idCode == 0)
-		{
+		if (idCode == 0) {
 			return RE::BSEventNotifyControl::kContinue;
 		}
 

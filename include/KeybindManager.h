@@ -36,10 +36,7 @@ public:
 	void ReadKeybindRegistrations();
 	void CommitKeybinds();
 
-	void Register(
-		std::uint32_t a_keyCode,
-		const std::string& a_modName,
-		const std::string& a_ID);
+	void Register(std::uint32_t a_keyCode, const std::string& a_modName, const std::string& a_ID);
 
 	void AddKeybind(
 		const std::string& a_modName,

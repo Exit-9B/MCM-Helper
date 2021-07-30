@@ -27,8 +27,7 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
-	if (err != 0)
-	{
+	if (err != 0) {
 		logger::warn("Failed to open keybinds for {}"sv, a_modName);
 		return;
 	}
@@ -39,8 +38,7 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 
 	auto result = reader.Parse(is, handler);
 	fclose(fp);
-	if (!result)
-	{
+	if (!result) {
 		logger::warn("Failed to parse keybinds for {}"sv, a_modName);
 	}
 }
@@ -57,8 +55,7 @@ void KeybindManager::ReadKeybindRegistrations()
 
 	FILE* fp = nullptr;
 	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
-	if (err != 0)
-	{
+	if (err != 0) {
 		return;
 	}
 
@@ -68,17 +65,14 @@ void KeybindManager::ReadKeybindRegistrations()
 
 	auto result = reader.Parse(is, handler);
 	fclose(fp);
-	if (!result)
-	{
+	if (!result) {
 		logger::warn("Failed to parse keybind registrations"sv);
 	}
 
 	auto endTime = std::chrono::steady_clock::now();
 	auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-	logger::info(
-		"Loaded keybind registrations in {} ms."sv,
-		elapsedMs.count());
+	logger::info("Loaded keybind registrations in {} ms."sv, elapsedMs.count());
 }
 
 void KeybindManager::CommitKeybinds()
@@ -93,16 +87,14 @@ void KeybindManager::CommitKeybinds()
 
 		auto settingsPath = std::filesystem::path{ "Data/MCM/Settings"sv };
 		auto settingsEntry = std::filesystem::directory_entry{ settingsPath };
-		if (!settingsEntry.exists())
-		{
+		if (!settingsEntry.exists()) {
 			std::filesystem::create_directory(settingsPath);
 		}
 
 		auto keybindsLocation = settingsPath / "keybinds.json"sv;
 		FILE* fp = nullptr;
 		auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"w");
-		if (err != 0)
-		{
+		if (err != 0) {
 			logger::error("Failed to open file for saving keybind registrations"sv);
 			return;
 		}
@@ -117,8 +109,7 @@ void KeybindManager::CommitKeybinds()
 		writer.Key("keybinds");
 		writer.StartArray();
 
-		for (auto& [keybind, keyCode] : _modRegs)
-		{
+		for (auto& [keybind, keyCode] : _modRegs) {
 			writer.StartObject();
 			writer.Key("keycode");
 			writer.Uint(keyCode);
@@ -138,9 +129,7 @@ void KeybindManager::CommitKeybinds()
 	auto endTime = std::chrono::steady_clock::now();
 	auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 
-	logger::info(
-		"Saved keybind registrations in {} ms."sv,
-		elapsedMs.count());
+	logger::info("Saved keybind registrations in {} ms."sv, elapsedMs.count());
 }
 
 void KeybindManager::Register(
@@ -159,8 +148,7 @@ void KeybindManager::Register(
 
 	// Check if keybind has been added yet
 	auto keyIt = _modKeys.find(key);
-	if (keyIt != _modKeys.end())
-	{
+	if (keyIt != _modKeys.end()) {
 		_lookup.emplace(std::make_pair(a_keyCode, keyIt->second));
 	}
 
@@ -178,8 +166,7 @@ void KeybindManager::AddKeybind(
 
 	// Add to lookup if a key was already registered
 	auto regIt = _modRegs.find(key);
-	if (regIt != _modRegs.end())
-	{
+	if (regIt != _modRegs.end()) {
 		_lookup.emplace(regIt->second, a_info);
 	}
 }
@@ -192,9 +179,7 @@ auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string&
 	return item != _modKeys.end() ? item->second : KeybindInfo{};
 }
 
-auto KeybindManager::GetRegisteredKey(
-	const std::string& a_modName,
-	const std::string& a_keybindID)
+auto KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
 	-> std::uint32_t
 {
 	std::scoped_lock lock{ _mutex };
@@ -212,14 +197,10 @@ void KeybindManager::Unregister(const std::string& a_modName, const std::string&
 	auto regIt = _modRegs.find(key);
 	auto keyIt = _modKeys.find(key);
 
-	if (regIt != _modRegs.end())
-	{
-		if (keyIt != _modKeys.end())
-		{
-			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it)
-			{
-				if (it->second.Keybind == keyIt->second.Keybind)
-				{
+	if (regIt != _modRegs.end()) {
+		if (keyIt != _modKeys.end()) {
+			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it) {
+				if (it->second.Keybind == keyIt->second.Keybind) {
 					_lookup.erase(it);
 					break;
 				}
@@ -237,13 +218,14 @@ void KeybindManager::Unregister(std::uint32_t a_keyCode)
 
 	_lookup.erase(a_keyCode);
 
-	const auto count = std::erase_if(_modRegs,
-		[=](const auto& item) {
+	const auto count = std::erase_if(
+		_modRegs,
+		[=](const auto& item)
+		{
 			return item.second == a_keyCode;
 		});
 
-	if (count > 0)
-	{
+	if (count > 0) {
 		_keybindsDirty = true;
 	}
 }
@@ -271,17 +253,13 @@ void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
 		break;
 	}
 
-	for (auto [it, end] = _lookup.equal_range(keyCode); it != end; ++it)
-	{
+	for (auto [it, end] = _lookup.equal_range(keyCode); it != end; ++it) {
 		auto& action = it->second.Action;
-		if (action)
-		{
-			if (a_event->IsDown())
-			{
+		if (action) {
+			if (a_event->IsDown()) {
 				action->SendControlEvent(false);
 			}
-			else if (a_event->IsUp())
-			{
+			else if (a_event->IsUp()) {
 				action->SendControlEvent(true, a_event->HeldDuration());
 			}
 		}

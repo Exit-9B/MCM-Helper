@@ -15,10 +15,7 @@ public:
 		_handlers.emplace(new T(this, std::forward<Args>(args)...));
 	}
 
-	void PopHandler()
-	{
-		_handlers.pop();
-	}
+	void PopHandler() { _handlers.pop(); }
 
 	bool Null();
 	bool Bool(bool b);

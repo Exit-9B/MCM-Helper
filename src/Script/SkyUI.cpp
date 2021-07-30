@@ -5,16 +5,17 @@ namespace SkyUI
 	auto ConfigManager::GetInstance() -> ScriptObjectPtr
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
-		auto configManagerInstance =
-			dataHandler ? dataHandler->LookupForm(0x00000802, SkyUI::PluginName) : nullptr;
+		auto configManagerInstance = dataHandler ?
+			  dataHandler->LookupForm(0x00000802, SkyUI::PluginName) :
+			  nullptr;
 
-		return
-			configManagerInstance
-			? ScriptObject::FromForm(configManagerInstance, "SKI_ConfigManager")
-			: nullptr;
+		return configManagerInstance ?
+			  ScriptObject::FromForm(configManagerInstance, "SKI_ConfigManager") :
+			  nullptr;
 	}
 
-	void ConfigManager::UpdateDisplayName(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config)
+	void
+		ConfigManager::UpdateDisplayName(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config)
 	{
 		assert(a_configManager);
 		assert(a_config);
@@ -22,11 +23,9 @@ namespace SkyUI
 		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
 		auto modNamesVar = ScriptObject::GetVariable(a_configManager, "_modNames"sv);
 		auto modNameVar = a_config->GetProperty("ModName"sv);
-		if (configIDVar && modNamesVar && modNameVar)
-		{
+		if (configIDVar && modNamesVar && modNameVar) {
 			auto index = configIDVar->GetSInt();
-			if (index >= 0)
-			{
+			if (index >= 0) {
 				auto& registeredName = modNamesVar->GetArray()->data()[index];
 				registeredName.SetString(modNameVar->GetString());
 			}
@@ -38,8 +37,7 @@ namespace SkyUI
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		auto movie = menu ? menu->uiMovie : nullptr;
-		if (movie)
-		{
+		if (movie) {
 			movie->Invoke(MENU_ROOT ".forcePageReset", nullptr, nullptr, 0);
 		}
 	}
@@ -49,8 +47,7 @@ namespace SkyUI
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		auto movie = menu ? menu->uiMovie : nullptr;
-		if (movie)
-		{
+		if (movie) {
 			RE::GFxValue args[]{ a_text };
 			movie->Invoke(MENU_ROOT ".setTitleText", nullptr, args, 1);
 		}
@@ -63,8 +60,7 @@ namespace SkyUI
 
 	void Config::SetCursorPosition(ScriptObjectPtr a_object, std::int32_t a_position)
 	{
-		if (a_position < 128)
-		{
+		if (a_position < 128) {
 			SetInt(a_object, "_cursorPosition"sv, a_position);
 		}
 	}
@@ -72,8 +68,7 @@ namespace SkyUI
 	void Config::SetCursorFillMode(ScriptObjectPtr a_object, CursorFillMode a_fillMode)
 	{
 		if (a_fillMode == CursorFillMode::LeftToRight ||
-			a_fillMode == CursorFillMode::TopToBottom)
-		{
+			a_fillMode == CursorFillMode::TopToBottom) {
 			SetInt(a_object, "_cursorFillMode"sv, static_cast<std::int32_t>(a_fillMode));
 		}
 	}
@@ -83,10 +78,7 @@ namespace SkyUI
 		return AddOption(a_object, OptionType::Empty, ""sv, ""sv, 0.0f, Flags::None);
 	}
 
-	auto Config::AddHeaderOption(
-		ScriptObjectPtr a_object,
-		std::string_view a_text,
-		Flags a_flags)
+	auto Config::AddHeaderOption(ScriptObjectPtr a_object, std::string_view a_text, Flags a_flags)
 		-> std::int32_t
 	{
 		return AddOption(a_object, OptionType::Header, a_text, ""sv, 0.0f, a_flags);
@@ -96,8 +88,7 @@ namespace SkyUI
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::string_view a_value,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		return AddOption(a_object, OptionType::Text, a_text, a_value, 0.0f, a_flags);
 	}
@@ -106,8 +97,7 @@ namespace SkyUI
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		bool a_checked,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		float numValue = a_checked ? 1.0f : 0.0f;
 		return AddOption(a_object, OptionType::Toggle, a_text, ""sv, numValue, a_flags);
@@ -118,8 +108,7 @@ namespace SkyUI
 		std::string_view a_text,
 		float a_value,
 		std::string_view a_formatString,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		return AddOption(a_object, OptionType::Slider, a_text, a_formatString, a_value, a_flags);
 	}
@@ -128,8 +117,7 @@ namespace SkyUI
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::string_view a_value,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		return AddOption(a_object, OptionType::Menu, a_text, a_value, 0.0f, a_flags);
 	}
@@ -138,8 +126,7 @@ namespace SkyUI
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::uint32_t a_color,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		float numValue = static_cast<float>(a_color);
 		return AddOption(a_object, OptionType::Color, a_text, ""sv, numValue, a_flags);
@@ -149,8 +136,7 @@ namespace SkyUI
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::int32_t a_keyCode,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		float numValue = static_cast<float>(a_keyCode);
 		return AddOption(a_object, OptionType::KeyMap, a_text, ""sv, numValue, a_flags);
@@ -160,30 +146,21 @@ namespace SkyUI
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::string_view a_value,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
 		return AddOption(a_object, OptionType::Input, a_text, a_value, 0.0f, a_flags);
 	}
 
-	void Config::LoadCustomContent(
-		std::string_view a_source,
-		float a_x,
-		float a_y)
+	void Config::LoadCustomContent(std::string_view a_source, float a_x, float a_y)
 	{
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
+		if (menu) {
 			RE::GFxValue params[]{ a_x, a_y };
-			menu->uiMovie->InvokeNoReturn(
-				MENU_ROOT ".setCustomContentParams",
-				params, 2);
+			menu->uiMovie->InvokeNoReturn(MENU_ROOT ".setCustomContentParams", params, 2);
 
 			RE::GFxValue source[]{ a_source };
-			menu->uiMovie->InvokeNoReturn(
-				MENU_ROOT ".loadCustomContent",
-				source, 1);
+			menu->uiMovie->InvokeNoReturn(MENU_ROOT ".loadCustomContent", source, 1);
 		}
 	}
 
@@ -191,11 +168,8 @@ namespace SkyUI
 	{
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
-			menu->uiMovie->InvokeNoReturn(
-				MENU_ROOT ".unloadCustomContent",
-				nullptr, 0);
+		if (menu) {
+			menu->uiMovie->InvokeNoReturn(MENU_ROOT ".unloadCustomContent", nullptr, 0);
 		}
 	}
 
@@ -205,8 +179,7 @@ namespace SkyUI
 		Flags a_flags,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
-		{
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset)) {
 			Error(
 				a_object,
 				"Cannot set option flags while in OnPageReset(). "sv
@@ -224,13 +197,11 @@ namespace SkyUI
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
+		if (menu) {
 			RE::GFxValue params[]{ index, a_flags };
 			menu->uiMovie->InvokeNoReturn(MENU_ROOT ".setOptionFlags", params, 2);
 
-			if (!a_noUpdate)
-			{
+			if (!a_noUpdate) {
 				menu->uiMovie->InvokeNoReturn(MENU_ROOT ".invalidateOptionData", nullptr, 0);
 			}
 		}
@@ -247,19 +218,16 @@ namespace SkyUI
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
 
-		if (type != static_cast<std::int32_t>(OptionType::Text))
-		{
+		if (type != static_cast<std::int32_t>(OptionType::Text)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
-			if (pageIdx != -1)
-			{
+			if (pageIdx != -1) {
 				std::ostringstream error;
 				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
 				error << "Option type mismatch. Expected text option, page \"" << page
-					<< "\", index " << index;
+					  << "\", index " << index;
 				Error(a_object, error.str());
 			}
-			else
-			{
+			else {
 				std::ostringstream error;
 				error << "Option type mismatch. Expected text option, page \"\", index " << index;
 				Error(a_object, error.str());
@@ -281,21 +249,19 @@ namespace SkyUI
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
 
-		if (type != static_cast<std::int32_t>(OptionType::Toggle))
-		{
+		if (type != static_cast<std::int32_t>(OptionType::Toggle)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
-			if (pageIdx != -1)
-			{
+			if (pageIdx != -1) {
 				std::ostringstream error;
 				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
 				error << "Option type mismatch. Expected toggle option, page \"" << page
-					<< "\", index " << index;
+					  << "\", index " << index;
 				Error(a_object, error.str());
 			}
-			else
-			{
+			else {
 				std::ostringstream error;
-				error << "Option type mismatch. Expected toggle option, page \"\", index " << index;
+				error << "Option type mismatch. Expected toggle option, page \"\", index "
+					  << index;
 				Error(a_object, error.str());
 			}
 			return;
@@ -316,21 +282,19 @@ namespace SkyUI
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
 
-		if (type != static_cast<std::int32_t>(OptionType::Slider))
-		{
+		if (type != static_cast<std::int32_t>(OptionType::Slider)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
-			if (pageIdx != -1)
-			{
+			if (pageIdx != -1) {
 				std::ostringstream error;
 				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
 				error << "Option type mismatch. Expected slider option, page \"" << page
-					<< "\", index " << index;
+					  << "\", index " << index;
 				Error(a_object, error.str());
 			}
-			else
-			{
+			else {
 				std::ostringstream error;
-				error << "Option type mismatch. Expected slider option, page \"\", index " << index;
+				error << "Option type mismatch. Expected slider option, page \"\", index "
+					  << index;
 				Error(a_object, error.str());
 			}
 			return;
@@ -350,19 +314,16 @@ namespace SkyUI
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
 
-		if (type != static_cast<std::int32_t>(OptionType::Menu))
-		{
+		if (type != static_cast<std::int32_t>(OptionType::Menu)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
-			if (pageIdx != -1)
-			{
+			if (pageIdx != -1) {
 				std::ostringstream error;
 				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
 				error << "Option type mismatch. Expected menu option, page \"" << page
-					<< "\", index " << index;
+					  << "\", index " << index;
 				Error(a_object, error.str());
 			}
-			else
-			{
+			else {
 				std::ostringstream error;
 				error << "Option type mismatch. Expected menu option, page \"\", index " << index;
 				Error(a_object, error.str());
@@ -384,19 +345,16 @@ namespace SkyUI
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
 
-		if (type != static_cast<std::int32_t>(OptionType::Color))
-		{
+		if (type != static_cast<std::int32_t>(OptionType::Color)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
-			if (pageIdx != -1)
-			{
+			if (pageIdx != -1) {
 				std::ostringstream error;
 				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
 				error << "Option type mismatch. Expected color option, page \"" << page
-					<< "\", index " << index;
+					  << "\", index " << index;
 				Error(a_object, error.str());
 			}
-			else
-			{
+			else {
 				std::ostringstream error;
 				error << "Option type mismatch. Expected color option, page \"\", index " << index;
 				Error(a_object, error.str());
@@ -418,21 +376,19 @@ namespace SkyUI
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
 			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
 
-		if (type != static_cast<std::int32_t>(OptionType::KeyMap))
-		{
+		if (type != static_cast<std::int32_t>(OptionType::KeyMap)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
-			if (pageIdx != -1)
-			{
+			if (pageIdx != -1) {
 				std::ostringstream error;
 				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
 				error << "Option type mismatch. Expected keymap option, page \"" << page
-					<< "\", index " << index;
+					  << "\", index " << index;
 				Error(a_object, error.str());
 			}
-			else
-			{
+			else {
 				std::ostringstream error;
-				error << "Option type mismatch. Expected keymap option, page \"\", index " << index;
+				error << "Option type mismatch. Expected keymap option, page \"\", index "
+					  << index;
 				Error(a_object, error.str());
 			}
 			return;
@@ -443,8 +399,7 @@ namespace SkyUI
 
 	void Config::SetSliderDialogStartValue(ScriptObjectPtr a_object, float a_value)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider))
-		{
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider)) {
 			Error(
 				a_object,
 				"Cannot set slider dialog params while outside OnOptionSliderOpen()"sv);
@@ -457,8 +412,7 @@ namespace SkyUI
 
 	void Config::SetSliderDialogDefaultValue(ScriptObjectPtr a_object, float a_value)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider))
-		{
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider)) {
 			Error(
 				a_object,
 				"Cannot set slider dialog params while outside OnOptionSliderOpen()"sv);
@@ -471,16 +425,14 @@ namespace SkyUI
 
 	void Config::SetSliderDialogRange(ScriptObjectPtr a_object, float a_minValue, float a_maxValue)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider))
-		{
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider)) {
 			Error(
 				a_object,
 				"Cannot set slider dialog params while outside OnOptionSliderOpen()"sv);
 			return;
 		}
 
-		if (auto sliderParams = GetArray(a_object, "_sliderParams"sv))
-		{
+		if (auto sliderParams = GetArray(a_object, "_sliderParams"sv)) {
 			sliderParams->data()[2].SetFloat(a_minValue);
 			sliderParams->data()[3].SetFloat(a_maxValue);
 		}
@@ -488,8 +440,7 @@ namespace SkyUI
 
 	void Config::SetSliderDialogInterval(ScriptObjectPtr a_object, float a_value)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider))
-		{
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider)) {
 			Error(
 				a_object,
 				"Cannot set slider dialog params while outside OnOptionSliderOpen()"sv);
@@ -502,11 +453,8 @@ namespace SkyUI
 
 	void Config::SetMenuDialogStartIndex(ScriptObjectPtr a_object, std::int32_t a_value)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Menu))
-		{
-			Error(
-				a_object,
-				"Cannot set menu dialog params while outside OnOptionMenuOpen()"sv);
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Menu)) {
+			Error(a_object, "Cannot set menu dialog params while outside OnOptionMenuOpen()"sv);
 			return;
 		}
 
@@ -516,11 +464,8 @@ namespace SkyUI
 
 	void Config::SetMenuDialogDefaultIndex(ScriptObjectPtr a_object, std::int32_t a_value)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Menu))
-		{
-			Error(
-				a_object,
-				"Cannot set menu dialog params while outside OnOptionMenuOpen()"sv);
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Menu)) {
+			Error(a_object, "Cannot set menu dialog params while outside OnOptionMenuOpen()"sv);
 			return;
 		}
 
@@ -528,26 +473,19 @@ namespace SkyUI
 			menuParams->data()[1].SetFloat(static_cast<float>(a_value));
 	}
 
-	void Config::SetMenuDialogOptions(
-		ScriptObjectPtr a_object,
-		std::span<std::string> a_options)
+	void Config::SetMenuDialogOptions(ScriptObjectPtr a_object, std::span<std::string> a_options)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Menu))
-		{
-			Error(
-				a_object,
-				"Cannot set menu dialog params while outside OnOptionMenuOpen()"sv);
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Menu)) {
+			Error(a_object, "Cannot set menu dialog params while outside OnOptionMenuOpen()"sv);
 			return;
 		}
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
+		if (menu) {
 			std::vector<RE::GFxValue> args;
 			args.reserve(a_options.size());
-			for (auto& option : a_options)
-			{
+			for (auto& option : a_options) {
 				args.push_back(std::string_view{ option });
 			}
 
@@ -560,11 +498,8 @@ namespace SkyUI
 
 	void Config::SetColorDialogStartColor(ScriptObjectPtr a_object, std::uint32_t a_color)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Color))
-		{
-			Error(
-				a_object,
-				"Cannot set color dialog params while outside OnOptionColorOpen()"sv);
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Color)) {
+			Error(a_object, "Cannot set color dialog params while outside OnOptionColorOpen()"sv);
 			return;
 		}
 
@@ -574,11 +509,8 @@ namespace SkyUI
 
 	void Config::SetColorDialogDefaultColor(ScriptObjectPtr a_object, std::uint32_t a_color)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Color))
-		{
-			Error(
-				a_object,
-				"Cannot set color dialog params while outside OnOptionColorOpen()"sv);
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Color)) {
+			Error(a_object, "Cannot set color dialog params while outside OnOptionColorOpen()"sv);
 			return;
 		}
 
@@ -588,11 +520,8 @@ namespace SkyUI
 
 	void Config::SetInputDialogStartText(ScriptObjectPtr a_object, std::string_view a_text)
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Input))
-		{
-			Error(
-				a_object,
-				"Cannot set input dialog params while outside OnOptionInputOpen()"sv);
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Input)) {
+			Error(a_object, "Cannot set input dialog params while outside OnOptionInputOpen()"sv);
 			return;
 		}
 
@@ -643,8 +572,7 @@ namespace SkyUI
 		std::string_view a_cancelLabel,
 		std::function<void(bool)> a_callback)
 	{
-		if (GetBool(a_object, "_waitForMessage"sv))
-		{
+		if (GetBool(a_object, "_waitForMessage"sv)) {
 			Error(a_object, "Called ShowMessage() while another message was already open"sv);
 			if (a_callback)
 				return a_callback(false);
@@ -660,19 +588,20 @@ namespace SkyUI
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		auto movie = menu ? menu->uiMovie : nullptr;
-		if (vm && movie)
-		{
+		if (vm && movie) {
 			RegisterForModEvent(a_object, "SKICP_messageDialogClosed"sv, "OnMessageDialogClose"sv);
 
 			RE::GFxValue params[]{ a_message, a_acceptLabel, a_withCancel ? a_cancelLabel : ""sv };
 			movie->Invoke(MENU_ROOT ".showMessageDialog", nullptr, params, 3);
 
-			struct Awaiter : RE::BSScript::IStackCallbackFunctor {
+			struct Awaiter : RE::BSScript::IStackCallbackFunctor
+			{
 				ScriptObjectPtr self;
 				std::function<void(bool)> callback;
 
 				Awaiter(ScriptObjectPtr a_self, std::function<void(bool)> a_callback) :
-					self(a_self), callback(a_callback)
+					self(a_self),
+					callback(a_callback)
 				{}
 
 				virtual void operator()([[maybe_unused]] RE::BSScript::Variable a_result) override
@@ -680,31 +609,29 @@ namespace SkyUI
 					const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 					const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 
-					if (!GetBool(self, "_waitForMessage"sv))
-					{
+					if (!GetBool(self, "_waitForMessage"sv)) {
 						UnregisterForModEvent(self, "SKICP_messageDialogClosed"sv);
 						if (callback)
 							return callback(GetBool(self, "_messageResult"sv));
 						return;
 					}
 
-					auto loopCallback = ScriptCallbackPtr{ new Awaiter{self, callback} };
+					auto loopCallback = ScriptCallbackPtr{ new Awaiter{ self, callback } };
 
-					if (vm)
-					{
+					if (vm) {
 						auto args = RE::MakeFunctionArguments(0.1f);
 						vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args, loopCallback);
 						delete args;
 					}
 				}
 
-				virtual void SetObject([[maybe_unused]] const ScriptObjectPtr& a_object) override {}
+				virtual void SetObject([[maybe_unused]] const ScriptObjectPtr& a_object) override
+				{}
 			};
 
-			auto waitCallback = ScriptCallbackPtr{ new Awaiter{a_object, a_callback} };
+			auto waitCallback = ScriptCallbackPtr{ new Awaiter{ a_object, a_callback } };
 
-			if (vm)
-			{
+			if (vm) {
 				auto args = RE::MakeFunctionArguments(0.1f);
 				vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args, waitCallback);
 				delete args;
@@ -724,11 +651,9 @@ namespace SkyUI
 		std::string_view a_text,
 		std::string_view a_strValue,
 		float a_numValue,
-		Flags a_flags)
-		-> std::int32_t
+		Flags a_flags) -> std::int32_t
 	{
-		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Reset))
-		{
+		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Reset)) {
 			std::ostringstream error;
 			error << "Cannot add option " << a_text << " outside of OnPageReset()";
 			Error(a_object, error.str());
@@ -736,13 +661,11 @@ namespace SkyUI
 		}
 
 		std::int32_t pos = GetInt(a_object, "_cursorPosition"sv);
-		if (pos == -1)
-		{
+		if (pos == -1) {
 			return -1;
 		}
 
-		std::int32_t flags =
-			(static_cast<std::int32_t>(a_flags) * 0x100) +
+		std::int32_t flags = (static_cast<std::int32_t>(a_flags) * 0x100) +
 			static_cast<std::int32_t>(a_optionType);
 
 		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
@@ -761,8 +684,7 @@ namespace SkyUI
 		std::int32_t cursorFillMode = GetInt(a_object, "_cursorFillMode"sv);
 		cursorPosition += cursorFillMode;
 		SetInt(a_object, "_cursorPosition"sv, cursorPosition);
-		if (cursorPosition >= 128)
-		{
+		if (cursorPosition >= 128) {
 			SetInt(a_object, "_cursorPosition"sv, -1);
 		}
 
@@ -775,19 +697,16 @@ namespace SkyUI
 		std::string_view a_strValue,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
-		{
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset)) {
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
+		if (menu) {
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursorIndex", a_index);
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursor.strValue", a_strValue);
-			if (!a_noUpdate)
-			{
+			if (!a_noUpdate) {
 				menu->uiMovie->InvokeNoReturn(MENU_ROOT ".invalidateOptionData", nullptr, 0);
 			}
 		}
@@ -799,19 +718,16 @@ namespace SkyUI
 		float a_numValue,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
-		{
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset)) {
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
+		if (menu) {
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursorIndex", a_index);
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursor.numValue", a_numValue);
-			if (!a_noUpdate)
-			{
+			if (!a_noUpdate) {
 				menu->uiMovie->InvokeNoReturn(MENU_ROOT ".invalidateOptionData", nullptr, 0);
 			}
 		}
@@ -824,20 +740,17 @@ namespace SkyUI
 		float a_numValue,
 		bool a_noUpdate)
 	{
-		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset))
-		{
+		if (GetInt(a_object, "_state"sv) == static_cast<std::int32_t>(State::Reset)) {
 			Error(a_object, "Cannot modify option data while in OnPageReset()"sv);
 		}
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		if (menu)
-		{
+		if (menu) {
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursorIndex", a_index);
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursor.strValue", a_strValue);
 			menu->uiMovie->SetVariable(MENU_ROOT ".optionCursor.numValue", a_numValue);
-			if (!a_noUpdate)
-			{
+			if (!a_noUpdate) {
 				menu->uiMovie->InvokeNoReturn(MENU_ROOT ".invalidateOptionData", nullptr, 0);
 			}
 		}

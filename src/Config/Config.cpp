@@ -3,22 +3,17 @@
 
 void Config::ShowPage(ScriptObjectPtr a_object, const std::string& a_page) const
 {
-	if (a_page.empty())
-	{
-		if (MainPage)
-		{
+	if (a_page.empty()) {
+		if (MainPage) {
 			MainPage->Draw(a_object);
 		}
 	}
-	else
-	{
+	else {
 		auto it = SubPages.find(a_page);
-		if (it != SubPages.end())
-		{
+		if (it != SubPages.end()) {
 			auto& content = it->second;
 
-			if (content)
-			{
+			if (content) {
 				content->Draw(a_object);
 			}
 		}
@@ -36,29 +31,23 @@ void Config::RefreshPage(ScriptObjectPtr a_object) const
 
 auto Config::GetCustomControl(std::uint32_t a_keyCode) const -> std::string
 {
-	if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(MainPage))
-	{
-		for (auto& control : pageLayout->Controls)
-		{
+	if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(MainPage)) {
+		for (auto& control : pageLayout->Controls) {
 			auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control);
-			if (keymap && !keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode)
-			{
+			if (keymap && !keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode) {
 				return keymap->GetDescription();
 			}
 		}
 	}
 
-	for (auto& [name, page] : SubPages)
-	{
+	for (auto& [name, page] : SubPages) {
 		auto pageLayout = std::dynamic_pointer_cast<PageLayout>(page);
 		if (!pageLayout)
 			continue;
 
-		for (auto& control : pageLayout->Controls)
-		{
+		for (auto& control : pageLayout->Controls) {
 			auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control);
-			if (keymap && !keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode)
-			{
+			if (keymap && !keymap->IgnoreConflicts && keymap->GetKeyCode() == a_keyCode) {
 				return keymap->GetDescription();
 			}
 		}

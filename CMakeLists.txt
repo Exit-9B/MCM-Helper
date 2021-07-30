@@ -143,6 +143,7 @@ add_library(${PROJECT_NAME} SHARED
 	${headers}
 	${sources}
 	${CMAKE_CURRENT_BINARY_DIR}/version.rc
+	.clang-format
 )
 
 set_property(

@@ -153,10 +153,7 @@ bool ContentHandler::Key(
 			return true;
 		}
 		else if (strcmp(str, "action") == 0) {
-			_master->PushHandler<ActionHandler>(
-				std::addressof(_data.Action),
-				_form,
-				_scriptName);
+			_master->PushHandler<ActionHandler>(std::addressof(_data.Action), _form, _scriptName);
 			return true;
 		}
 		else if (strcmp(str, "valueOptions") == 0) {
@@ -180,8 +177,8 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 	switch (_state) {
 	case State::Control:
 	{
-		if (auto modSetting =
-			std::dynamic_pointer_cast<ModSetting>(_data.ValueOptions.ValueSource)) {
+		if (auto modSetting = std::dynamic_pointer_cast<ModSetting>(
+				_data.ValueOptions.ValueSource)) {
 			modSetting->ID = _data.ID;
 		}
 

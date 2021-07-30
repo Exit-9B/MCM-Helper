@@ -17,8 +17,7 @@ auto PropertyValue::GetValue() -> float
 {
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
-	if (variable)
-	{
+	if (variable) {
 		return GetValue(*variable);
 	}
 
@@ -29,8 +28,7 @@ void PropertyValue::SetValue(float a_value)
 {
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
-	if (variable)
-	{
+	if (variable) {
 		SetValue(*variable, a_value);
 	}
 }
@@ -42,8 +40,7 @@ auto PropertyValue::GetDefaultValue() -> float
 
 auto PropertyValueBool::GetValue(RE::BSScript::Variable& a_variable) -> float
 {
-	if (a_variable.IsBool())
-	{
+	if (a_variable.IsBool()) {
 		return a_variable.GetBool() ? 1.0f : 0.0f;
 	}
 
@@ -57,8 +54,7 @@ void PropertyValueBool::SetValue(RE::BSScript::Variable& a_variable, float a_val
 
 auto PropertyValueInt::GetValue(RE::BSScript::Variable& a_variable) -> float
 {
-	if (a_variable.IsInt())
-	{
+	if (a_variable.IsInt()) {
 		return static_cast<float>(a_variable.GetSInt());
 	}
 
@@ -72,8 +68,7 @@ void PropertyValueInt::SetValue(RE::BSScript::Variable& a_variable, float a_valu
 
 auto PropertyValueFloat::GetValue(RE::BSScript::Variable& a_variable) -> float
 {
-	if (a_variable.IsFloat())
-	{
+	if (a_variable.IsFloat()) {
 		return a_variable.GetFloat();
 	}
 
@@ -99,12 +94,10 @@ void ModSettingBool::SetValue(float a_value)
 auto ModSettingBool::GetDefaultValue() -> float
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
-	if (setting)
-	{
+	if (setting) {
 		return setting->data.b ? 1.0f : 0.0f;
 	}
-	else
-	{
+	else {
 		return GetValue();
 	}
 }
@@ -123,8 +116,7 @@ void ModSettingInt::SetValue(float a_value)
 auto ModSettingInt::GetDefaultValue() -> float
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
-	if (setting)
-	{
+	if (setting) {
 		switch (setting->GetType()) {
 		case RE::Setting::Type::kUnsignedInteger:
 			return static_cast<float>(setting->data.u);
@@ -134,8 +126,7 @@ auto ModSettingInt::GetDefaultValue() -> float
 			return static_cast<float>(setting->data.i);
 		}
 	}
-	else
-	{
+	else {
 		return GetValue();
 	}
 }
@@ -153,12 +144,10 @@ void ModSettingFloat::SetValue(float a_value)
 auto ModSettingFloat::GetDefaultValue() -> float
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
-	if (setting)
-	{
+	if (setting) {
 		return setting->data.f;
 	}
-	else
-	{
+	else {
 		return GetValue();
 	}
 }
@@ -170,8 +159,7 @@ auto GlobalValue::GetValue() -> float
 
 void GlobalValue::SetValue(float a_value)
 {
-	if (SourceForm)
-	{
+	if (SourceForm) {
 		SourceForm->value = a_value;
 	}
 }
