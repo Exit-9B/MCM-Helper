@@ -3,6 +3,7 @@ set(sources ${sources}
     src/PCH.cpp
 
     src/Utils.cpp
+    src/InputMap.cpp
     src/SettingStore.cpp
     src/ConfigStore.cpp
     src/ConfigPageCache.cpp

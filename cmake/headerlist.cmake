@@ -3,6 +3,7 @@ set(headers ${headers}
 
     include/ColorUtil.h
     include/Utils.h
+    include/InputMap.h
     include/SettingStore.h
     include/ConfigStore.h
     include/ConfigPageCache.h

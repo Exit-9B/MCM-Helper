@@ -2,6 +2,7 @@
 #include "Json/ReaderHandler.h"
 #include "Json/KeybindsHandler.h"
 #include "Json/UserKeybindsHandler.h"
+#include "InputMap.h"
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/writer.h>
@@ -257,7 +258,14 @@ void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
 {
 	assert(a_event);
 
-	for (auto [it, end] = _lookup.equal_range(a_event->GetIDCode()); it != end; ++it)
+	std::uint32_t keyCode = a_event->GetIDCode();
+
+	if (a_event->device == RE::INPUT_DEVICES::kGamepad)
+	{
+		keyCode = InputMap::GamepadMaskToKeycode(keyCode);
+	}
+
+	for (auto [it, end] = _lookup.equal_range(keyCode); it != end; ++it)
 	{
 		auto& action = it->second.Action;
 		if (action)
