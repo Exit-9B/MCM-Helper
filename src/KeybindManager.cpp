@@ -260,9 +260,15 @@ void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
 
 	std::uint32_t keyCode = a_event->GetIDCode();
 
-	if (a_event->device == RE::INPUT_DEVICES::kGamepad)
-	{
+	switch (a_event->device.get()) {
+	case RE::INPUT_DEVICES::kMouse:
+		keyCode = InputMap::kMacro_MouseButtonOffset + keyCode;
+		break;
+	case RE::INPUT_DEVICES::kGamepad:
 		keyCode = InputMap::GamepadMaskToKeycode(keyCode);
+		break;
+	default:
+		break;
 	}
 
 	for (auto [it, end] = _lookup.equal_range(keyCode); it != end; ++it)
