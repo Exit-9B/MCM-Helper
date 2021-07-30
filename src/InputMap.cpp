@@ -1,4 +1,5 @@
 #include "InputMap.h"
+#include <windows.h>
 #include <xinput.h>
 
 std::uint32_t InputMap::GamepadMaskToKeycode(std::uint32_t keyMask)
