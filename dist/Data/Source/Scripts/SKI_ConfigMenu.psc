@@ -149,9 +149,7 @@ endEvent
 
 event OnSettingChange(string a_ID)
 	; ItemList
-	if a_ID == "iFontSize:ItemList"
-		ApplyItemListFontSize(GetModSettingInt(a_ID))
-	elseif a_ID == "iQuantityMinCount:ItemList"
+	if a_ID == "iQuantityMinCount:ItemList"
 		SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", GetModSettingInt(a_ID))
 	elseif a_ID == "iCategoryIconTheme:ItemList"
 		SKI_SettingsManagerInstance.SetOverride("Appearance$icons$category$source", _categoryIconThemeValues[GetModSettingInt(a_ID)])
