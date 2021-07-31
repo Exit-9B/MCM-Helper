@@ -450,15 +450,17 @@ namespace Papyrus
 			};
 
 			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts) {
+				auto conflictControl = Utils::ScaleformTranslate(std::string{ a_conflictControl });
+
 				std::string msg;
 				if (!a_conflictName.empty()) {
 					msg = std::format(
 						"$MCM_KeyAlreadyMappedByMod{{{}}}{{{}}}"sv,
-						a_conflictControl,
+						conflictControl,
 						a_conflictName);
 				}
 				else {
-					msg = std::format("$MCM_KeyAlreadyMapped{{{}}}"sv, a_conflictControl);
+					msg = std::format("$MCM_KeyAlreadyMapped{{{}}}"sv, conflictControl);
 				}
 
 				SkyUI::Config::ShowMessage(object, msg, updateKey);

@@ -1,6 +1,6 @@
 #include "InputMap.h"
-#include <windows.h>
-#include <xinput.h>
+#include <Windows.h>
+#include <Xinput.h>
 
 // clang-format off
 
