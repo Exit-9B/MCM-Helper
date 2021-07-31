@@ -1,0 +1,2 @@
+$MCM_KeyAlreadyMapped{}	Este botón ya está asignado a:\n{}\n\n ¿Estás seguro que quieres continuar?
+$MCM_KeyAlreadyMappedByMod{}{}	Este botón ya está asignado a:\n{}\n({})\n\n ¿Estás seguro que quieres continuar?

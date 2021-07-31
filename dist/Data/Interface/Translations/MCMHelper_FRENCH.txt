@@ -1,0 +1,2 @@
+$MCM_KeyAlreadyMapped{}	Cette touche est déjà affectée à : \n{}\n\nContinuer ?
+$MCM_KeyAlreadyMappedByMod{}{}	Cette touche est déjà affectée à : \n{}\n({})\n\nContinuer ?

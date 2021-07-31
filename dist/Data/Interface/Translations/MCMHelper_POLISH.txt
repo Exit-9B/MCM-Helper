@@ -1,0 +1,2 @@
+$MCM_KeyAlreadyMapped{}	Ten klawisz jest przypisany do: \n{}\n\nCzy jesteś pewien, że chcesz kontynuować?
+$MCM_KeyAlreadyMappedByMod{}{}	Ten klawisz jest przypisany do: \n{}\n({})\n\nCzy jesteś pewien, że chcesz kontynuować?

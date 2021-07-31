@@ -1,0 +1,2 @@
+$MCM_KeyAlreadyMapped{}	Questo tasto è già stato assegnato a:\n{}\n\nSicuro di voler continuare?
+$MCM_KeyAlreadyMappedByMod{}{}	Questo tasto è già stato assegnato a:\n{}\n({})\n\nSicuro di voler continuare?

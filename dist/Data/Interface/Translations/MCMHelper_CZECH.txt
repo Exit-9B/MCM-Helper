@@ -1,0 +1,2 @@
+$MCM_KeyAlreadyMapped{}	Tato klávesa je již používána:\n{}\n\nOpravdu chcete pokračovat?
+$MCM_KeyAlreadyMappedByMod{}{}	Tato klávesa je již používána:\n{}\n({})\n\nOpravdu chcete pokračovat?

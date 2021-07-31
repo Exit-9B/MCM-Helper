@@ -1,0 +1,2 @@
+$MCM_KeyAlreadyMapped{}	Diese Taste wird bereits verwendet:\n{}\n\nTrotzdem fortfahren?
+$MCM_KeyAlreadyMappedByMod{}{}	Diese Taste wird bereits verwendet:\n{}\n({})\n\nTrotzdem fortfahren?
