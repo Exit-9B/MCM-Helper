@@ -8,6 +8,10 @@ Scriptname MCM_ConfigBase extends SKI_ConfigBase
 Event OnSettingChange(string a_ID)
 EndEvent
 
+; Event raised when a config menu is first initialized.
+Event OnConfigInit()
+EndEvent
+
 ; Event raised when a config menu is opened.
 Event OnConfigOpen()
 EndEvent
