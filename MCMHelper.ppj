@@ -56,6 +56,8 @@
       <Include NoRecurse="true">MCM\Config\SkyUI_SE</Include>
     </ZipFile>
     <ZipFile Name="MCM SDK" RootDir="dist\Data" Compression="deflate">
+      <Include>Scripts\MCM.pex</Include>
+      <Include>Scripts\MCM_ConfigBase.pex</Include>
       <Include>Scripts\SKI_ConfigBase.pex</Include>
       <Include>Scripts\SKI_ConfigManager.pex</Include>
       <Include>Scripts\SKI_PlayerLoadGameAlias.pex</Include>
