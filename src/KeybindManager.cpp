@@ -5,7 +5,7 @@
 #include "InputMap.h"
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
-#include <rapidjson/writer.h>
+#include <rapidjson/prettywriter.h>
 
 auto KeybindManager::GetInstance() -> KeybindManager&
 {
@@ -101,7 +101,8 @@ void KeybindManager::CommitKeybinds()
 
 		char writeBuffer[65536]{};
 		rapidjson::FileWriteStream os{ fp, writeBuffer, sizeof(writeBuffer) };
-		rapidjson::Writer<rapidjson::FileWriteStream> writer{ os };
+		rapidjson::PrettyWriter<rapidjson::FileWriteStream> writer{ os };
+		writer.SetIndent(' ', 2);
 
 		writer.StartObject();
 		writer.Key("version");
