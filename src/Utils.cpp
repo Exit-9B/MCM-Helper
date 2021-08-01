@@ -64,24 +64,35 @@ auto Utils::ScaleformTranslate(const std::string& a_key) -> std::string
 		return a_key;
 	}
 
-	std::string key;
-	std::string nested;
+	// Count braces to find what to replace
+	std::string key = a_key;
+	std::vector<std::string> nested;
 
 	auto nestOpen = a_key.find_first_of('{');
 	if (nestOpen != std::string::npos) {
-		auto nestClose = a_key.find_last_of('}');
-		if (nestClose != std::string::npos && nestClose > nestOpen) {
-			key = a_key.substr(0, nestOpen + 1) +
-				a_key.substr(nestClose, a_key.size() - nestClose);
-			auto nestedKey = a_key.substr(nestOpen + 1, nestClose - nestOpen - 1);
-			nested = ScaleformTranslate(nestedKey);
+		auto nestLevel = 1;
+		auto tokenStart = nestOpen + 1;
+		for (auto i = tokenStart; i < key.length(); i++) {
+			if (key[i] == '{') {
+				nestLevel++;
+				if (nestLevel == 1) {
+					tokenStart = i + 1;
+				}
+			}
+			else if (key[i] == '}') {
+				nestLevel--;
+				if (nestLevel == 0) {
+					// Recursion
+					auto nestedKey = key.substr(tokenStart, i - tokenStart);
+					nested.push_back(ScaleformTranslate(nestedKey));
+					key = key.substr(0, tokenStart) + key.substr(i, key.length() - i);
+					i = tokenStart + 1;
+				}
+			}
 		}
 	}
 
-	if (key.empty()) {
-		key = a_key;
-	}
-
+	// Lookup translation
 	auto key_utf16 = Utf8ToUtf16(key);
 	RE::GFxWStringBuffer result;
 
@@ -92,7 +103,16 @@ auto Utils::ScaleformTranslate(const std::string& a_key) -> std::string
 	translator->Translate(std::addressof(translateInfo));
 
 	auto result_utf8 = Utf16ToUtf8(result.c_str());
-	return std::format(std::string_view{ result_utf8 }, nested);
+
+	// Replace tokens with nested translations from right to left
+	auto pos = result_utf8.rfind("{}"s);
+	while (pos != std::string::npos && !nested.empty()) {
+		result_utf8 = result_utf8.replace(pos, 2, nested.back());
+		nested.pop_back();
+		pos = result_utf8.rfind("{}"s, pos);
+	}
+
+	return result_utf8;
 }
 
 auto Utils::Utf8ToUtf16(const std::string& a_utf8) -> std::wstring
