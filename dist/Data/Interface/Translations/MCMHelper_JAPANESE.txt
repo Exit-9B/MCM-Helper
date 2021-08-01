@@ -1,2 +1,2 @@
-$MCM_KeyAlreadyMapped{}	This key is already mapped to:\n{}\n\nAre you sure you want to continue?
-$MCM_KeyAlreadyMappedByMod{}{}	This key is already mapped to:\n{}\n({})\n\nAre you sure you want to continue?
+$MCM_KeyAlreadyMapped{}	ホットキーはすでに:\n{}ボタンにマップされている。\n\nよろしいですか？
+$MCM_KeyAlreadyMappedByMod{}{}	ホットキーはすでに:\n{}\n({})ボタンにマップされている。\n\nよろしいですか？
