@@ -9,6 +9,7 @@ bool UserKeybindsArrayHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::Keycode:
 		_keyCode = static_cast<std::int32_t>(i);
+		_state = State::Keybind;
 		return true;
 	default:
 		return false;
@@ -23,9 +24,11 @@ bool UserKeybindsArrayHandler::String(
 	switch (_state) {
 	case State::ModName:
 		_modName = str;
+		_state = State::Keybind;
 		return true;
 	case State::ID:
 		_id = str;
+		_state = State::Keybind;
 		return true;
 	default:
 		return false;
@@ -75,6 +78,7 @@ bool UserKeybindsArrayHandler::EndObject([[maybe_unused]] SizeType memberCount)
 	switch (_state) {
 	case State::Keybind:
 		KeybindManager::GetInstance().Register(_keyCode, _modName, _id);
+		_state = State::Main;
 		return true;
 	default:
 		return false;
@@ -96,6 +100,7 @@ bool UserKeybindsArrayHandler::EndArray([[maybe_unused]] SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
+		_master->PopHandler();
 		return true;
 	default:
 		return false;

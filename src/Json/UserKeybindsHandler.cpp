@@ -9,6 +9,7 @@ bool UserKeybindsHandler::Uint(unsigned i)
 {
 	switch (_state) {
 	case State::Version:
+		_state = State::Main;
 		return i <= PLUGIN_VERSION;
 	default:
 		return false;

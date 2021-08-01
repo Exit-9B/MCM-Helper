@@ -106,7 +106,7 @@ void KeybindManager::CommitKeybinds()
 
 		writer.StartObject();
 		writer.Key("version");
-		writer.String(std::to_string(PLUGIN_VERSION).c_str());
+		writer.Int(PLUGIN_VERSION);
 		writer.Key("keybinds");
 		writer.StartArray();
 
