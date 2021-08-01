@@ -82,9 +82,10 @@ auto Utils::ScaleformTranslate(const std::string& a_key) -> std::string
 		key = a_key;
 	}
 
-	RE::GFxTranslator::TranslateInfo translateInfo;
 	auto key_utf16 = Utf8ToUtf16(key);
 	RE::GFxWStringBuffer result;
+
+	RE::GFxTranslator::TranslateInfo translateInfo;
 	translateInfo.key = key_utf16.c_str();
 	translateInfo.result = std::addressof(result);
 
