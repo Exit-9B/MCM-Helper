@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <tsl/ordered_map.h>
 
-constexpr std::int32_t PLUGIN_VERSION = 1;
+constexpr std::int32_t PLUGIN_VERSION = 2;
 
 #ifdef NDEBUG
 #include <spdlog/sinks/basic_file_sink.h>
