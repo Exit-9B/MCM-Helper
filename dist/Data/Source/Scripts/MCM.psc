@@ -1,9 +1,9 @@
 Scriptname MCM Hidden
 
-; Checks to see whether the MCM is installed.
+; Checks to see whether MCM Helper is installed.
 bool Function IsInstalled() native global
 
-; Returns the version code of the MCM. This value is incremented for every public release of MCM.
+; Returns the version code of MCM Helper. This value is incremented for every public release of MCM Helper.
 int Function GetVersionCode() native global
 
 ;-----------------
