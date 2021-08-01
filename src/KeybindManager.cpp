@@ -122,6 +122,7 @@ void KeybindManager::CommitKeybinds()
 
 		writer.EndArray();
 		writer.EndObject();
+		fclose(fp);
 
 		_keybindsDirty = false;
 	}
