@@ -20,22 +20,25 @@ bool ConfigHandler::Uint(unsigned i)
 {
 	switch (_state) {
 	case State::MinMcmVersion:
-		return PLUGIN_VERSION >= i;
+		if (PLUGIN_VERSION < i) {
+			return ReportError("Config requires plugin version: {}"sv, i);
+		}
+		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
-bool ConfigHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ConfigHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::ModName:
 		_hasModName = true;
 		_state = State::Main;
-		return str == _modName;
+		if (str != _modName) {
+			return ReportError("modName: \"{}\" did not match plugin"sv, str);
+		}
+		return true;
 	case State::DisplayName:
 	{
 		_hasDisplayName = true;
@@ -58,10 +61,10 @@ bool ConfigHandler::String(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidValue, str);
 		}
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -72,14 +75,11 @@ bool ConfigHandler::StartObject()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool ConfigHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ConfigHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -120,22 +120,31 @@ bool ConfigHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool ConfigHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool ConfigHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
 		if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(_config->MainPage)) {
 			pageLayout->CursorFillMode = _cursorFillMode;
 		}
-		return _hasModName && _hasDisplayName;
+
+		if (!_hasModName) {
+			return ReportError(ErrorType::MissingRequiredField, "modName"s);
+		}
+
+		if (!_hasDisplayName) {
+			return ReportError(ErrorType::MissingRequiredField, "displayName"s);
+		}
+
+		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }

@@ -9,10 +9,7 @@ KeybindsArrayHandler::KeybindsArrayHandler(
 {
 }
 
-bool KeybindsArrayHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool KeybindsArrayHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::ID:
@@ -24,7 +21,7 @@ bool KeybindsArrayHandler::String(
 		_state = State::Keybind;
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -35,14 +32,11 @@ bool KeybindsArrayHandler::StartObject()
 		_state = State::Keybind;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool KeybindsArrayHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool KeybindsArrayHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Keybind:
@@ -59,19 +53,20 @@ bool KeybindsArrayHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool KeybindsArrayHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool KeybindsArrayHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Keybind:
-		if (_id.empty())
-			return false;
+		if (_id.empty()) {
+			return ReportError(ErrorType::MissingRequiredField, "id"sv);
+		}
 
 		if (auto sendEvent = std::dynamic_pointer_cast<SendEvent>(_action)) {
 			sendEvent->Control = _id;
@@ -86,7 +81,7 @@ bool KeybindsArrayHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
 
@@ -97,17 +92,17 @@ bool KeybindsArrayHandler::StartArray()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool KeybindsArrayHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool KeybindsArrayHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

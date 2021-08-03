@@ -82,14 +82,14 @@ bool GroupConditionHandler::Key(
 	}
 }
 
-bool GroupConditionHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool GroupConditionHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
 
@@ -103,11 +103,11 @@ bool GroupConditionHandler::StartArray()
 		_state = State::Array;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool GroupConditionHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool GroupConditionHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Array:
@@ -117,6 +117,6 @@ bool GroupConditionHandler::EndArray([[maybe_unused]] SizeType elementCount)
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

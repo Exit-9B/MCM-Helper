@@ -18,7 +18,7 @@ bool CustomContentHandler::Int(int i)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Int(i);
 	}
 }
 
@@ -34,7 +34,7 @@ bool CustomContentHandler::Uint(unsigned i)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
@@ -50,14 +50,11 @@ bool CustomContentHandler::Double(double d)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Double(d);
 	}
 }
 
-bool CustomContentHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool CustomContentHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Source:
@@ -65,7 +62,7 @@ bool CustomContentHandler::String(
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -76,14 +73,11 @@ bool CustomContentHandler::StartObject()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool CustomContentHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool CustomContentHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -100,20 +94,20 @@ bool CustomContentHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool CustomContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool CustomContentHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }

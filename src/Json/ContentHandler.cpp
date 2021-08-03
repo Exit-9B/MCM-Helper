@@ -23,7 +23,7 @@ bool ContentHandler::Bool(bool b)
 		_state = State::Control;
 		return true;
 	default:
-		return false;
+		return IHandler::Bool(b);
 	}
 }
 
@@ -39,14 +39,11 @@ bool ContentHandler::Uint(unsigned i)
 		_state = State::Control;
 		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
-bool ContentHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ContentHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::ID:
@@ -82,14 +79,14 @@ bool ContentHandler::String(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidValue, str);
 		}
 	case State::FormatString:
 		_data.FormatString = str;
 		_state = State::Control;
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -100,14 +97,11 @@ bool ContentHandler::StartObject()
 		_state = State::Control;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool ContentHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ContentHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Control:
@@ -165,14 +159,14 @@ bool ContentHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool ContentHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Control:
@@ -282,8 +276,9 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 
 			if (_data.Action) {
 				auto function = std::dynamic_pointer_cast<Function>(_data.Action);
-				if (!function)
-					return false;
+				if (!function) {
+					return ReportError("Unsupported action type"sv);
+				}
 
 				control->Action = function;
 			}
@@ -297,7 +292,7 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			}
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidValue, _data.Type);
 		}
 
 		_data = ControlData{};
@@ -305,7 +300,7 @@ bool ContentHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
 
@@ -316,17 +311,17 @@ bool ContentHandler::StartArray()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool ContentHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool ContentHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

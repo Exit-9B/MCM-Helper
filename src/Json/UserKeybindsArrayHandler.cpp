@@ -12,14 +12,11 @@ bool UserKeybindsArrayHandler::Uint(unsigned i)
 		_state = State::Keybind;
 		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
-bool UserKeybindsArrayHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool UserKeybindsArrayHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::ModName:
@@ -31,7 +28,7 @@ bool UserKeybindsArrayHandler::String(
 		_state = State::Keybind;
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -42,14 +39,11 @@ bool UserKeybindsArrayHandler::StartObject()
 		_state = State::Keybind;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool UserKeybindsArrayHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool UserKeybindsArrayHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Keybind:
@@ -66,14 +60,14 @@ bool UserKeybindsArrayHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool UserKeybindsArrayHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool UserKeybindsArrayHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Keybind:
@@ -81,7 +75,7 @@ bool UserKeybindsArrayHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
 
@@ -92,17 +86,17 @@ bool UserKeybindsArrayHandler::StartArray()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool UserKeybindsArrayHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool UserKeybindsArrayHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

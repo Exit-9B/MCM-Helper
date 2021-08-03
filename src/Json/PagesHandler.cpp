@@ -9,10 +9,7 @@ PagesHandler::PagesHandler(ReaderHandler* master, Config* config, const ScriptOb
 {
 }
 
-bool PagesHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool PagesHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::PageDisplayName:
@@ -31,10 +28,10 @@ bool PagesHandler::String(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidValue, str);
 		}
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -45,11 +42,11 @@ bool PagesHandler::StartObject()
 		_state = State::Page;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool PagesHandler::Key(const Ch* str, [[maybe_unused]] SizeType length, [[maybe_unused]] bool copy)
+bool PagesHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Page:
@@ -74,14 +71,14 @@ bool PagesHandler::Key(const Ch* str, [[maybe_unused]] SizeType length, [[maybe_
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool PagesHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool PagesHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Page:
@@ -97,7 +94,7 @@ bool PagesHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
 
@@ -108,17 +105,17 @@ bool PagesHandler::StartArray()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool PagesHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool PagesHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

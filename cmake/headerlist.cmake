@@ -27,6 +27,7 @@ set(headers ${headers}
 
     include/Json/ReaderHandler.h
     include/Json/IHandler.h
+    include/Json/IHandler.inl
     include/Json/ConfigHandler.h
     include/Json/PluginRequirementsHandler.h
     include/Json/ContentHandler.h

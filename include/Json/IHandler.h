@@ -27,7 +27,36 @@ public:
 	virtual bool EndArray(SizeType elementCount);
 
 protected:
+	enum class ErrorType
+	{
+		UnexpectedNull,
+		UnexpectedBool,
+		UnexpectedInt,
+		UnexpectedUint,
+		UnexpectedInt64,
+		UnexpectedUint64,
+		UnexpectedDouble,
+		UnexpectedNumber,
+		UnexpectedString,
+		UnexpectedStartObject,
+		UnexpectedKey,
+		UnexpectedEndObject,
+		UnexpectedStartArray,
+		UnexpectedEndArray,
+		InvalidKey,
+		InvalidValue,
+		MissingRequiredField,
+	};
+
 	IHandler(ReaderHandler* master);
+
+	template <typename... Args>
+	inline static bool ReportError(ErrorType errType, Args&&... args);
+
+	template <typename... Args>
+	inline static bool ReportError(std::string_view message, Args&&... args);
 
 	ReaderHandler* _master;
 };
+
+#include "Json/IHandler.inl"

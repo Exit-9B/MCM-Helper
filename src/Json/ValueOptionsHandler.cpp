@@ -24,7 +24,7 @@ bool ValueOptionsHandler::Bool(bool b)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Bool(b);
 	}
 }
 
@@ -48,7 +48,7 @@ bool ValueOptionsHandler::Int(int i)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Int(i);
 	}
 }
 
@@ -72,7 +72,7 @@ bool ValueOptionsHandler::Uint(unsigned i)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
@@ -96,14 +96,11 @@ bool ValueOptionsHandler::Double(double d)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::Double(d);
 	}
 }
 
-bool ValueOptionsHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ValueOptionsHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Value:
@@ -173,7 +170,7 @@ bool ValueOptionsHandler::String(
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -184,14 +181,11 @@ bool ValueOptionsHandler::StartObject()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool ValueOptionsHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ValueOptionsHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -240,10 +234,10 @@ bool ValueOptionsHandler::Key(
 			return true;
 		}
 	}
-	return false;
+	return IHandler::Key(str, length, copy);
 }
 
-bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool ValueOptionsHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
@@ -259,7 +253,7 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 				propertyValue = std::make_shared<PropertyValueFloat>();
 			}
 			else {
-				return false;
+				return ReportError(ErrorType::InvalidValue, _data->SourceType);
 			}
 
 			propertyValue->PropertyName = _data->PropertyName;
@@ -290,7 +284,7 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 				modSetting = std::make_shared<ModSettingFloat>();
 			}
 			else {
-				return false;
+				return ReportError(ErrorType::InvalidValue, _data->SourceType);
 			}
 
 			modSetting->ModName = _modName;
@@ -306,13 +300,13 @@ bool ValueOptionsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			_data->ValueSource = globalValue;
 		}
 		else if (!_data->SourceType.empty()) {
-			return false;
+			return ReportError(ErrorType::InvalidValue, _data->SourceType);
 		}
 
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
 
@@ -326,11 +320,11 @@ bool ValueOptionsHandler::StartArray()
 		_state = State::ShortNameElem;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool ValueOptionsHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool ValueOptionsHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::OptionElem:
@@ -340,6 +334,6 @@ bool ValueOptionsHandler::EndArray([[maybe_unused]] SizeType elementCount)
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

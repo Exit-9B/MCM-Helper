@@ -17,7 +17,7 @@ bool ParamsHandler::Bool(bool b)
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::Bool(b);
 	}
 }
 
@@ -32,7 +32,7 @@ bool ParamsHandler::Int(int i)
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::Int(i);
 	}
 }
 
@@ -47,7 +47,7 @@ bool ParamsHandler::Uint(unsigned i)
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
@@ -62,21 +62,18 @@ bool ParamsHandler::Double(double d)
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::Double(d);
 	}
 }
 
-bool ParamsHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ParamsHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
 		_params->push_back(str);
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -87,17 +84,17 @@ bool ParamsHandler::StartArray()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool ParamsHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool ParamsHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

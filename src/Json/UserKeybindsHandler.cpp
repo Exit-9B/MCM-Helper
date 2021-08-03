@@ -10,9 +10,12 @@ bool UserKeybindsHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::Version:
 		_state = State::Main;
-		return i <= PLUGIN_VERSION;
+		if (i > PLUGIN_VERSION) {
+			return ReportError("Keybind registrations require plugin version: {}"sv, i);
+		}
+		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
@@ -23,14 +26,11 @@ bool UserKeybindsHandler::StartObject()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool UserKeybindsHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool UserKeybindsHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -43,19 +43,19 @@ bool UserKeybindsHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool UserKeybindsHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool UserKeybindsHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }

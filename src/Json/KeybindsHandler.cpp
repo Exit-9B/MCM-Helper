@@ -7,18 +7,18 @@ KeybindsHandler::KeybindsHandler(ReaderHandler* master, const std::string& modNa
 {
 }
 
-bool KeybindsHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool KeybindsHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::ModName:
 		_hasModName = true;
 		_state = State::Main;
-		return str == _modName;
+		if (str != _modName) {
+			return ReportError("modName: \"{}\" did not match plugin"sv, str);
+		}
+		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -29,14 +29,11 @@ bool KeybindsHandler::StartObject()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool KeybindsHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool KeybindsHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -49,20 +46,21 @@ bool KeybindsHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return IHandler::ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool KeybindsHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool KeybindsHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
 	{
-		if (!_hasModName)
-			return false;
+		if (!_hasModName) {
+			return ReportError(ErrorType::MissingRequiredField, "modName"sv);
+		}
 
 		auto& keybindManager = KeybindManager::GetInstance();
 		for (auto& [id, info] : _modKeys) {
@@ -73,6 +71,6 @@ bool KeybindsHandler::EndObject([[maybe_unused]] SizeType memberCount)
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }

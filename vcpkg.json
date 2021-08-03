@@ -1,6 +1,6 @@
 {
   "name": "mcmhelper",
-  "version-string": "1.0.1",
+  "version-string": "1.0.2",
   "description": "A framework for simplifying the creation of Mod Configuration Menus for SkyUI",
   "homepage": "https://github.com/Exit-9B/MCM-Helper",
   "license": "MIT",

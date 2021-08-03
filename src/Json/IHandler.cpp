@@ -1,4 +1,5 @@
 #include "Json/IHandler.h"
+#include "Json/IHandler.inl"
 
 IHandler::IHandler(ReaderHandler* master) : _master{ master }
 {
@@ -6,79 +7,79 @@ IHandler::IHandler(ReaderHandler* master) : _master{ master }
 
 bool IHandler::Null()
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedNull);
 }
 
-bool IHandler::Bool([[maybe_unused]] bool b)
+bool IHandler::Bool(bool b)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedBool, b);
 }
 
-bool IHandler::Int([[maybe_unused]] int i)
+bool IHandler::Int(int i)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedInt, i);
 }
 
-bool IHandler::Uint([[maybe_unused]] unsigned i)
+bool IHandler::Uint(unsigned i)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedUint, i);
 }
 
-bool IHandler::Int64([[maybe_unused]] std::int64_t i)
+bool IHandler::Int64(std::int64_t i)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedInt64, i);
 }
 
-bool IHandler::Uint64([[maybe_unused]] std::uint64_t i)
+bool IHandler::Uint64(std::uint64_t i)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedUint64, i);
 }
 
-bool IHandler::Double([[maybe_unused]] double d)
+bool IHandler::Double(double d)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedDouble, d);
 }
 
 bool IHandler::RawNumber(
-	[[maybe_unused]] const Ch* str,
+	const Ch* str,
 	[[maybe_unused]] SizeType length,
 	[[maybe_unused]] bool copy)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedNumber, str);
 }
 
 bool IHandler::String(
-	[[maybe_unused]] const Ch* str,
+	const Ch* str,
 	[[maybe_unused]] SizeType length,
 	[[maybe_unused]] bool copy)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedString, str);
 }
 
 bool IHandler::StartObject()
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedStartObject);
 }
 
 bool IHandler::Key(
-	[[maybe_unused]] const Ch* str,
+	const Ch* str,
 	[[maybe_unused]] SizeType length,
 	[[maybe_unused]] bool copy)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedKey, str);
 }
 
-bool IHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool IHandler::EndObject(SizeType memberCount)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedEndObject, memberCount);
 }
 
 bool IHandler::StartArray()
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedStartArray);
 }
 
-bool IHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool IHandler::EndArray(SizeType elementCount)
 {
-	return false;
+	return ReportError(ErrorType::UnexpectedEndArray, elementCount);
 }

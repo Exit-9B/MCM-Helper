@@ -11,7 +11,7 @@ option(BUILD_SKYRIMVR "Build the mod for Skyrim VR" OFF)
 
 project(
 	MCMHelper
-	VERSION 1.0.1
+	VERSION 1.0.2
 	LANGUAGES CXX
 )
 

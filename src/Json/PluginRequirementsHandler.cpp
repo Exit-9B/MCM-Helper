@@ -4,10 +4,7 @@ PluginRequirementsHandler::PluginRequirementsHandler(ReaderHandler* master) : IH
 {
 }
 
-bool PluginRequirementsHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool PluginRequirementsHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -16,7 +13,7 @@ bool PluginRequirementsHandler::String(
 		return dataHandler && dataHandler->LookupModByName(str);
 	}
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -25,17 +22,19 @@ bool PluginRequirementsHandler::StartArray()
 	switch (_state) {
 	case State::Init:
 		_state = State::Main;
+		return true;
 	default:
-		return false;
+		return IHandler::StartArray();
 	}
 }
 
-bool PluginRequirementsHandler::EndArray([[maybe_unused]] SizeType elementCount)
+bool PluginRequirementsHandler::EndArray(SizeType elementCount)
 {
 	switch (_state) {
 	case State::Main:
 		_master->PopHandler();
+		return true;
 	default:
-		return false;
+		return IHandler::EndArray(elementCount);
 	}
 }

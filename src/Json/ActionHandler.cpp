@@ -14,10 +14,7 @@ ActionHandler::ActionHandler(
 {
 }
 
-bool ActionHandler::String(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ActionHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Type:
@@ -45,7 +42,7 @@ bool ActionHandler::String(
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::String(str, length, copy);
 	}
 }
 
@@ -56,14 +53,11 @@ bool ActionHandler::StartObject()
 		_state = State::Main;
 		return true;
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool ActionHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool ActionHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -96,20 +90,21 @@ bool ActionHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
-bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
+bool ActionHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
 		if (_data.Type == "CallFunction"s) {
-			if (_data.Function.empty())
-				return false;
+			if (_data.Function.empty()) {
+				return ReportError(ErrorType::MissingRequiredField, "function"sv);
+			}
 
 			auto callFunction = std::make_shared<CallFunction>();
 			*_action = callFunction;
@@ -125,8 +120,9 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			callFunction->Function = _data.Function;
 		}
 		else if (_data.Type == "CallGlobalFunction"s) {
-			if (_data.Function.empty())
-				return false;
+			if (_data.Function.empty()) {
+				return ReportError(ErrorType::MissingRequiredField, "function"sv);
+			}
 
 			auto callGlobalFunction = std::make_shared<CallGlobalFunction>();
 			*_action = callGlobalFunction;
@@ -135,29 +131,34 @@ bool ActionHandler::EndObject([[maybe_unused]] SizeType memberCount)
 			callGlobalFunction->Function = _data.Function;
 		}
 		else if (_data.Type == "RunConsoleCommand"s) {
-			if (_data.Command.empty())
-				return false;
+			if (_data.Command.empty()) {
+				return ReportError(ErrorType::MissingRequiredField, "command"sv);
+			}
 
 			auto runConsoleCommand = std::make_shared<RunConsoleCommand>();
 			*_action = runConsoleCommand;
 			runConsoleCommand->Command = _data.Command;
 		}
 		else if (_data.Type == "SendEvent"s) {
-			if (!_data.Form)
-				return false;
+			if (!_data.Form) {
+				return ReportError(ErrorType::MissingRequiredField, "form"sv);
+			}
 
 			auto sendEvent = std::make_shared<SendEvent>();
 			*_action = sendEvent;
 			sendEvent->Form = _data.Form;
 			sendEvent->ScriptName = _data.ScriptName;
 		}
+		else if (!_data.Type.empty()) {
+			return ReportError(ErrorType::InvalidValue, _data.Type);
+		}
 		else {
-			return false;
+			return ReportError(ErrorType::MissingRequiredField, "type"sv);
 		}
 
 		_master->PopHandler();
 		return true;
 	default:
-		return false;
+		return IHandler::EndObject(memberCount);
 	}
 }
