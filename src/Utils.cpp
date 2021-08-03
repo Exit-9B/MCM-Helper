@@ -44,7 +44,7 @@ auto Utils::GetModName(RE::TESForm* a_form) -> std::string
 	auto file = a_form ? a_form->GetFile() : nullptr;
 	auto fileName = file ? file->fileName : nullptr;
 
-	return std::filesystem::path{ fileName }.stem().string();
+	return fileName ? std::filesystem::path{ fileName }.stem().string() : ""s;
 }
 
 auto Utils::ScaleformTranslate(const std::string& a_key) -> std::string

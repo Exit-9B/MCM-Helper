@@ -31,7 +31,7 @@ extern "C" DLLEXPORT bool SKSEAPI
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("%s(%#): [%^%l%$] %v"s);
 
-	logger::info("MCMHelper v1.0.2"sv);
+	logger::info("MCMHelper v1.0.3"sv);
 
 	a_info->infoVersion = SKSE::PluginInfo::kVersion;
 	a_info->name = "MCMHelper";

@@ -47,11 +47,9 @@ void ConfigStore::ReadConfigs()
 
 	for (auto& modConfig : *modConfigs) {
 		auto configScript = modConfig.GetObject();
-
-		if (configScript) {
+		if (configScript && ScriptObject::IsType(configScript, "MCM_ConfigBase")) {
 			auto modName = GetModName(configScript);
-			if (ScriptObject::IsType(configScript, "MCM_ConfigBase") &&
-				ReadConfig(modName, configScript)) {
+			if (!modName.empty() && ReadConfig(modName, configScript)) {
 				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
 				KeybindManager::GetInstance().ReadKeybinds(modName);
 			}
