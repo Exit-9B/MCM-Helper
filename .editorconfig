@@ -1,0 +1,20 @@
+root = true
+
+[*]
+indent_style = tab
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.json]
+indent_style = space
+indent_size = 2
+
+[*.ppj]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.bat]
+end_of_line = crlf
