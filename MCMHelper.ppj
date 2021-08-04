@@ -11,6 +11,8 @@
     <Variable Name="temppath" Value="dist\temp"/>
   </Variables>
   <Imports>
+    <!-- SDK headers are under Data; implementation scripts are in Detail, so they take priority -->
+    <Import>dist\Detail\Source\Scripts</Import>
     <Import>dist\Data\Source\Scripts</Import>
     <Import>%SKSE64Path%\Scripts\Source</Import>
     <Import>%Skyrim64Path%\Data\Source\Scripts</Import>

@@ -114,30 +114,6 @@ namespace Papyrus
 		SettingStore::GetInstance().SetModSettingString(modName, a_settingName, a_value);
 	}
 
-	void MCM_ConfigBase::OnConfigRegister(RE::TESQuest* a_self)
-	{
-		auto object = ScriptObject::FromForm(a_self, ScriptName);
-		if (object) {
-			auto startTime = std::chrono::steady_clock::now();
-			auto modName = Utils::GetModName(a_self);
-			ConfigStore::GetInstance().ReadConfig(modName, object);
-
-			auto configManager = SkyUI::ConfigManager::GetInstance();
-			if (configManager) {
-				SkyUI::ConfigManager::UpdateDisplayName(configManager, object);
-			}
-
-			auto& keybindManager = KeybindManager::GetInstance();
-			keybindManager.ReadKeybinds(modName);
-
-			auto endTime = std::chrono::steady_clock::now();
-			auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
-				endTime - startTime);
-
-			logger::info("Registered mod config for {} in {} ms."sv, modName, elapsedMs.count());
-		}
-	}
-
 	void MCM_ConfigBase::OnPageReset(RE::TESQuest* a_self, std::string a_page)
 	{
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
@@ -525,6 +501,30 @@ namespace Papyrus
 		return config ? config->GetCustomControl(a_keyCode) : ""s;
 	}
 
+	void MCM_ConfigBase::LoadConfig(RE::TESQuest* a_self)
+	{
+		auto object = ScriptObject::FromForm(a_self, ScriptName);
+
+		auto startTime = std::chrono::steady_clock::now();
+		auto modName = Utils::GetModName(a_self);
+
+		if (!ConfigStore::GetInstance().ReadConfig(modName, object)) {
+			return;
+		}
+
+		auto modNameVar = object->GetProperty("ModName"sv);
+		auto displayName = modNameVar && modNameVar->IsString() ? modNameVar->GetString() : ""sv;
+
+		auto& keybindManager = KeybindManager::GetInstance();
+		keybindManager.ReadKeybinds(modName);
+
+		auto endTime = std::chrono::steady_clock::now();
+		auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
+			endTime - startTime);
+
+		logger::info("Registered mod config for {} in {} ms."sv, modName, elapsedMs.count());
+	}
+
 	void MCM_ConfigBase::SendSettingChangeEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
 		ScriptObjectPtr a_object,
@@ -553,7 +553,6 @@ namespace Papyrus
 		REGISTER_FUNCTION(a_vm, SetModSettingFloat);
 		REGISTER_FUNCTION(a_vm, SetModSettingString);
 
-		REGISTER_FUNCTION(a_vm, OnConfigRegister);
 		REGISTER_FUNCTION(a_vm, OnPageReset);
 
 		REGISTER_FUNCTION(a_vm, OnOptionHighlight);
@@ -570,6 +569,8 @@ namespace Papyrus
 		REGISTER_FUNCTION(a_vm, OnOptionInputAccept);
 
 		REGISTER_FUNCTION(a_vm, GetCustomControl);
+
+		REGISTER_FUNCTION(a_vm, LoadConfig);
 
 		return true;
 	}

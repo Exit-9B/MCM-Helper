@@ -32,26 +32,50 @@ void ConfigStore::ReadConfigs()
 	}
 
 	auto modConfigsVar = ScriptObject::GetVariable(configManager, "_modConfigs"sv);
-	if (!modConfigsVar || !modConfigsVar->IsObjectArray()) {
-		// Something else went wrong
-		logger::warn("Could not find registered mod configs."sv);
-		return;
+	auto modConfigs = modConfigsVar && modConfigsVar->IsObjectArray()
+		? modConfigsVar->GetArray()
+		: nullptr;
+
+	if (modConfigs) {
+		for (auto& modConfig : *modConfigs) {
+			auto configScript = modConfig.GetObject();
+			if (configScript && ScriptObject::IsType(configScript, "MCM_ConfigBase")) {
+				auto modName = GetModName(configScript);
+				if (!modName.empty() && ReadConfig(modName, configScript)) {
+					SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
+					KeybindManager::GetInstance().ReadKeybinds(modName);
+				}
+			}
+		}
 	}
 
-	auto modConfigs = modConfigsVar->GetArray();
+	// Handle 'SkyUI - Resort' by Barzing
+	for (std::int32_t i = 0; i <= 9; i++) {
+		auto modConfigsVarName =
+			i == 0 ? "_MainMenu"s
+			: std::format("_modConfigsP{}"sv, i);
 
-	if (!modConfigs) {
-		logger::warn("SkyUI Config Manager is not ready"sv);
-		return;
-	}
+		auto modConfigsPVar = ScriptObject::GetVariable(configManager, modConfigsVarName);
+		auto modConfigsP = modConfigsPVar && modConfigsPVar->IsArray() ?
+            modConfigsPVar->GetArray() :
+            nullptr;
 
-	for (auto& modConfig : *modConfigs) {
-		auto configScript = modConfig.GetObject();
-		if (configScript && ScriptObject::IsType(configScript, "MCM_ConfigBase")) {
-			auto modName = GetModName(configScript);
-			if (!modName.empty() && ReadConfig(modName, configScript)) {
-				SkyUI::ConfigManager::UpdateDisplayName(configManager, configScript);
-				KeybindManager::GetInstance().ReadKeybinds(modName);
+		if (!modConfigsP) {
+			continue;
+		}
+
+		for (auto& modConfig : *modConfigsP) {
+			auto configScript = modConfig.GetObject();
+			if (configScript && ScriptObject::IsType(configScript, "MCM_ConfigBase")) {
+				auto modName = GetModName(configScript);
+				if (!modName.empty() && ReadConfig(modName, configScript)) {
+					SkyUI::ConfigManager::UpdateDisplayName_Barzing(
+						configManager,
+						configScript,
+						i);
+
+					KeybindManager::GetInstance().ReadKeybinds(modName);
+				}
 			}
 		}
 	}

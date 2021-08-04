@@ -58,8 +58,6 @@ namespace Papyrus
 			std::string_view a_value);
 
 		// SkyUI Overrides
-		static void OnConfigRegister(RE::TESQuest* a_self);
-
 		static void OnPageReset(RE::TESQuest* a_self, std::string a_page);
 
 		static void OnOptionHighlight(RE::TESQuest* a_self, std::int32_t a_option);
@@ -120,6 +118,8 @@ namespace Papyrus
 		static auto GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode) -> std::string;
 
 		// Helpers
+		static void LoadConfig(RE::TESQuest* a_self);
+
 		static void SendSettingChangeEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,

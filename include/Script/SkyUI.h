@@ -55,6 +55,11 @@ namespace SkyUI
 		static auto GetInstance() -> ScriptObjectPtr;
 
 		static void UpdateDisplayName(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config);
+
+		static void UpdateDisplayName_Barzing(
+			ScriptObjectPtr a_configManager,
+			ScriptObjectPtr a_config,
+			std::int32_t a_subPage);
 	};
 
 	/* SKI_ConfigBase script functionality reimplemented for efficiency
