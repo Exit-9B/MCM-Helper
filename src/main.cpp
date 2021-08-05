@@ -1,4 +1,4 @@
-﻿#include "Papyrus/RegisterFuncs.h"
+#include "Papyrus/RegisterFuncs.h"
 #include "SettingStore.h"
 #include "ConfigStore.h"
 #include "KeybindEventHandler.h"
@@ -15,7 +15,7 @@ extern "C" DLLEXPORT bool SKSEAPI
 		return false;
 	}
 
-	*path /= "MCMHelper.log"sv;
+	*path /= std::format("{}.log"sv, Version::PROJECT);
 	auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 #endif
 
@@ -31,11 +31,11 @@ extern "C" DLLEXPORT bool SKSEAPI
 	spdlog::set_default_logger(std::move(log));
 	spdlog::set_pattern("%s(%#): [%^%l%$] %v"s);
 
-	logger::info("MCMHelper v1.0.3"sv);
+	logger::info("{} v{}"sv, Version::PROJECT, Version::NAME);
 
 	a_info->infoVersion = SKSE::PluginInfo::kVersion;
-	a_info->name = "MCMHelper";
-	a_info->version = 1;
+	a_info->name = Version::PROJECT.data();
+	a_info->version = Version::MAJOR;
 
 	if (a_skse->IsEditor()) {
 		logger::critical("Loaded in editor, marking as incompatible"sv);

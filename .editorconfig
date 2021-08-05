@@ -1,9 +1,17 @@
-root = true
-
 [*]
+charset = utf-8
 indent_style = tab
 indent_size = 4
+insert_final_newline = true
 trim_trailing_whitespace = true
+
+[*.{c,cpp,cxx,h,hpp,hxx,inl,ixx}]
+indent_style = tab
+indent_size = 4
+
+[*.cmake]
+indent_style = tab
+indent_size = 4
 
 [*.json]
 indent_style = space

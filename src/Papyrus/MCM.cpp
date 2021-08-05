@@ -10,7 +10,7 @@ auto Papyrus::MCM::IsInstalled(RE::StaticFunctionTag*) -> bool
 
 auto Papyrus::MCM::GetVersionCode(RE::StaticFunctionTag*) -> std::uint32_t
 {
-	return PLUGIN_VERSION;
+	return static_cast<std::uint32_t>(Version::PLUGIN);
 }
 
 auto Papyrus::MCM::GetModSettingInt(

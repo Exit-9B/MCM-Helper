@@ -20,7 +20,7 @@ bool ConfigHandler::Uint(unsigned i)
 {
 	switch (_state) {
 	case State::MinMcmVersion:
-		if (PLUGIN_VERSION < i) {
+		if (static_cast<std::size_t>(i) > Version::PLUGIN) {
 			return ReportError("Config requires plugin version: {}"sv, i);
 		}
 		return true;
