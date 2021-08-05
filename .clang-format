@@ -36,11 +36,11 @@ BraceWrapping:
     BeforeLambdaBody: 'true'
     IndentBraces: 'false'
     SplitEmptyFunction: 'true'
-    SplitEmptyNamespace: 'false'
-    SplitEmptyRecord: 'false'
+    SplitEmptyNamespace: 'true'
+    SplitEmptyRecord: 'true'
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Custom
-BreakBeforeTernaryOperators: 'false'
+BreakBeforeTernaryOperators: 'true'
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
 BreakStringLiterals: 'true'
@@ -61,14 +61,14 @@ IndentGotoLabels: 'false'
 IndentPPDirectives: None
 IndentWidth: 4
 IndentWrappedFunctionNames: 'true'
-KeepEmptyLinesAtTheStartOfBlocks: 'false'
+KeepEmptyLinesAtTheStartOfBlocks: 'true'
 Language: Cpp
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
 PenaltyBreakAssignment: 500
 PenaltyReturnTypeOnItsOwnLine: 1000
 PointerAlignment: Left
-ReflowComments : 'false'
+ReflowComments : 'true'
 SortIncludes: 'false'
 SortUsingDeclarations: 'false'
 SpaceAfterCStyleCast: 'false'
@@ -93,6 +93,6 @@ SpacesInSquareBrackets: 'false'
 Standard: c++17
 TabWidth: 4
 UseCRLF: 'true'
-UseTab: AlignWithSpaces
+UseTab: ForContinuationAndIndentation
 
 ...

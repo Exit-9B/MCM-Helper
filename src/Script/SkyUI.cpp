@@ -5,13 +5,13 @@ namespace SkyUI
 	auto ConfigManager::GetInstance() -> ScriptObjectPtr
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
-		auto configManagerInstance = dataHandler ?
-			  dataHandler->LookupForm(0x00000802, SkyUI::PluginName) :
-			  nullptr;
+		auto configManagerInstance = dataHandler
+			? dataHandler->LookupForm(0x00000802, SkyUI::PluginName)
+			: nullptr;
 
-		return configManagerInstance ?
-			  ScriptObject::FromForm(configManagerInstance, "SKI_ConfigManager") :
-			  nullptr;
+		return configManagerInstance
+			? ScriptObject::FromForm(configManagerInstance, "SKI_ConfigManager")
+			: nullptr;
 	}
 
 	void ConfigManager::UpdateDisplayName(

@@ -4,7 +4,8 @@ namespace InputMap
 {
 	enum
 	{
-		// first 256 for keyboard, then 8 mouse buttons, then mouse wheel up, wheel down, then 16 gamepad buttons
+		// first 256 for keyboard, then 8 mouse buttons, then mouse wheel up, wheel down, then 16
+		// gamepad buttons
 		kMacro_KeyboardOffset = 0,  // not actually used, just for self-documentation
 		kMacro_NumKeyboardKeys = 256,
 
