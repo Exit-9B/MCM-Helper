@@ -8,6 +8,7 @@ struct ValueOptionsData
 	float Min = 0.0f;
 	float Max = 0.0f;
 	float Step = 0.0f;
+	std::string FormatString = "{0}";
 
 	std::string Value;
 	std::vector<std::string> Options;
@@ -52,6 +53,7 @@ private:
 		Max,
 		Step,
 		Value,
+		FormatString,
 		Options,
 		OptionElem,
 		ShortNames,

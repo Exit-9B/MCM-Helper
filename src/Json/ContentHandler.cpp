@@ -82,7 +82,8 @@ bool ContentHandler::String(const Ch* str, SizeType length, bool copy)
 			return ReportError(ErrorType::InvalidValue, str);
 		}
 	case State::FormatString:
-		_data.FormatString = str;
+		// Kept for backwards compatibility with v1.0.3 - 4
+		_data.ValueOptions.FormatString = str;
 		_state = State::Control;
 		return true;
 	default:
@@ -139,6 +140,7 @@ bool ContentHandler::Key(const Ch* str, SizeType length, bool copy)
 			return true;
 		}
 		else if (strcmp(str, "formatString") == 0) {
+			// Kept for backwards compatibility with v1.0.3 - 4
 			_state = State::FormatString;
 			return true;
 		}
@@ -224,7 +226,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			sliderOption->Min = _data.ValueOptions.Min;
 			sliderOption->Max = _data.ValueOptions.Max;
 			sliderOption->Step = _data.ValueOptions.Step;
-			sliderOption->FormatString = _data.FormatString;
+			sliderOption->FormatString = _data.ValueOptions.FormatString;
 			sliderOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = sliderOption;
 		}

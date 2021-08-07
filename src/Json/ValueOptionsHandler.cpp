@@ -107,6 +107,10 @@ bool ValueOptionsHandler::String(const Ch* str, SizeType length, bool copy)
 		_data->Value = str;
 		_state = State::Main;
 		return true;
+	case State::FormatString:
+		_data->FormatString = str;
+		_state = State::Main;
+		return true;
 	case State::OptionElem:
 		_data->Options.push_back(str);
 		return true;
@@ -203,6 +207,10 @@ bool ValueOptionsHandler::Key(const Ch* str, SizeType length, bool copy)
 		}
 		else if (strcmp(str, "value") == 0) {
 			_state = State::Value;
+			return true;
+		}
+		else if (strcmp(str, "formatString") == 0) {
+			_state = State::FormatString;
 			return true;
 		}
 		else if (strcmp(str, "options") == 0) {

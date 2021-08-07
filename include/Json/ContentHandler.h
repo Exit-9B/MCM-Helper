@@ -17,7 +17,6 @@ struct ControlData
 	std::shared_ptr<Action> Action;
 
 	std::uint32_t GroupControl = 0;
-	std::string FormatString = "{0}";
 
 	bool IgnoreConflicts = false;
 
@@ -51,7 +50,7 @@ private:
 		Type,
 		GroupBehavior,
 		GroupControl,
-		FormatString,
+		FormatString, // Kept for backwards compatibility with v1.0.3 - 4
 		IgnoreConflicts,
 	};
 
