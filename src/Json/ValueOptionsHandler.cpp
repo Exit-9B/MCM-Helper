@@ -292,7 +292,7 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 			_data->ValueSource = modSetting;
 		}
 		else if (_data->SourceType == "GlobalValue"s) {
-			std::shared_ptr<GlobalValue> globalValue;
+			auto globalValue = std::make_shared<GlobalValue>();
 			globalValue->SourceForm = skyrim_cast<RE::TESGlobal*>(_data->SourceForm);
 
 			globalValue->DefaultValue = _data->DefaultValue;
