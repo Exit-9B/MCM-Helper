@@ -505,8 +505,14 @@ namespace Papyrus
 	{
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
-		auto startTime = std::chrono::steady_clock::now();
 		auto modName = Utils::GetModName(a_self);
+
+		auto& configStore = ConfigStore::GetInstance();
+		if (modName.empty() || configStore.GetConfig(modName)) {
+			return;
+		}
+
+		auto startTime = std::chrono::steady_clock::now();
 
 		if (!ConfigStore::GetInstance().ReadConfig(modName, object)) {
 			return;
