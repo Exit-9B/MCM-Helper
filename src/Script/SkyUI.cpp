@@ -22,11 +22,64 @@ namespace SkyUI
 		assert(a_config);
 
 		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		if (!configIDVar) {
+			return;
+		}
+
 		auto modNamesVar = ScriptObject::GetVariable(a_configManager, "_modNames"sv);
-		auto modNameVar = a_config->GetProperty("ModName"sv);
-		if (configIDVar && modNamesVar && modNameVar) {
+		auto modNamesArray =
+			modNamesVar && modNamesVar->IsArray() ? modNamesVar->GetArray()
+			: nullptr;
+
+		if (!modNamesArray) {
 			auto index = configIDVar->GetSInt();
-			if (index >= 0) {
+			return UpdateDisplayName_Barzing(a_configManager, a_config, index / 128);
+		}
+
+		auto modNameVar = a_config->GetProperty("ModName"sv);
+		if (modNameVar) {
+			auto size = static_cast<std::int32_t>(modNamesArray->size());
+			auto index = configIDVar->GetSInt();
+
+			if (index >= 0 && index < size) {
+				auto& registeredName = modNamesVar->GetArray()->data()[index];
+				registeredName.SetString(modNameVar->GetString());
+			}
+		}
+	}
+
+	void ConfigManager::UpdateDisplayName_Barzing(
+		ScriptObjectPtr a_configManager,
+		ScriptObjectPtr a_config,
+		std::int32_t a_subPage)
+	{
+		assert(a_configManager);
+		assert(a_config);
+
+		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		if (!configIDVar) {
+			return;
+		}
+
+		auto modNameVarName =
+			a_subPage == 0 ? "_MainMenuP"s
+			: std::format("_modNamesP{}"sv, a_subPage);
+
+		auto modNamesVar = ScriptObject::GetVariable(a_configManager, modNameVarName);
+		auto modNamesArray =
+			modNamesVar && modNamesVar->IsArray() ? modNamesVar->GetArray()
+			: nullptr;
+
+		if (!modNamesArray) {
+			return;
+		}
+
+		auto modNameVar = a_config->GetProperty("ModName"sv);
+		if (modNameVar) {
+			auto size = static_cast<std::int32_t>(modNamesArray->size());
+			auto index = configIDVar->GetSInt() % 128;
+
+			if (index >= 0 && index < size) {
 				auto& registeredName = modNamesVar->GetArray()->data()[index];
 				registeredName.SetString(modNameVar->GetString());
 			}
