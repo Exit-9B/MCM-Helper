@@ -1,4 +1,4 @@
-set(sources ${sources}
+set(SOURCES ${SOURCES}
     src/main.cpp
     src/PCH.cpp
 

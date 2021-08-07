@@ -1,4 +1,4 @@
-set(headers ${headers}
+set(HEADERS ${HEADERS}
     include/PCH.h
 
     include/ColorUtil.h
