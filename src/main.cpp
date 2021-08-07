@@ -15,7 +15,7 @@ extern "C" DLLEXPORT bool SKSEAPI
 		return false;
 	}
 
-	*path /= std::format("{}.log"sv, Version::PROJECT);
+	*path /= fmt::format("{}.log"sv, Version::PROJECT);
 	auto sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(path->string(), true);
 #endif
 

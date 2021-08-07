@@ -63,7 +63,7 @@ namespace SkyUI
 
 		auto modNameVarName =
 			a_subPage == 0 ? "_MainMenuP"s
-			: std::format("_modNamesP{}"sv, a_subPage);
+			: fmt::format("_modNamesP{}"sv, a_subPage);
 
 		auto modNamesVar = ScriptObject::GetVariable(a_configManager, modNameVarName);
 		auto modNamesArray =

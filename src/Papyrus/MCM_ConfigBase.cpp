@@ -430,13 +430,13 @@ namespace Papyrus
 
 				std::string msg;
 				if (!a_conflictName.empty()) {
-					msg = std::format(
+					msg = fmt::format(
 						"$MCM_KeyAlreadyMappedByMod{{{}}}{{{}}}"sv,
 						conflictControl,
 						a_conflictName);
 				}
 				else {
-					msg = std::format("$MCM_KeyAlreadyMapped{{{}}}"sv, conflictControl);
+					msg = fmt::format("$MCM_KeyAlreadyMapped{{{}}}"sv, conflictControl);
 				}
 
 				SkyUI::Config::ShowMessage(object, msg, updateKey);

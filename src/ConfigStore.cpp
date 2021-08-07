@@ -53,7 +53,7 @@ void ConfigStore::ReadConfigs()
 	for (std::int32_t i = 0; i <= 9; i++) {
 		auto modConfigsVarName =
 			i == 0 ? "_MainMenu"s
-			: std::format("_modConfigsP{}"sv, i);
+			: fmt::format("_modConfigsP{}"sv, i);
 
 		auto modConfigsPVar = ScriptObject::GetVariable(configManager, modConfigsVarName);
 		auto modConfigsP = modConfigsPVar && modConfigsPVar->IsArray() ?
