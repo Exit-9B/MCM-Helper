@@ -58,7 +58,7 @@ extern "C" DLLEXPORT bool SKSEAPI
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
 {
-	logger::info("MCMHelper loaded"sv);
+	logger::info("{} loaded"sv, Version::PROJECT);
 
 	SKSE::Init(a_skse);
 
