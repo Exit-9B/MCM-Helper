@@ -248,7 +248,7 @@
         {
           "id": "iPreviousColumnButton:Controls",
           "text": "$Previous Column",
-          "help": "$SKI_INFO{LB}",
+          "help": "$SKI_INFO1{LB}",
           "type": "keymap",
           "ignoreConflicts": true,
           "groupCondition": 1,
@@ -260,7 +260,7 @@
         {
           "id": "iNextColumnButton:Controls",
           "text": "$Next Column",
-          "help": "$SKI_INFO{RB}",
+          "help": "$SKI_INFO1{RB}",
           "type": "keymap",
           "ignoreConflicts": true,
           "groupCondition": 1,
@@ -272,7 +272,7 @@
         {
           "id": "iSortOrderButton:Controls",
           "text": "$Order",
-          "help": "$SKI_INFO{LS}",
+          "help": "$SKI_INFO1{LS}",
           "type": "keymap",
           "ignoreConflicts": true,
           "groupCondition": 1,
@@ -325,7 +325,7 @@
         {
           "id": "iFavoriteEquipStateKey:Controls",
           "text": "$Save Equip State",
-          "help": "$SKI_INFO{T}",
+          "help": "$SKI_INFO1{T}",
           "type": "keymap",
           "ignoreConflicts": true,
           "groupCondition": {"NOT": 1},
@@ -337,7 +337,7 @@
         {
           "id": "iFavoriteToggleFocusKey:Controls",
           "text": "$Toggle Focus",
-          "help": "$SKI_INFO{Space}",
+          "help": "$SKI_INFO1{Space}",
           "type": "keymap",
           "ignoreConflicts": true,
           "groupCondition": {"NOT": 1},
@@ -538,7 +538,7 @@
         {
           "id": "iGroupEffectCount:EffectWidget",
           "text": "$Icon Group Count",
-          "help": "$SKI_INFO{8}",
+          "help": "$SKI_INFO1{8}",
           "type": "slider",
           "valueOptions": {
             "min": 1,

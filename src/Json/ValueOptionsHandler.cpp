@@ -301,7 +301,9 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 		}
 		else if (_data->SourceType == "GlobalValue"s) {
 			auto globalValue = std::make_shared<GlobalValue>();
-			globalValue->SourceForm = skyrim_cast<RE::TESGlobal*>(_data->SourceForm);
+			if (_data->SourceForm && _data->SourceForm->GetFormType() == RE::FormType::Global) {
+				globalValue->SourceForm = static_cast<RE::TESGlobal*>(_data->SourceForm);
+			}
 
 			globalValue->DefaultValue = _data->DefaultValue;
 
