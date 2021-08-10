@@ -182,8 +182,17 @@ bool ContentHandler::EndObject(SizeType memberCount)
 		if (!_data.ValueOptions.ValueSource) {
 			if (!_data.ValueOptions.PropertyName.empty()) {
 				auto propertyString = std::make_shared<PropertyString>();
-				propertyString->SourceForm = _data.ValueOptions.SourceForm;
-				propertyString->ScriptName = _data.ValueOptions.ScriptName;
+				if (_data.ValueOptions.SourceForm) {
+					propertyString->SourceForm = _data.ValueOptions.SourceForm;
+					propertyString->ScriptName = _data.ValueOptions.ScriptName;
+				}
+				else {
+					propertyString->SourceForm = _form;
+					propertyString->ScriptName =
+						!_scriptName.empty() ? _data.ValueOptions.ScriptName
+						: _scriptName;
+				}
+
 				propertyString->PropertyName = _data.ValueOptions.PropertyName;
 				propertyString->DefaultValue = _data.ValueOptions.DefaultValueStr;
 				textSource = propertyString;

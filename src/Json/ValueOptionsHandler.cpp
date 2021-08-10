@@ -264,7 +264,6 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 				return ReportError(ErrorType::InvalidValue, _data->SourceType);
 			}
 
-			propertyValue->PropertyName = _data->PropertyName;
 			if (_data->SourceForm) {
 				propertyValue->SourceForm = _data->SourceForm;
 				propertyValue->ScriptName = _data->ScriptName;
@@ -276,6 +275,7 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 					: _scriptName;
 			}
 
+			propertyValue->PropertyName = _data->PropertyName;
 			propertyValue->DefaultValue = _data->DefaultValue;
 
 			_data->ValueSource = propertyValue;
