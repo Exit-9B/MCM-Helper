@@ -1,5 +1,5 @@
 #include "Json/ValueOptionsHandler.h"
-#include "Utils.h"
+#include "FormUtil.h"
 #include "ColorUtil.h"
 
 ValueOptionsHandler::ValueOptionsHandler(
@@ -122,7 +122,7 @@ bool ValueOptionsHandler::String(const Ch* str, SizeType length, bool copy)
 		_state = State::Main;
 		return true;
 	case State::SourceForm:
-		_data->SourceForm = Utils::GetFormFromIdentifier(str);
+		_data->SourceForm = FormUtil::GetFormFromIdentifier(str);
 		_state = State::Main;
 		return true;
 	case State::ScriptName:

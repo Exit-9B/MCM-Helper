@@ -2,8 +2,11 @@ set(HEADERS ${HEADERS}
     include/PCH.h
 
     include/ColorUtil.h
-    include/Utils.h
+    include/FormUtil.h
     include/InputMap.h
+    include/Encoding.h
+    include/Translation.h
+
     include/SettingStore.h
     include/ConfigStore.h
     include/ConfigPageCache.h

@@ -1,6 +1,6 @@
 #include "Json/ActionHandler.h"
 #include "Json/ParamsHandler.h"
-#include "Utils.h"
+#include "FormUtil.h"
 
 ActionHandler::ActionHandler(
 	ReaderHandler* master,
@@ -22,7 +22,7 @@ bool ActionHandler::String(const Ch* str, SizeType length, bool copy)
 		_state = State::Main;
 		return true;
 	case State::Form:
-		_data.Form = Utils::GetFormFromIdentifier(str);
+		_data.Form = FormUtil::GetFormFromIdentifier(str);
 		_state = State::Main;
 		return true;
 	case State::Script:

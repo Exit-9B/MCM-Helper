@@ -1,6 +1,6 @@
 #include "ConfigStore.h"
 #include "KeybindManager.h"
-#include "Utils.h"
+#include "FormUtil.h"
 #include "Script/SkyUI.h"
 #include "Script/ScriptObject.h"
 #include "Json/ReaderHandler.h"
@@ -153,7 +153,7 @@ auto ConfigStore::GetConfig(const std::string& a_modName) -> std::shared_ptr<Con
 
 auto ConfigStore::GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>
 {
-	auto modName = Utils::GetModName(a_configQuest);
+	auto modName = FormUtil::GetModName(a_configQuest);
 	return GetConfig(modName);
 }
 
@@ -167,5 +167,5 @@ auto ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQ
 auto ConfigStore::GetModName(ScriptObjectPtr& a_configScript) -> std::string
 {
 	auto quest = GetFormFromScript(a_configScript);
-	return Utils::GetModName(quest);
+	return FormUtil::GetModName(quest);
 }

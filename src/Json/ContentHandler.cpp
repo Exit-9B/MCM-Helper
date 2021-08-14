@@ -1,7 +1,7 @@
 #include "Json/ContentHandler.h"
 #include "Json/GroupConditionHandler.h"
 #include "Json/ActionHandler.h"
-#include "Utils.h"
+#include "FormUtil.h"
 
 ContentHandler::ContentHandler(
 	ReaderHandler* master,
@@ -11,7 +11,7 @@ ContentHandler::ContentHandler(
 	_pageLayout{ pageLayout }
 {
 	_form = static_cast<RE::TESForm*>(script->Resolve(0));
-	_modName = Utils::GetModName(_form);
+	_modName = FormUtil::GetModName(_form);
 	_scriptName = script->GetTypeInfo()->GetName();
 }
 

@@ -4,7 +4,8 @@
 #include "ConfigStore.h"
 #include "ConfigPageCache.h"
 #include "KeybindManager.h"
-#include "Utils.h"
+#include "FormUtil.h"
+#include "Translation.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func)
 
@@ -52,28 +53,28 @@ namespace Papyrus
 	auto MCM_ConfigBase::GetModSettingInt(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> std::int32_t
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingInt(modName, a_settingName);
 	}
 
 	auto MCM_ConfigBase::GetModSettingBool(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> bool
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingBool(modName, a_settingName);
 	}
 
 	auto MCM_ConfigBase::GetModSettingFloat(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> float
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingFloat(modName, a_settingName);
 	}
 
 	auto MCM_ConfigBase::GetModSettingString(RE::TESQuest* a_self, std::string_view a_settingName)
 		-> std::string
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		auto value = SettingStore::GetInstance().GetModSettingString(modName, a_settingName);
 		return value ? value : ""s;
 	}
@@ -83,7 +84,7 @@ namespace Papyrus
 		std::string_view a_settingName,
 		std::int32_t a_value)
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		SettingStore::GetInstance().SetModSettingInt(modName, a_settingName, a_value);
 	}
 
@@ -92,7 +93,7 @@ namespace Papyrus
 		std::string_view a_settingName,
 		bool a_value)
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		SettingStore::GetInstance().SetModSettingBool(modName, a_settingName, a_value);
 	}
 
@@ -101,7 +102,7 @@ namespace Papyrus
 		std::string_view a_settingName,
 		float a_value)
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		SettingStore::GetInstance().SetModSettingFloat(modName, a_settingName, a_value);
 	}
 
@@ -110,7 +111,7 @@ namespace Papyrus
 		std::string_view a_settingName,
 		std::string_view a_value)
 	{
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 		SettingStore::GetInstance().SetModSettingString(modName, a_settingName, a_value);
 	}
 
@@ -414,7 +415,7 @@ namespace Papyrus
 						keymap->ValueSource->SetValue(static_cast<float>(a_keyCode));
 					}
 					else if (!keymap->ID.empty()) {
-						auto modName = Utils::GetModName(a_self);
+						auto modName = FormUtil::GetModName(a_self);
 						auto& keybindManager = KeybindManager::GetInstance();
 						keybindManager.Register(a_keyCode, modName, keymap->ID);
 						keybindManager.CommitKeybinds();
@@ -426,7 +427,8 @@ namespace Papyrus
 			};
 
 			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts) {
-				auto conflictControl = Utils::ScaleformTranslate(std::string{ a_conflictControl });
+				auto conflictControl = Translation::ScaleformTranslate(
+					std::string{ a_conflictControl });
 
 				std::string msg;
 				if (!a_conflictName.empty()) {
@@ -461,7 +463,7 @@ namespace Papyrus
 
 		if (auto input = std::dynamic_pointer_cast<InputControl>(control)) {
 			if (!input->ID.empty()) {
-				auto modName = Utils::GetModName(a_self);
+				auto modName = FormUtil::GetModName(a_self);
 				auto text = SettingStore::GetInstance().GetModSettingString(modName, input->ID);
 				SkyUI::Config::SetInputDialogStartText(object, text);
 			}
@@ -505,7 +507,7 @@ namespace Papyrus
 	{
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
-		auto modName = Utils::GetModName(a_self);
+		auto modName = FormUtil::GetModName(a_self);
 
 		auto& configStore = ConfigStore::GetInstance();
 		if (modName.empty() || configStore.GetConfig(modName)) {

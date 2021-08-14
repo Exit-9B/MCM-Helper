@@ -5,7 +5,7 @@
 #include "KeybindManager.h"
 #include "ConfigPageCache.h"
 #include "ColorUtil.h"
-#include "Utils.h"
+#include "Translation.h"
 
 void Control::Refresh(
 	[[maybe_unused]] const ScriptObjectPtr& a_configScript,
@@ -28,7 +28,7 @@ void Control::ResetToDefault()
 auto Control::GetInfoText() -> std::string
 {
 	std::string text = Help;
-	std::string value = Utils::ScaleformTranslate(GetValueString());
+	std::string value = Translation::ScaleformTranslate(GetValueString());
 
 	constexpr auto valueToken = "{value}"sv;
 	constexpr auto length = valueToken.length();
@@ -483,7 +483,7 @@ auto KeyMapControl::GetInfoText() -> std::string
 
 auto KeyMapControl::GetValueString() -> std::string
 {
-	return Utils::GetKeyName(GetKeyCode());
+	return Translation::GetKeyName(GetKeyCode());
 }
 
 auto KeyMapControl::GetKeyCode() -> std::uint32_t

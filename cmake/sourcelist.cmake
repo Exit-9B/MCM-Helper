@@ -2,8 +2,11 @@ set(SOURCES ${SOURCES}
     src/main.cpp
     src/PCH.cpp
 
-    src/Utils.cpp
+    src/FormUtil.cpp
     src/InputMap.cpp
+    src/Encoding.cpp
+    src/Translation.cpp
+
     src/SettingStore.cpp
     src/ConfigStore.cpp
     src/ConfigPageCache.cpp

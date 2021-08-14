@@ -1,5 +1,5 @@
 #include "Script/ScriptObject.h"
-#include "Utils.h"
+#include "FormUtil.h"
 
 auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName)
 	-> ScriptObjectPtr
@@ -23,7 +23,7 @@ auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName
 	vm->FindBoundObject(handle, a_scriptName.c_str(), object);
 
 	if (!object) {
-		std::string formIdentifier = Utils::GetIdentifierFromForm(a_form);
+		std::string formIdentifier = FormUtil::GetIdentifierFromForm(a_form);
 		logger::warn("Script {} is not attached to form. {}"sv, a_scriptName, formIdentifier);
 	}
 
