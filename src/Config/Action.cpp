@@ -122,8 +122,9 @@ void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
 	RE::BSFixedString control{ Control };
 	auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
 
-	auto args = a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime)) :
-                       RE::MakeFunctionArguments(std::move(control));
+	auto args =
+		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
+		: RE::MakeFunctionArguments(std::move(control));
 
 	ScriptCallbackPtr nullCallback;
 	vm->DispatchMethodCall(object, fnName, args, nullCallback);
