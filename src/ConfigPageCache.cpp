@@ -12,6 +12,7 @@ void ConfigPageCache::ClearCache()
 	_currentScript = ""s;
 	_pageCache.clear();
 	_menuOptions.clear();
+	_menuShortNames.clear();
 	_groupControls.clear();
 }
 
@@ -74,7 +75,8 @@ auto ConfigPageCache::GetControl(std::int32_t a_optionID) const -> std::shared_p
 	return it != _pageCache.end() ? it->second : nullptr;
 }
 
-auto ConfigPageCache::GetMenuOptions(MenuControl* a_control) const -> std::vector<std::string>
+auto ConfigPageCache::GetMenuOptions(MenuDialogControl* a_control) const
+	-> std::vector<std::string>
 {
 	if (!a_control)
 		return std::vector<std::string>{};
@@ -84,7 +86,8 @@ auto ConfigPageCache::GetMenuOptions(MenuControl* a_control) const -> std::vecto
 	return it != _menuOptions.end() ? it->second : a_control->Options;
 }
 
-auto ConfigPageCache::GetMenuShortNames(MenuControl* a_control) const -> std::vector<std::string>
+auto ConfigPageCache::GetMenuShortNames(MenuDialogControl* a_control) const
+	-> std::vector<std::string>
 {
 	if (!a_control)
 		return std::vector<std::string>{};

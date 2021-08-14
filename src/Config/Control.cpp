@@ -385,15 +385,21 @@ auto EnumControl::GetValue() -> std::int32_t
 
 auto EnumControl::GetShortText() -> std::string
 {
-	auto value = GetValue();
-	if (value >= 0 && value < Options.size()) {
-		if (ShortNames.size() == Options.size())
-			return ShortNames[value];
-		else
-			return Options[value];
+	auto& configPageCache = ConfigPageCache::GetInstance();
+	auto options = configPageCache.GetMenuOptions(this);
+	auto shortNames = configPageCache.GetMenuShortNames(this);
+
+	auto index = GetValue();
+
+	if (index < 0 || index > options.size()) {
+		return ""s;
 	}
 
-	return ""s;
+	if (options.size() != shortNames.size()) {
+		return Options[index];
+	}
+
+	return shortNames[index];
 }
 
 auto ColorControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t

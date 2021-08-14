@@ -40,9 +40,9 @@ public:
 
 	auto GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>;
 
-	auto GetMenuOptions(MenuControl* a_control) const -> std::vector<std::string>;
+	auto GetMenuOptions(MenuDialogControl* a_control) const -> std::vector<std::string>;
 
-	auto GetMenuShortNames(MenuControl* a_control) const -> std::vector<std::string>;
+	auto GetMenuShortNames(MenuDialogControl* a_control) const -> std::vector<std::string>;
 
 	void ForEach(std::function<void(std::int32_t, std::shared_ptr<Control>)> a_func) const;
 

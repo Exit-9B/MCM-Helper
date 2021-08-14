@@ -39,6 +39,13 @@ public:
 	std::shared_ptr<Function> Action;
 };
 
+class MenuDialogControl : public Control
+{
+public:
+	std::vector<std::string> Options;
+	std::vector<std::string> ShortNames;
+};
+
 class EmptyControl : public Control
 {
 public:
@@ -116,7 +123,7 @@ public:
 	std::shared_ptr<ValueSource> ValueSource;
 };
 
-class MenuControl : public Control
+class MenuControl : public MenuDialogControl
 {
 public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
@@ -129,12 +136,10 @@ public:
 	auto GetDefaultValue() -> std::string;
 	auto GetShortText() -> std::string;
 
-	std::vector<std::string> Options;
-	std::vector<std::string> ShortNames;
 	std::shared_ptr<TextSource> ValueSource;
 };
 
-class EnumControl : public Control
+class EnumControl : public MenuDialogControl
 {
 public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
@@ -146,8 +151,6 @@ public:
 	auto GetValue() -> std::int32_t;
 	auto GetShortText() -> std::string;
 
-	std::vector<std::string> Options;
-	std::vector<std::string> ShortNames;
 	std::shared_ptr<ValueSource> ValueSource;
 };
 

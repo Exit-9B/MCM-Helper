@@ -273,24 +273,28 @@ namespace Papyrus
 		if (auto menu = std::dynamic_pointer_cast<MenuControl>(control)) {
 			auto options = configPageCache.GetMenuOptions(menu.get());
 			auto item = std::find(options.begin(), options.end(), menu->GetValue());
+
 			SkyUI::Config::SetMenuDialogOptions(object, options);
 			if (item != options.end()) {
 				auto index = static_cast<std::int32_t>(item - options.begin());
 				SkyUI::Config::SetMenuDialogStartIndex(object, index);
 			}
 
-			if (!menu->ID.empty()) {
-				auto defaultValue = menu->GetDefaultValue();
-				if (!defaultValue.empty()) {
-					item = std::find(options.begin(), options.end(), defaultValue);
-					auto index = static_cast<std::int32_t>(item - options.begin());
+			auto defaultValue = menu->GetDefaultValue();
+			if (!defaultValue.empty()) {
+				auto defaultItem = std::find(options.begin(), options.end(), defaultValue);
+				if (defaultItem != options.end()) {
+					auto index = static_cast<std::int32_t>(defaultItem - options.begin());
 					SkyUI::Config::SetMenuDialogDefaultIndex(object, index);
 				}
 			}
 		}
 		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control)) {
-			SkyUI::Config::SetMenuDialogOptions(object, menuEnum->Options);
-			SkyUI::Config::SetMenuDialogStartIndex(object, menuEnum->GetValue());
+			auto options = configPageCache.GetMenuOptions(menuEnum.get());
+			auto index = menuEnum->GetValue();
+
+			SkyUI::Config::SetMenuDialogOptions(object, options);
+			SkyUI::Config::SetMenuDialogStartIndex(object, index);
 
 			if (menuEnum->ValueSource) {
 				auto defaultValue = static_cast<std::int32_t>(
