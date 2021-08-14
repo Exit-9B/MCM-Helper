@@ -392,7 +392,7 @@ auto EnumControl::GetShortText() -> std::string
 
 	auto index = GetValue();
 
-	if (index < 0 || index > options.size()) {
+	if (index < 0 || index >= options.size()) {
 		return ""s;
 	}
 
