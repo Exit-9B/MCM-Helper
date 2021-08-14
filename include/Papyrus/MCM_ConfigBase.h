@@ -120,6 +120,8 @@ namespace Papyrus
 		// Helpers
 		static void LoadConfig(RE::TESQuest* a_self);
 
+		static void UpdateInfoText(ScriptObjectPtr a_object, bool a_forceUpdate);
+
 		static void SendSettingChangeEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,

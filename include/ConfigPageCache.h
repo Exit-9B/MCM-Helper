@@ -30,6 +30,8 @@ public:
 		const std::vector<std::string>& a_options,
 		const std::vector<std::string>& a_shortNames);
 
+	void SetHighlight(std::int32_t a_option);
+
 	auto GetCurrentForm() const -> RE::TESForm*;
 
 	auto GetCurrentScriptName() const -> const std::string&;
@@ -44,6 +46,8 @@ public:
 
 	auto GetMenuShortNames(MenuDialogControl* a_control) const -> std::vector<std::string>;
 
+	auto GetHighlightedControl() const -> std::shared_ptr<Control>;
+
 	void ForEach(std::function<void(std::int32_t, std::shared_ptr<Control>)> a_func) const;
 
 private:
@@ -55,4 +59,5 @@ private:
 	std::unordered_map<std::string, std::vector<std::string>> _menuOptions;
 	std::unordered_map<std::string, std::vector<std::string>> _menuShortNames;
 	std::unordered_map<std::uint32_t, std::shared_ptr<ToggleControl>> _groupControls;
+	std::int32_t _highlight = -1;
 };

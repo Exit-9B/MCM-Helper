@@ -4,34 +4,6 @@
 #include <Windows.h>
 #include <WinUser.h>
 
-auto Translation::GetKeyName(std::uint32_t a_keyCode) -> std::string
-{
-	std::uint32_t extended = a_keyCode & 0xffff00;
-	std::uint32_t lParam = 0;
-
-	if (extended) {
-
-		if (extended == 0xE11D00) {
-			lParam = 0x45 << 16;
-		}
-		else {
-			lParam = (0x100 | (a_keyCode & 0xff)) << 16;
-		}
-	}
-	else {
-
-		lParam = a_keyCode << 16;
-
-		if (a_keyCode == 0x45) {
-			lParam |= (0x1 << 24);
-		}
-	}
-
-	wchar_t buffer[MAX_PATH];
-	std::ignore = GetKeyNameTextW(lParam, buffer, MAX_PATH);
-	return Encoding::Utf16ToUtf8(buffer);
-}
-
 auto Translation::ScaleformTranslate(const std::string& a_key) -> std::string
 {
 	if (!a_key.starts_with('$')) {

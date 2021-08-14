@@ -14,6 +14,7 @@ void ConfigPageCache::ClearCache()
 	_menuOptions.clear();
 	_menuShortNames.clear();
 	_groupControls.clear();
+	_highlight = -1;
 }
 
 void ConfigPageCache::SetCurrentScript(RE::TESForm* a_form, const std::string& a_scriptName)
@@ -40,6 +41,11 @@ void ConfigPageCache::SetMenuOptions(
 {
 	_menuOptions[a_ID] = a_options;
 	_menuShortNames[a_ID] = a_shortNames;
+}
+
+void ConfigPageCache::SetHighlight(std::int32_t a_option)
+{
+	_highlight = a_option;
 }
 
 auto ConfigPageCache::GetCurrentForm() const -> RE::TESForm*
@@ -95,6 +101,11 @@ auto ConfigPageCache::GetMenuShortNames(MenuDialogControl* a_control) const
 	auto& id = a_control->ID;
 	auto it = _menuShortNames.find(id);
 	return it != _menuShortNames.end() ? it->second : a_control->ShortNames;
+}
+
+auto ConfigPageCache::GetHighlightedControl() const -> std::shared_ptr<Control>
+{
+	return GetControl(_highlight);
 }
 
 void ConfigPageCache::ForEach(

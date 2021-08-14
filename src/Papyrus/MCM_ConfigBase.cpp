@@ -133,11 +133,8 @@ namespace Papyrus
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
-		auto control = configPageCache.GetControl(a_option);
-		auto infoText = control ? control->GetInfoText() : ""s;
-		if (control && !infoText.empty()) {
-			SkyUI::Config::SetInfoText(object, infoText);
-		}
+		configPageCache.SetHighlight(a_option);
+		UpdateInfoText(object, false);
 	}
 
 	void MCM_ConfigBase::OnOptionSelect(
@@ -537,6 +534,17 @@ namespace Papyrus
 		logger::info("Registered mod config for {} in {} ms."sv, modName, elapsedMs.count());
 	}
 
+	void MCM_ConfigBase::UpdateInfoText(ScriptObjectPtr a_object, bool a_forceUpdate)
+	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
+
+		auto control = configPageCache.GetHighlightedControl();
+		auto infoText = control ? control->GetInfoText() : ""s;
+		if (control && !infoText.empty()) {
+			SkyUI::Config::SetInfoText(a_object, infoText, a_forceUpdate);
+		}
+	}
+
 	void MCM_ConfigBase::SendSettingChangeEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
 		ScriptObjectPtr a_object,
@@ -548,6 +556,8 @@ namespace Papyrus
 		auto args = RE::MakeFunctionArguments(std::move(a_ID));
 		a_vm->DispatchMethodCall(a_object, "OnSettingChange"sv, args, nullCallback);
 		delete args;
+
+		UpdateInfoText(a_object, true);
 	}
 
 	bool MCM_ConfigBase::RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)

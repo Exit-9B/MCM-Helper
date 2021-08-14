@@ -107,9 +107,19 @@ namespace SkyUI
 		}
 	}
 
-	void Config::SetInfoText(ScriptObjectPtr a_object, std::string_view a_text)
+	void Config::SetInfoText(ScriptObjectPtr a_object, std::string_view a_text, bool a_forceUpdate)
 	{
 		SetString(a_object, "_infoText"sv, a_text);
+
+		if (a_forceUpdate) {
+			const auto ui = RE::UI::GetSingleton();
+			const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
+			auto movie = menu ? menu->uiMovie : nullptr;
+			if (movie) {
+				RE::GFxValue args[]{ a_text };
+				movie->Invoke(MENU_ROOT ".setInfoText", nullptr, args, 1);
+			}
+		}
 	}
 
 	void Config::SetCursorPosition(ScriptObjectPtr a_object, std::int32_t a_position)

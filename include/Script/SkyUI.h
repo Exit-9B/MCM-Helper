@@ -73,7 +73,10 @@ namespace SkyUI
 
 		static void SetTitleText(ScriptObjectPtr a_object, std::string_view a_text);
 
-		static void SetInfoText(ScriptObjectPtr a_object, std::string_view a_text);
+		static void SetInfoText(
+			ScriptObjectPtr a_object,
+			std::string_view a_text,
+			bool a_forceUpdate = false);
 
 		static void SetCursorPosition(ScriptObjectPtr a_object, std::int32_t a_position);
 

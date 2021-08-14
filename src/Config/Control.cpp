@@ -6,6 +6,7 @@
 #include "ConfigPageCache.h"
 #include "ColorUtil.h"
 #include "Translation.h"
+#include "InputMap.h"
 
 void Control::Refresh(
 	[[maybe_unused]] const ScriptObjectPtr& a_configScript,
@@ -474,8 +475,9 @@ void KeyMapControl::ResetToDefault()
 
 auto KeyMapControl::GetInfoText() -> std::string
 {
-	if (!Help.empty()) {
-		return Help;
+	auto text = Control::GetInfoText();
+	if (!text.empty()) {
+		return text;
 	}
 
 	if (!ValueSource && !ID.empty()) {
@@ -489,7 +491,7 @@ auto KeyMapControl::GetInfoText() -> std::string
 
 auto KeyMapControl::GetValueString() -> std::string
 {
-	return Translation::GetKeyName(GetKeyCode());
+	return InputMap::GetKeyName(GetKeyCode());
 }
 
 auto KeyMapControl::GetKeyCode() -> std::uint32_t
