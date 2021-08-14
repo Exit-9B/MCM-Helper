@@ -30,14 +30,7 @@ protected:
 	enum class ErrorType
 	{
 		UnexpectedNull,
-		UnexpectedBool,
-		UnexpectedInt,
-		UnexpectedUint,
-		UnexpectedInt64,
-		UnexpectedUint64,
-		UnexpectedDouble,
-		UnexpectedNumber,
-		UnexpectedString,
+		UnexpectedValueType,
 		UnexpectedStartObject,
 		UnexpectedKey,
 		UnexpectedEndObject,

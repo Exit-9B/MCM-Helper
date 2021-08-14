@@ -10,29 +10,8 @@ bool IHandler::ReportError(ErrorType errType, Args&&... args)
 	case ErrorType::UnexpectedNull:
 		message = "Unexpected null"sv;
 		break;
-	case ErrorType::UnexpectedBool:
-		message = "Unexpected boolean: {}"sv;
-		break;
-	case ErrorType::UnexpectedInt:
-		message = "Unexpected integer: {}"sv;
-		break;
-	case ErrorType::UnexpectedUint:
-		message = "Unexpected unsigned integer: {}"sv;
-		break;
-	case ErrorType::UnexpectedInt64:
-		message = "Unexpected 64-bit integer: {}"sv;
-		break;
-	case ErrorType::UnexpectedUint64:
-		message = "Unexpected 64-bit unsigned integer: {}"sv;
-		break;
-	case ErrorType::UnexpectedDouble:
-		message = "Unexpected floating point: {}"sv;
-		break;
-	case ErrorType::UnexpectedNumber:
-		message = "Unexpected number: {}"sv;
-		break;
-	case ErrorType::UnexpectedString:
-		message = "Unexpected string: {}"sv;
+	case ErrorType::UnexpectedValueType:
+		message = "Unexpected {}: {}"sv;
 		break;
 	case ErrorType::UnexpectedStartObject:
 		message = "Unexpected object: {}"sv;
