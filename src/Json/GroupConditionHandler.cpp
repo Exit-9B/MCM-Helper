@@ -24,7 +24,7 @@ bool GroupConditionHandler::Uint(unsigned i)
 		_tree->TopLevelOperands.push_back(static_cast<std::uint32_t>(i));
 		return true;
 	default:
-		return false;
+		return IHandler::Uint(i);
 	}
 }
 
@@ -43,14 +43,11 @@ bool GroupConditionHandler::StartObject()
 		return true;
 	}
 	default:
-		return false;
+		return IHandler::StartObject();
 	}
 }
 
-bool GroupConditionHandler::Key(
-	const Ch* str,
-	[[maybe_unused]] SizeType length,
-	[[maybe_unused]] bool copy)
+bool GroupConditionHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
@@ -75,10 +72,10 @@ bool GroupConditionHandler::Key(
 			return true;
 		}
 		else {
-			return false;
+			return ReportError(ErrorType::InvalidKey, str);
 		}
 	default:
-		return false;
+		return IHandler::Key(str, length, copy);
 	}
 }
 
