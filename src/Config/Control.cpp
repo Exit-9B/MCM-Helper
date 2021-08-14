@@ -4,6 +4,8 @@
 #include "SettingStore.h"
 #include "KeybindManager.h"
 #include "ConfigPageCache.h"
+#include "ColorUtil.h"
+#include "Utils.h"
 
 void Control::Refresh(
 	[[maybe_unused]] const ScriptObjectPtr& a_configScript,
@@ -25,7 +27,24 @@ void Control::ResetToDefault()
 
 auto Control::GetInfoText() -> std::string
 {
-	return Help;
+	std::string text = Help;
+	std::string value = Utils::ScaleformTranslate(GetValueString());
+
+	constexpr auto valueToken = "{value}"sv;
+	constexpr auto length = valueToken.length();
+
+	auto pos = text.rfind(valueToken);
+	while (pos != std::string::npos) {
+		text = text.replace(pos, length, value);
+		pos = text.rfind(valueToken, pos);
+	}
+
+	return text;
+}
+
+auto Control::GetValueString() -> std::string
+{
+	return "{value}"s;
 }
 
 auto Control::GetFlags() -> SkyUI::Flags
@@ -115,6 +134,11 @@ void TextControl::ResetToDefault()
 	}
 }
 
+auto TextControl::GetValueString() -> std::string
+{
+	return GetValue();
+}
+
 auto TextControl::GetValue() -> std::string
 {
 	return ValueSource ? ValueSource->GetValue() : Value;
@@ -148,6 +172,11 @@ void ToggleControl::ResetToDefault()
 	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
+}
+
+auto ToggleControl::GetValueString() -> std::string
+{
+	return GetValue() ? "1"s : "0"s;
 }
 
 auto ToggleControl::GetValue() -> bool
@@ -185,6 +214,19 @@ void SliderControl::ResetToDefault()
 	}
 }
 
+auto SliderControl::GetValueString() -> std::string
+{
+	auto stepStr = std::to_string(Step);
+	auto precision = stepStr.find_last_not_of('0') - stepStr.find('.');
+	auto decimalOffset = precision > 0 ? 1 : 0;
+
+	auto valueStr = std::to_string(GetValue());
+	auto newLength = valueStr.find('.') + precision + decimalOffset;
+	valueStr = valueStr.substr(0, newLength);
+
+	return valueStr;
+}
+
 auto SliderControl::GetValue() -> float
 {
 	return ValueSource ? ValueSource->GetValue() : 0.0f;
@@ -218,6 +260,11 @@ void StepperControl::ResetToDefault()
 	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
+}
+
+auto StepperControl::GetValueString() -> std::string
+{
+	return std::to_string(GetValue());
 }
 
 auto StepperControl::GetValue() -> std::int32_t
@@ -263,6 +310,11 @@ void MenuControl::ResetToDefault()
 	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
+}
+
+auto MenuControl::GetValueString() -> std::string
+{
+	return GetValue();
 }
 
 auto MenuControl::GetValue() -> std::string
@@ -321,6 +373,11 @@ void EnumControl::ResetToDefault()
 	}
 }
 
+auto EnumControl::GetValueString() -> std::string
+{
+	return std::to_string(GetValue());
+}
+
 auto EnumControl::GetValue() -> std::int32_t
 {
 	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
@@ -367,6 +424,11 @@ void ColorControl::ResetToDefault()
 	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
+}
+
+auto ColorControl::GetValueString() -> std::string
+{
+	return std::to_string(UnpackARGB(GetColor()));
 }
 
 auto ColorControl::GetColor() -> std::uint32_t
@@ -419,6 +481,11 @@ auto KeyMapControl::GetInfoText() -> std::string
 	return ""s;
 }
 
+auto KeyMapControl::GetValueString() -> std::string
+{
+	return Utils::GetKeyName(GetKeyCode());
+}
+
 auto KeyMapControl::GetKeyCode() -> std::uint32_t
 {
 	if (ValueSource) {
@@ -468,6 +535,11 @@ void InputControl::ResetToDefault()
 	if (ValueSource) {
 		ValueSource->ResetToDefault();
 	}
+}
+
+auto InputControl::GetValueString() -> std::string
+{
+	return GetValue();
 }
 
 auto InputControl::GetValue() -> std::string

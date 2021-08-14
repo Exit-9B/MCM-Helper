@@ -8,6 +8,8 @@ namespace Utils
 
 	auto GetModName(RE::TESForm* a_form) -> std::string;
 
+	auto GetKeyName(std::uint32_t a_keyCode) -> std::string;
+
 	auto ScaleformTranslate(const std::string& a_key) -> std::string;
 
 	auto Utf8ToUtf16(const std::string& a_utf8) -> std::wstring;

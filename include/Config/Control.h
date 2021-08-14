@@ -24,6 +24,7 @@ public:
 	virtual void InvokeAction(VM* a_vm);
 	virtual void ResetToDefault();
 	virtual auto GetInfoText() -> std::string;
+	virtual auto GetValueString() -> std::string;
 
 	auto GetFlags() -> SkyUI::Flags;
 	auto GetDesiredBehavior() -> Behavior;
@@ -58,6 +59,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::string;
 
@@ -72,6 +74,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> bool;
 
@@ -86,6 +89,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> float;
 
@@ -103,6 +107,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::int32_t;
 	auto GetText() -> std::string;
@@ -118,6 +123,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::string;
 	auto GetDefaultValue() -> std::string;
@@ -135,6 +141,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::int32_t;
 	auto GetShortText() -> std::string;
@@ -151,6 +158,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetColor() -> std::uint32_t;
 
@@ -165,6 +173,7 @@ public:
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
 	virtual auto GetInfoText() -> std::string override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetKeyCode() -> std::uint32_t;
 	auto GetDescription() -> std::string;
@@ -181,6 +190,7 @@ public:
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 	virtual void InvokeAction(VM* a_vm) override;
 	virtual void ResetToDefault() override;
+	virtual auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::string;
 

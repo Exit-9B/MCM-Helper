@@ -2,6 +2,7 @@
 #include "Script/ScriptObject.h"
 #include <Windows.h>
 #include <stringapiset.h>
+#include <WinUser.h>
 
 auto Utils::GetFormFromIdentifier(const std::string& a_identifier) -> RE::TESForm*
 {
@@ -45,6 +46,34 @@ auto Utils::GetModName(RE::TESForm* a_form) -> std::string
 	auto fileName = file ? file->fileName : nullptr;
 
 	return fileName ? std::filesystem::path{ fileName }.stem().string() : ""s;
+}
+
+auto Utils::GetKeyName(std::uint32_t a_keyCode) -> std::string
+{
+	std::uint32_t extended = a_keyCode & 0xffff00;
+	std::uint32_t lParam = 0;
+
+	if (extended) {
+
+		if (extended == 0xE11D00) {
+			lParam = 0x45 << 16;
+		}
+		else {
+			lParam = (0x100 | (a_keyCode & 0xff)) << 16;
+		}
+	}
+	else {
+
+		lParam = a_keyCode << 16;
+
+		if (a_keyCode == 0x45) {
+			lParam |= (0x1 << 24);
+		}
+	}
+
+	wchar_t buffer[MAX_PATH];
+	std::ignore = GetKeyNameTextW(lParam, buffer, MAX_PATH);
+	return Utf16ToUtf8(buffer);
 }
 
 auto Utils::ScaleformTranslate(const std::string& a_key) -> std::string
