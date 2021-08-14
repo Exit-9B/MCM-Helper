@@ -50,6 +50,7 @@ bool GroupConditionHandler::StartObject()
 bool GroupConditionHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
+	case State::Init:
 	case State::Main:
 		if (strcmp(str, "OR") == 0) {
 			_tree->Conjunction = GroupConditionTree::ConjunctionType::OR;
