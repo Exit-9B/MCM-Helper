@@ -45,6 +45,8 @@ bool IHandler::ReportError(ErrorType errType, Args&&... args)
 template <typename... Args>
 bool IHandler::ReportError(std::string_view message, Args&&... args)
 {
-	logger::warn(std::move(message), std::forward<Args>(args)...);
+	std::string error = fmt::format(std::move(message), std::forward<Args>(args)...);
+	_master->SetError(error);
+	logger::warn(std::move(error));
 	return false;
 }

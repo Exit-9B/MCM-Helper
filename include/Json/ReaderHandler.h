@@ -17,6 +17,9 @@ public:
 
 	void PopHandler() { _handlers.pop(); }
 
+	void SetError(const std::string& error);
+	const std::string& GetError() const;
+
 	bool Null();
 	bool Bool(bool b);
 	bool Int(int i);
@@ -34,4 +37,5 @@ public:
 
 private:
 	std::stack<std::unique_ptr<IHandler>> _handlers;
+	std::string _error;
 };

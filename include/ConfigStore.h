@@ -25,6 +25,12 @@ public:
 private:
 	ConfigStore();
 
+	bool MakeErrorPage(
+		const std::string& a_modName,
+		ScriptObjectPtr& a_configScript,
+		std::shared_ptr<Config> a_config,
+		const std::string& a_error);
+
 	auto GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*;
 	auto GetModName(ScriptObjectPtr& a_configScript) -> std::string;
 

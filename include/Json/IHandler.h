@@ -44,10 +44,10 @@ protected:
 	IHandler(ReaderHandler* master);
 
 	template <typename... Args>
-	inline static bool ReportError(ErrorType errType, Args&&... args);
+	inline bool ReportError(ErrorType errType, Args&&... args);
 
 	template <typename... Args>
-	inline static bool ReportError(std::string_view message, Args&&... args);
+	inline bool ReportError(std::string_view message, Args&&... args);
 
 	ReaderHandler* _master;
 };

@@ -112,7 +112,10 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 	fclose(fp);
 	if (!result) {
 		logger::warn("Failed to parse config for {}"sv, a_modName);
-		return false;
+		if (MakeErrorPage(a_modName, a_configScript, config, handler.GetError())) {
+			_configStore[a_modName] = config;
+			return true;
+		}
 	}
 
 	_configStore[a_modName] = config;
@@ -155,6 +158,33 @@ auto ConfigStore::GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Conf
 {
 	auto modName = FormUtil::GetModName(a_configQuest);
 	return GetConfig(modName);
+}
+
+bool ConfigStore::MakeErrorPage(
+	const std::string& a_modName,
+	ScriptObjectPtr& a_configScript,
+	std::shared_ptr<Config> a_config,
+	const std::string& a_error)
+{
+	assert(a_config);
+
+	auto displayName = a_configScript->GetProperty("ModName"sv);
+	if (displayName) {
+		displayName->SetString(a_modName);
+	}
+	else {
+		return false;
+	}
+
+	auto page = std::make_shared<PageLayout>();
+
+	auto control = std::make_shared<ErrorControl>();
+	control->Error = !a_error.empty() ? a_error : "Unknown error; check JSON syntax";
+
+	page->Controls.push_back(control);
+	a_config->MainPage = page;
+
+	return true;
 }
 
 auto ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*

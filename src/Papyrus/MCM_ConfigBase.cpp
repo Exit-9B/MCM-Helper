@@ -183,6 +183,9 @@ namespace Papyrus
 
 			SendSettingChangeEvent(a_vm, object, stepper->ID);
 		}
+		else if (auto error = std::dynamic_pointer_cast<ErrorControl>(control)) {
+			SkyUI::Config::ShowMessage(object, error->Error, false, nullptr);
+		}
 
 		if (control) {
 			control->InvokeAction(a_vm);

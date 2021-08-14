@@ -566,3 +566,8 @@ void HiddenToggleControl::Refresh(
 	[[maybe_unused]] std::int32_t a_optionID)
 {
 }
+
+auto ErrorControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+{
+	return SkyUI::Config::AddTextOption(a_configScript, "Error", "Click to view");
+}

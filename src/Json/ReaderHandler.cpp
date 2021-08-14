@@ -1,6 +1,16 @@
 #include "Json/ReaderHandler.h"
 #include "Json/IHandler.h"
 
+void ReaderHandler::SetError(const std::string& error)
+{
+	_error = error;
+}
+
+const std::string& ReaderHandler::GetError() const
+{
+	return _error;
+}
+
 bool ReaderHandler::Null()
 {
 	return _handlers.top()->Null();

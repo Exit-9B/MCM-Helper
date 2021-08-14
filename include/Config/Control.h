@@ -206,3 +206,11 @@ public:
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 };
+
+class ErrorControl : public Control
+{
+public:
+	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+
+	std::string Error;
+};
