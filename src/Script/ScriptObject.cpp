@@ -55,7 +55,7 @@ auto ScriptObject::GetVariable(ScriptObjectPtr a_object, std::string_view a_vari
 	}
 
 	if (idx == INVALID) {
-		logger::warn(
+		logger::debug(
 			"Variable {} does not exist on script {}"sv,
 			a_variableName,
 			a_object->GetTypeInfo()->GetName());
