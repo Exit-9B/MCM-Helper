@@ -13,8 +13,8 @@ namespace Papyrus
 		static void SetMenuOptions(
 			RE::TESQuest* a_self,
 			std::string a_ID,
-			std::vector<RE::BSFixedString> a_options,
-			std::vector<RE::BSFixedString> a_shortNames);
+			std::vector<std::string> a_options,
+			std::vector<std::string> a_shortNames);
 
 		// Mod Settings
 		static auto GetModSettingInt(

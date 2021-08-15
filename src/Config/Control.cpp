@@ -397,7 +397,7 @@ auto EnumControl::GetShortText() -> std::string
 	}
 
 	if (options.size() != shortNames.size()) {
-		return Options[index];
+		return options[index];
 	}
 
 	return shortNames[index];

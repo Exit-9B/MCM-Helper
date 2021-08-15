@@ -28,26 +28,14 @@ namespace Papyrus
 	void MCM_ConfigBase::SetMenuOptions(
 		RE::TESQuest* a_self,
 		std::string a_ID,
-		std::vector<RE::BSFixedString> a_options,
-		std::vector<RE::BSFixedString> a_shortNames)
+		std::vector<std::string> a_options,
+		std::vector<std::string> a_shortNames)
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
 			return;
 
-		std::vector<std::string> options;
-		options.reserve(a_options.size());
-		for (auto& option : a_options) {
-			options.push_back(std::string{ option });
-		}
-
-		std::vector<std::string> shortNames;
-		shortNames.reserve(a_shortNames.size());
-		for (auto& shortName : a_shortNames) {
-			shortNames.push_back(std::string{ shortName });
-		}
-
-		configPageCache.SetMenuOptions(a_ID, options, shortNames);
+		configPageCache.SetMenuOptions(a_ID, a_options, a_shortNames);
 	}
 
 	auto MCM_ConfigBase::GetModSettingInt(RE::TESQuest* a_self, std::string_view a_settingName)
