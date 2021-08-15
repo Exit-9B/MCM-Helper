@@ -33,11 +33,11 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STR
 
 project(
 	MCMHelper
-	VERSION 1.2.0
+	VERSION 1.2.1
 	LANGUAGES CXX
 )
 
-set(PLUGIN_VERSION 7)
+set(PLUGIN_VERSION 8)
 
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/cmake/Version.h.in
