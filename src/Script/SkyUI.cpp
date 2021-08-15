@@ -2,6 +2,9 @@
 
 namespace SkyUI
 {
+	constexpr auto ErrorOptionTypeMismatch =
+		"Option type mismatch. Expected {} option, page \"{}\", index {}"sv;
+
 	auto ConfigManager::GetInstance() -> ScriptObjectPtr
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
@@ -284,18 +287,11 @@ namespace SkyUI
 
 		if (type != static_cast<std::int32_t>(OptionType::Text)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
 			if (pageIdx != -1) {
-				std::ostringstream error;
-				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
-				error << "Option type mismatch. Expected text option, page \"" << page
-					  << "\", index " << index;
-				Error(a_object, error.str());
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
 			}
-			else {
-				std::ostringstream error;
-				error << "Option type mismatch. Expected text option, page \"\", index " << index;
-				Error(a_object, error.str());
-			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "text"sv, page, index));
 			return;
 		}
 
@@ -315,19 +311,11 @@ namespace SkyUI
 
 		if (type != static_cast<std::int32_t>(OptionType::Toggle)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
 			if (pageIdx != -1) {
-				std::ostringstream error;
-				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
-				error << "Option type mismatch. Expected toggle option, page \"" << page
-					  << "\", index " << index;
-				Error(a_object, error.str());
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
 			}
-			else {
-				std::ostringstream error;
-				error << "Option type mismatch. Expected toggle option, page \"\", index "
-					  << index;
-				Error(a_object, error.str());
-			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "toggle"sv, page, index));
 			return;
 		}
 
@@ -348,19 +336,11 @@ namespace SkyUI
 
 		if (type != static_cast<std::int32_t>(OptionType::Slider)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
 			if (pageIdx != -1) {
-				std::ostringstream error;
-				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
-				error << "Option type mismatch. Expected slider option, page \"" << page
-					  << "\", index " << index;
-				Error(a_object, error.str());
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
 			}
-			else {
-				std::ostringstream error;
-				error << "Option type mismatch. Expected slider option, page \"\", index "
-					  << index;
-				Error(a_object, error.str());
-			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "slider"sv, page, index));
 			return;
 		}
 
@@ -380,18 +360,11 @@ namespace SkyUI
 
 		if (type != static_cast<std::int32_t>(OptionType::Menu)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
 			if (pageIdx != -1) {
-				std::ostringstream error;
-				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
-				error << "Option type mismatch. Expected menu option, page \"" << page
-					  << "\", index " << index;
-				Error(a_object, error.str());
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
 			}
-			else {
-				std::ostringstream error;
-				error << "Option type mismatch. Expected menu option, page \"\", index " << index;
-				Error(a_object, error.str());
-			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "menu"sv, page, index));
 			return;
 		}
 
@@ -411,18 +384,11 @@ namespace SkyUI
 
 		if (type != static_cast<std::int32_t>(OptionType::Color)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
 			if (pageIdx != -1) {
-				std::ostringstream error;
-				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
-				error << "Option type mismatch. Expected color option, page \"" << page
-					  << "\", index " << index;
-				Error(a_object, error.str());
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
 			}
-			else {
-				std::ostringstream error;
-				error << "Option type mismatch. Expected color option, page \"\", index " << index;
-				Error(a_object, error.str());
-			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "color"sv, page, index));
 			return;
 		}
 
@@ -442,19 +408,11 @@ namespace SkyUI
 
 		if (type != static_cast<std::int32_t>(OptionType::KeyMap)) {
 			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
 			if (pageIdx != -1) {
-				std::ostringstream error;
-				auto page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetSInt();
-				error << "Option type mismatch. Expected keymap option, page \"" << page
-					  << "\", index " << index;
-				Error(a_object, error.str());
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
 			}
-			else {
-				std::ostringstream error;
-				error << "Option type mismatch. Expected keymap option, page \"\", index "
-					  << index;
-				Error(a_object, error.str());
-			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "keymap"sv, page, index));
 			return;
 		}
 
@@ -718,9 +676,7 @@ namespace SkyUI
 		Flags a_flags) -> std::int32_t
 	{
 		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Reset)) {
-			std::ostringstream error;
-			error << "Cannot add option " << a_text << " outside of OnPageReset()";
-			Error(a_object, error.str());
+			Error(a_object, fmt::format("Cannot add option {} outside of OnPageReset()", a_text));
 			return -1;
 		}
 
