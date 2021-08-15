@@ -49,24 +49,24 @@ public:
 class EmptyControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 };
 
 class HeaderControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 };
 
 class TextControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::string;
 
@@ -77,11 +77,11 @@ public:
 class ToggleControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> bool;
 
@@ -92,11 +92,11 @@ public:
 class SliderControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> float;
 
@@ -110,11 +110,11 @@ public:
 class StepperControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::int32_t;
 	auto GetText() -> std::string;
@@ -126,11 +126,11 @@ public:
 class MenuControl : public MenuDialogControl
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::string;
 	auto GetDefaultValue() -> std::string;
@@ -142,11 +142,11 @@ public:
 class EnumControl : public MenuDialogControl
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::int32_t;
 	auto GetShortText() -> std::string;
@@ -157,11 +157,11 @@ public:
 class ColorControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetColor() -> std::uint32_t;
 
@@ -171,12 +171,12 @@ public:
 class KeyMapControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetInfoText() -> std::string override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetInfoText() -> std::string override;
+	auto GetValueString() -> std::string override;
 
 	auto GetKeyCode() -> std::uint32_t;
 	auto GetDescription() -> std::string;
@@ -189,11 +189,11 @@ public:
 class InputControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	virtual void InvokeAction(VM* a_vm) override;
-	virtual void ResetToDefault() override;
-	virtual auto GetValueString() -> std::string override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	void InvokeAction(VM* a_vm) override;
+	void ResetToDefault() override;
+	auto GetValueString() -> std::string override;
 
 	auto GetValue() -> std::string;
 
@@ -203,14 +203,14 @@ public:
 class HiddenToggleControl : public ToggleControl
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
-	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
 };
 
 class ErrorControl : public Control
 {
 public:
-	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
+	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 
 	std::string Error;
 };
