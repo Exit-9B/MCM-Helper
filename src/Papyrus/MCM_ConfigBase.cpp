@@ -404,7 +404,10 @@ namespace Papyrus
 			{
 				if (confirm) {
 					if (keymap->ValueSource) {
-						keymap->ValueSource->SetValue(static_cast<float>(a_keyCode));
+						// Keycodes are normally unsigned ints, but SkyUI will send -1 to indicate
+						// a key being unmapped; the double cast fixes this
+						auto iKeyCode = static_cast<std::int32_t>(a_keyCode);
+						keymap->ValueSource->SetValue(static_cast<float>(iKeyCode));
 					}
 					else if (!keymap->ID.empty()) {
 						auto modName = FormUtil::GetModName(a_self);
