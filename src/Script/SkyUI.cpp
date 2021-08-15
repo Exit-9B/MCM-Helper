@@ -1,5 +1,7 @@
 #include "Script/SkyUI.h"
 
+#undef GetObject
+
 namespace SkyUI
 {
 	constexpr auto ErrorOptionTypeMismatch =
@@ -15,6 +17,77 @@ namespace SkyUI
 		return configManagerInstance
 			? ScriptObject::FromForm(configManagerInstance, "SKI_ConfigManager")
 			: nullptr;
+	}
+
+	bool ConfigManager::HasConfig(
+		ScriptObjectPtr a_configManager,
+		ScriptObjectPtr a_config)
+	{
+		if (!a_configManager || !a_config) {
+			return false;
+		}
+
+		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		if (!configIDVar) {
+			return false;
+		}
+
+		auto index = configIDVar->GetSInt();
+
+		if (index < 0) {
+			return false;
+		}
+
+		auto modConfigsVar = ScriptObject::GetVariable(a_configManager, "_modConfigs"sv);
+		auto modConfigsArray =
+			modConfigsVar && modConfigsVar->IsArray() ? modConfigsVar->GetArray()
+			: nullptr;
+
+		if (!modConfigsArray) {
+			return HasConfig_Barzing(a_configManager, a_config, index / 128);
+		}
+
+		if (static_cast<std::size_t>(index) >= modConfigsArray->size()) {
+			return false;
+		}
+
+		return modConfigsArray->data()[index].GetObject() == a_config;
+	}
+
+	bool ConfigManager::HasConfig_Barzing(
+		ScriptObjectPtr a_configManager,
+		ScriptObjectPtr a_config,
+		std::int32_t a_subPage)
+	{
+		if (!a_configManager || !a_config) {
+			return false;
+		}
+
+		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		if (!configIDVar) {
+			return false;
+		}
+
+		auto index = configIDVar->GetSInt() % 128;
+
+		auto modConfigVarName =
+			a_subPage == 0 ? "_MainMenu"s
+			: fmt::format("_modConfigsP{}"sv, a_subPage);
+
+		auto modConfigsVar = ScriptObject::GetVariable(a_configManager, modConfigVarName);
+		auto modConfigsArray =
+			modConfigsVar && modConfigsVar->IsArray() ? modConfigsVar->GetArray()
+			: nullptr;
+
+		if (!modConfigsArray) {
+			return false;
+		}
+
+		if (static_cast<std::size_t>(index) >= modConfigsArray->size()) {
+			return false;
+		}
+
+		return modConfigsArray->data()[index].GetObject() == a_config;
 	}
 
 	void ConfigManager::UpdateDisplayName(

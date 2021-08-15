@@ -507,9 +507,17 @@ namespace Papyrus
 
 		auto modName = FormUtil::GetModName(a_self);
 
-		auto& configStore = ConfigStore::GetInstance();
-		if (modName.empty() || configStore.GetConfig(modName)) {
+		if (modName.empty()) {
 			return;
+		}
+
+		// We might have already loaded the config, but double-check that the config manager also
+		// has it before aborting
+		auto& configStore = ConfigStore::GetInstance();
+		auto configManager = SkyUI::ConfigManager::GetInstance();
+		if (configStore.GetConfig(modName) &&
+			SkyUI::ConfigManager::HasConfig(configManager, object)) {
+				return;
 		}
 
 		auto startTime = std::chrono::steady_clock::now();

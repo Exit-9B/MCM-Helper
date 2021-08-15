@@ -22,6 +22,8 @@ public:
 	auto GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>;
 	auto GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>;
 
+	void ClearConfigs();
+
 private:
 	ConfigStore();
 

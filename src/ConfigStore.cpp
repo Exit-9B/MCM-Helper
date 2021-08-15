@@ -188,6 +188,11 @@ bool ConfigStore::MakeErrorPage(
 	return true;
 }
 
+void ConfigStore::ClearConfigs()
+{
+	_configStore.clear();
+}
+
 auto ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*
 {
 	auto typeID = static_cast<RE::VMTypeID>(RE::TESQuest::FORMTYPE);

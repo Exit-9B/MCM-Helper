@@ -84,6 +84,10 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 			case SKSE::MessagingInterface::kInputLoaded:
 				KeybindEventHandler::GetInstance().Register();
 				break;
+			case SKSE::MessagingInterface::kNewGame:
+				ConfigStore::GetInstance().ClearConfigs();
+				KeybindManager::GetInstance().ClearKeybinds();
+				break;
 			}
 		});
 
