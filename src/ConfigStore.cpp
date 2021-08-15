@@ -169,17 +169,18 @@ bool ConfigStore::MakeErrorPage(
 	assert(a_config);
 
 	auto displayName = a_configScript->GetProperty("ModName"sv);
-	if (displayName) {
-		displayName->SetString(a_modName);
-	}
-	else {
+	if (!displayName) {
 		return false;
+	}
+
+	if (displayName->GetString().empty()) {
+		displayName->SetString(a_modName);
 	}
 
 	auto page = std::make_shared<PageLayout>();
 
 	auto control = std::make_shared<ErrorControl>();
-	control->Error = !a_error.empty() ? a_error : "Unknown error; check JSON syntax";
+	control->Error = !a_error.empty() ? a_error : "Unknown error; check JSON syntax"s;
 
 	page->Controls.push_back(control);
 	a_config->MainPage = page;

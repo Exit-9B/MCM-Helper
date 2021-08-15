@@ -570,5 +570,8 @@ void HiddenToggleControl::Refresh(
 
 auto ErrorControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 {
-	return SkyUI::Config::AddTextOption(a_configScript, "Error", "Click to view");
+	return SkyUI::Config::AddTextOption(
+		a_configScript,
+		"Error loading config"sv,
+		"Click to view"sv);
 }
