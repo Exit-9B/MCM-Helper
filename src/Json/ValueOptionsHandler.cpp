@@ -260,6 +260,11 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 			else if (_data->SourceType == "PropertyValueFloat"s) {
 				propertyValue = std::make_shared<PropertyValueFloat>();
 			}
+			else if (_data->SourceType == "PropertyValueString"s) {
+				// Ignore, don't raise an error
+				_master->PopHandler();
+				return true;
+			}
 			else {
 				return ReportError(ErrorType::InvalidValue, _data->SourceType);
 			}
@@ -290,6 +295,11 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 			}
 			else if (_data->SourceType == "ModSettingFloat"s) {
 				modSetting = std::make_shared<ModSettingFloat>();
+			}
+			else if (_data->SourceType == "ModSettingString"s) {
+				// Ignore, don't raise an error
+				_master->PopHandler();
+				return true;
 			}
 			else {
 				return ReportError(ErrorType::InvalidValue, _data->SourceType);
