@@ -11,7 +11,10 @@ bool UserKeybindsHandler::Uint(unsigned i)
 	case State::Version:
 		_state = State::Main;
 		if (static_cast<std::size_t>(i) > Version::PLUGIN) {
-			return ReportError("Keybind registrations require plugin version: {}"sv, i);
+			return ReportError(
+				"Keybind registrations require {} plugin version: {}"sv,
+				Version::PROJECT,
+				i);
 		}
 		return true;
 	default:
