@@ -189,7 +189,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 				else {
 					propertyString->SourceForm = _form;
 					propertyString->ScriptName =
-						!_scriptName.empty() ? _data.ValueOptions.ScriptName
+						!_data.ValueOptions.ScriptName.empty() ? _data.ValueOptions.ScriptName
 						: _scriptName;
 				}
 
