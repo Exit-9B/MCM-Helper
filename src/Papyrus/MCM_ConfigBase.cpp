@@ -418,7 +418,10 @@ namespace Papyrus
 				}
 			};
 
-			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts) {
+			if (!a_conflictControl.empty() &&
+				!keymap->IgnoreConflicts &&
+				a_keyCode != static_cast<std::uint32_t>(-1)) {
+
 				auto conflictControl = Translation::ScaleformTranslate(
 					std::string{ a_conflictControl });
 
