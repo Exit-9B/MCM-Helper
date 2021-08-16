@@ -8,6 +8,10 @@ Scriptname MCM_ConfigBase extends SKI_ConfigBase
 Event OnSettingChange(string a_ID)
 EndEvent
 
+; Event raised when a new page is selected, including the initial empty page.
+Event OnPageChange(string a_page)
+EndEvent
+
 ;-----------------
 ; MCM
 ;-----------------

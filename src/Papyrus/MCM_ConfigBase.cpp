@@ -103,13 +103,19 @@ namespace Papyrus
 		SettingStore::GetInstance().SetModSettingString(modName, a_settingName, a_value);
 	}
 
-	void MCM_ConfigBase::OnPageReset(RE::TESQuest* a_self, std::string a_page)
+	void MCM_ConfigBase::OnPageReset(
+		RE::BSScript::IVirtualMachine* a_vm,
+		[[maybe_unused]] RE::VMStackID a_stackID,
+		RE::TESQuest* a_self,
+		std::string a_page)
 	{
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		if (config) {
 			config->ShowPage(object, a_page);
+
+			SendPageChangeEvent(a_vm, object, a_page);
 		}
 	}
 
@@ -563,6 +569,19 @@ namespace Papyrus
 		delete args;
 
 		UpdateInfoText(a_object, true);
+	}
+
+	void MCM_ConfigBase::SendPageChangeEvent(
+		RE::BSScript::IVirtualMachine* a_vm,
+		ScriptObjectPtr a_object,
+		std::string a_page)
+	{
+		assert(a_vm);
+
+		ScriptCallbackPtr nullCallback;
+		auto args = RE::MakeFunctionArguments(std::move(a_page));
+		a_vm->DispatchMethodCall(a_object, "OnPageChange"sv, args, nullCallback);
+		delete args;
 	}
 
 	bool MCM_ConfigBase::RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
