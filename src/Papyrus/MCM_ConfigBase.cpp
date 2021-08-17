@@ -105,7 +105,16 @@ namespace Papyrus
 
 	void MCM_ConfigBase::OnPageReset(RE::TESQuest* a_self, std::string a_page)
 	{
+		auto& configPageCache = ConfigPageCache::GetInstance();
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
+
+		if (a_self != configPageCache.GetCurrentForm()) {
+			configPageCache.SetCurrentScript(a_self, object->GetTypeInfo()->GetName());
+		}
+		else {
+			configPageCache.ClearPageCache();
+		}
+
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 
 		if (config) {

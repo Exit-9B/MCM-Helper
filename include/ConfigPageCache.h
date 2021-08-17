@@ -16,7 +16,11 @@ public:
 
 	static auto GetInstance() -> ConfigPageCache&;
 
-	void ClearCache();
+	// Set data
+
+	void ClearPageCache();
+
+	void ClearMenuOptions();
 
 	void SetCurrentScript(RE::TESForm* a_form, const std::string& a_scriptName);
 
@@ -31,6 +35,8 @@ public:
 		const std::vector<std::string>& a_shortNames);
 
 	void SetHighlight(std::int32_t a_option);
+
+	// Get data
 
 	auto GetCurrentForm() const -> RE::TESForm*;
 
@@ -53,11 +59,14 @@ public:
 private:
 	ConfigPageCache() = default;
 
+	// Config
 	RE::TESForm* _currentForm;
 	std::string _currentScript;
-	std::unordered_map<std::int32_t, std::shared_ptr<Control>> _pageCache;
 	std::unordered_map<std::string, std::vector<std::string>> _menuOptions;
 	std::unordered_map<std::string, std::vector<std::string>> _menuShortNames;
+
+	// Page
+	std::unordered_map<std::int32_t, std::shared_ptr<Control>> _pageCache;
 	std::unordered_map<std::uint32_t, std::shared_ptr<ToggleControl>> _groupControls;
 	std::int32_t _highlight = -1;
 };

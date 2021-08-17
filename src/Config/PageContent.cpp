@@ -6,13 +6,7 @@
 void PageLayout::Draw(ScriptObjectPtr a_object) const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
-	configPageCache.ClearCache();
 
-	auto typeID = static_cast<RE::VMTypeID>(RE::TESQuest::FORMTYPE);
-	auto form = static_cast<RE::TESQuest*>(a_object->Resolve(typeID));
-	auto scriptName = a_object->GetTypeInfo()->GetName();
-
-	configPageCache.SetCurrentScript(form, scriptName);
 	configPageCache.SetGroupControls(GroupControls);
 
 	SkyUI::Config::UnloadCustomContent();
@@ -33,6 +27,5 @@ void PageLayout::Draw(ScriptObjectPtr a_object) const
 
 void CustomContent::Draw(ScriptObjectPtr a_object) const
 {
-	ConfigPageCache::GetInstance().ClearCache();
 	SkyUI::Config::LoadCustomContent(Source, X, Y);
 }

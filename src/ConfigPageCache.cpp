@@ -6,21 +6,29 @@ auto ConfigPageCache::GetInstance() -> ConfigPageCache&
 	return instance;
 }
 
-void ConfigPageCache::ClearCache()
+void ConfigPageCache::ClearPageCache()
 {
-	_currentForm = nullptr;
-	_currentScript = ""s;
 	_pageCache.clear();
-	_menuOptions.clear();
-	_menuShortNames.clear();
 	_groupControls.clear();
 	_highlight = -1;
 }
 
+void ConfigPageCache::ClearMenuOptions()
+{
+	_menuOptions.clear();
+	_menuShortNames.clear();
+}
+
 void ConfigPageCache::SetCurrentScript(RE::TESForm* a_form, const std::string& a_scriptName)
 {
+	if (a_form == _currentForm && a_scriptName == _currentScript)
+		return;
+
 	_currentForm = a_form;
 	_currentScript = a_scriptName;
+
+	ClearMenuOptions();
+	ClearPageCache();
 }
 
 void ConfigPageCache::SetGroupControls(
