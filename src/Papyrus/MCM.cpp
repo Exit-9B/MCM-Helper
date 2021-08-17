@@ -2,6 +2,7 @@
 #include "SettingStore.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func)
+#define REGISTER_FUNCTION_ND(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func, true)
 
 auto Papyrus::MCM::IsInstalled(RE::StaticFunctionTag*) -> bool
 {
@@ -84,18 +85,18 @@ void Papyrus::MCM::SetModSettingString(
 
 bool Papyrus::MCM::RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)
 {
-	REGISTER_FUNCTION(a_vm, IsInstalled);
-	REGISTER_FUNCTION(a_vm, GetVersionCode);
+	REGISTER_FUNCTION_ND(a_vm, IsInstalled);
+	REGISTER_FUNCTION_ND(a_vm, GetVersionCode);
 
-	REGISTER_FUNCTION(a_vm, GetModSettingInt);
-	REGISTER_FUNCTION(a_vm, GetModSettingBool);
-	REGISTER_FUNCTION(a_vm, GetModSettingFloat);
-	REGISTER_FUNCTION(a_vm, GetModSettingString);
+	REGISTER_FUNCTION_ND(a_vm, GetModSettingInt);
+	REGISTER_FUNCTION_ND(a_vm, GetModSettingBool);
+	REGISTER_FUNCTION_ND(a_vm, GetModSettingFloat);
+	REGISTER_FUNCTION_ND(a_vm, GetModSettingString);
 
-	REGISTER_FUNCTION(a_vm, SetModSettingInt);
-	REGISTER_FUNCTION(a_vm, SetModSettingBool);
-	REGISTER_FUNCTION(a_vm, SetModSettingFloat);
-	REGISTER_FUNCTION(a_vm, SetModSettingString);
+	REGISTER_FUNCTION_ND(a_vm, SetModSettingInt);
+	REGISTER_FUNCTION_ND(a_vm, SetModSettingBool);
+	REGISTER_FUNCTION_ND(a_vm, SetModSettingFloat);
+	REGISTER_FUNCTION_ND(a_vm, SetModSettingString);
 
 	return true;
 }

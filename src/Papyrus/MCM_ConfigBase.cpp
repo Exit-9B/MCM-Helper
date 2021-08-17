@@ -8,6 +8,7 @@
 #include "Translation.h"
 
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func)
+#define REGISTER_FUNCTION_ND(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func, true)
 
 namespace Papyrus
 {
@@ -579,15 +580,15 @@ namespace Papyrus
 		REGISTER_FUNCTION(a_vm, RefreshMenu);
 		REGISTER_FUNCTION(a_vm, SetMenuOptions);
 
-		REGISTER_FUNCTION(a_vm, GetModSettingInt);
-		REGISTER_FUNCTION(a_vm, GetModSettingBool);
-		REGISTER_FUNCTION(a_vm, GetModSettingFloat);
-		REGISTER_FUNCTION(a_vm, GetModSettingString);
+		REGISTER_FUNCTION_ND(a_vm, GetModSettingInt);
+		REGISTER_FUNCTION_ND(a_vm, GetModSettingBool);
+		REGISTER_FUNCTION_ND(a_vm, GetModSettingFloat);
+		REGISTER_FUNCTION_ND(a_vm, GetModSettingString);
 
-		REGISTER_FUNCTION(a_vm, SetModSettingInt);
-		REGISTER_FUNCTION(a_vm, SetModSettingBool);
-		REGISTER_FUNCTION(a_vm, SetModSettingFloat);
-		REGISTER_FUNCTION(a_vm, SetModSettingString);
+		REGISTER_FUNCTION_ND(a_vm, SetModSettingInt);
+		REGISTER_FUNCTION_ND(a_vm, SetModSettingBool);
+		REGISTER_FUNCTION_ND(a_vm, SetModSettingFloat);
+		REGISTER_FUNCTION_ND(a_vm, SetModSettingString);
 
 		REGISTER_FUNCTION(a_vm, OnPageReset);
 

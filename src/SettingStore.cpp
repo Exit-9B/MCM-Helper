@@ -83,6 +83,9 @@ void SettingStore::SetModSettingInt(
 	std::int32_t a_newValue)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
+
+	auto lock = std::scoped_lock{ _mutex };
+
 	if (setting) {
 		if (setting->GetType() == RE::Setting::Type::kColor) {
 			auto color = UnpackARGB(static_cast<std::uint32_t>(a_newValue));
@@ -106,6 +109,9 @@ void SettingStore::SetModSettingBool(
 	bool a_newValue)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
+
+	auto lock = std::scoped_lock{ _mutex };
+
 	if (setting && setting->data.b != a_newValue) {
 		setting->data.b = a_newValue;
 		CommitModSetting(a_modName, setting);
@@ -118,6 +124,9 @@ void SettingStore::SetModSettingFloat(
 	float a_newValue)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
+
+	auto lock = std::scoped_lock{ _mutex };
+
 	if (setting && setting->data.f != a_newValue) {
 		setting->data.f = a_newValue;
 		CommitModSetting(a_modName, setting);
@@ -130,6 +139,9 @@ void SettingStore::SetModSettingString(
 	std::string_view a_newValue)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
+
+	auto lock = std::scoped_lock{ _mutex };
+
 	if (setting && strcmp(setting->data.s, a_newValue.data()) != 0) {
 		if (setting->data.s)
 			delete[] setting->data.s;
@@ -164,12 +176,17 @@ void SettingStore::ReloadDefault(std::string_view a_modName, std::string_view a_
 		std::string value = ini.GetValue(sectionName.c_str(), settingName.c_str());
 
 		RegisterModSetting(a_modName, a_settingName, value, _settingStore);
-		CommitModSetting(a_modName, GetModSetting(a_modName, a_settingName));
+		auto setting = GetModSetting(a_modName, a_settingName);
+
+		auto lock = std::scoped_lock{ _mutex };
+		CommitModSetting(a_modName, setting);
 	}
 }
 
 void SettingStore::ResetToDefault(std::string_view a_modName, std::string_view a_settingName)
 {
+	auto lock = std::scoped_lock{ _mutex };
+
 	auto key = GetKey(a_modName, a_settingName);
 	auto item = _settingStore.find(key);
 	if (item == _settingStore.end())
@@ -259,6 +276,8 @@ auto SettingStore::GetModSetting(std::string_view a_modName, std::string_view a_
 	if (a_modName.empty() || a_settingName.empty())
 		return nullptr;
 
+	auto lock = std::scoped_lock{ _mutex };
+
 	auto key = GetKey(a_modName, a_settingName);
 	auto it = _settingStore.find(key);
 	return (it != _settingStore.end()) ? it->second : nullptr;
@@ -269,6 +288,8 @@ auto SettingStore::GetDefaultSetting(std::string_view a_modName, std::string_vie
 {
 	if (a_modName.empty() || a_settingName.empty())
 		return nullptr;
+
+	auto lock = std::scoped_lock{ _mutex };
 
 	auto key = GetKey(a_modName, a_settingName);
 	auto it = _defaults.find(key);
@@ -371,6 +392,8 @@ void SettingStore::RegisterModSetting(
 		::free(newSetting);
 		return;
 	}
+
+	auto lock = std::scoped_lock{ _mutex };
 
 	auto key = GetKey(a_modName, a_settingName);
 
