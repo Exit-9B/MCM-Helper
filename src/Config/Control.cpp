@@ -449,8 +449,7 @@ auto KeyMapControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 		return -1;
 
 	auto keyCode = GetKeyCode();
-	auto flags = GetFlags() | SkyUI::Flags::WithUnmap;
-	return SkyUI::Config::AddKeyMapOption(a_configScript, Text, keyCode, flags);
+	return SkyUI::Config::AddKeyMapOption(a_configScript, Text, keyCode, GetFlags());
 }
 
 void KeyMapControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
@@ -493,6 +492,12 @@ auto KeyMapControl::GetInfoText() -> std::string
 auto KeyMapControl::GetValueString() -> std::string
 {
 	return InputMap::GetKeyName(GetKeyCode());
+}
+
+auto KeyMapControl::GetFlags() -> SkyUI::Flags
+{
+	auto flags = Control::GetFlags();
+	return flags == SkyUI::Flags::None ? SkyUI::Flags::WithUnmap : flags;
 }
 
 auto KeyMapControl::GetKeyCode() -> std::uint32_t

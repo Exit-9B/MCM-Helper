@@ -25,8 +25,8 @@ public:
 	virtual void ResetToDefault();
 	virtual auto GetInfoText() -> std::string;
 	virtual auto GetValueString() -> std::string;
+	virtual auto GetFlags() -> SkyUI::Flags;
 
-	auto GetFlags() -> SkyUI::Flags;
 	auto GetDesiredBehavior() -> Behavior;
 	void RefreshFlags(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
 
@@ -177,6 +177,7 @@ public:
 	void ResetToDefault() override;
 	auto GetInfoText() -> std::string override;
 	auto GetValueString() -> std::string override;
+	auto GetFlags() -> SkyUI::Flags override;
 
 	auto GetKeyCode() -> std::uint32_t;
 	auto GetDescription() -> std::string;
