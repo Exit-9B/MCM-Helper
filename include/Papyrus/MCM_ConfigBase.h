@@ -131,7 +131,7 @@ namespace Papyrus
 			ScriptObjectPtr a_object,
 			std::string a_ID);
 
-		static void SendPageChangeEvent(
+		static void SendPageSelectEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,
 			std::string a_page);

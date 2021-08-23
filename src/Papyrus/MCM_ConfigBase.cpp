@@ -115,7 +115,7 @@ namespace Papyrus
 		if (config) {
 			config->ShowPage(object, a_page);
 
-			SendPageChangeEvent(a_vm, object, a_page);
+			SendPageSelectEvent(a_vm, object, a_page);
 		}
 	}
 
@@ -571,7 +571,7 @@ namespace Papyrus
 		UpdateInfoText(a_object, true);
 	}
 
-	void MCM_ConfigBase::SendPageChangeEvent(
+	void MCM_ConfigBase::SendPageSelectEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
 		ScriptObjectPtr a_object,
 		std::string a_page)
@@ -580,7 +580,7 @@ namespace Papyrus
 
 		ScriptCallbackPtr nullCallback;
 		auto args = RE::MakeFunctionArguments(std::move(a_page));
-		a_vm->DispatchMethodCall(a_object, "OnPageChange"sv, args, nullCallback);
+		a_vm->DispatchMethodCall(a_object, "OnPageSelect"sv, args, nullCallback);
 		delete args;
 	}
 

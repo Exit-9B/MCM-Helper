@@ -9,7 +9,7 @@ Event OnSettingChange(string a_ID)
 EndEvent
 
 ; Event raised when a new page is selected, including the initial empty page.
-Event OnPageChange(string a_page)
+Event OnPageSelect(string a_page)
 EndEvent
 
 ; Event raised when a config menu is first initialized.
