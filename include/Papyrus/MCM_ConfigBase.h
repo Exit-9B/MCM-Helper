@@ -58,7 +58,11 @@ namespace Papyrus
 			std::string_view a_value);
 
 		// SkyUI Overrides
-		static void OnPageReset(RE::TESQuest* a_self, std::string a_page);
+		static void OnPageReset(
+			RE::BSScript::IVirtualMachine* a_vm,
+			RE::VMStackID a_stackID,
+			RE::TESQuest* a_self,
+			std::string a_page);
 
 		static void OnOptionHighlight(RE::TESQuest* a_self, std::int32_t a_option);
 
@@ -126,6 +130,11 @@ namespace Papyrus
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,
 			std::string a_ID);
+
+		static void SendPageSelectEvent(
+			RE::BSScript::IVirtualMachine* a_vm,
+			ScriptObjectPtr a_object,
+			std::string a_page);
 
 		// Registration delegate
 		static bool RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm);
