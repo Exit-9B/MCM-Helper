@@ -196,7 +196,11 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionDefault(RE::TESQuest* a_self, std::int32_t a_option)
+	void MCM_ConfigBase::OnOptionDefault(
+		RE::BSScript::IVirtualMachine* a_vm,
+		[[maybe_unused]] RE::VMStackID a_stackID,
+		RE::TESQuest* a_self,
+		std::int32_t a_option)
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())

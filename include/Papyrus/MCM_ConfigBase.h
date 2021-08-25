@@ -72,7 +72,11 @@ namespace Papyrus
 			RE::TESQuest* a_self,
 			std::int32_t a_option);
 
-		static void OnOptionDefault(RE::TESQuest* a_self, std::int32_t a_option);
+		static void OnOptionDefault(
+			RE::BSScript::IVirtualMachine* a_vm,
+			RE::VMStackID a_stackID,
+			RE::TESQuest* a_self,
+			std::int32_t a_option);
 
 		static void OnOptionSliderOpen(RE::TESQuest* a_self, std::int32_t a_option);
 
