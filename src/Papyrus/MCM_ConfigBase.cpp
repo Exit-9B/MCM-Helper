@@ -202,6 +202,7 @@ namespace Papyrus
 
 		if (control) {
 			control->ResetToDefault();
+			SendSettingChangeEvent(a_vm, object, control->ID);
 			control->Refresh(object, a_option);
 		}
 	}
@@ -568,10 +569,12 @@ namespace Papyrus
 	{
 		assert(a_vm);
 
-		ScriptCallbackPtr nullCallback;
-		auto args = RE::MakeFunctionArguments(std::move(a_ID));
-		a_vm->DispatchMethodCall(a_object, "OnSettingChange"sv, args, nullCallback);
-		delete args;
+		if (!a_ID.empty()) {
+			ScriptCallbackPtr nullCallback;
+			auto args = RE::MakeFunctionArguments(std::move(a_ID));
+			a_vm->DispatchMethodCall(a_object, "OnSettingChange"sv, args, nullCallback);
+			delete args;
+		}
 
 		UpdateInfoText(a_object, true);
 	}
