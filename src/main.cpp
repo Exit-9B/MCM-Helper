@@ -78,7 +78,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 		{
 			switch (a_msg->type) {
 			case SKSE::MessagingInterface::kPostLoadGame:
-				KeybindManager::GetInstance().ClearKeybinds();
+				KeybindManager::GetInstance().ClearModKeys();
 				ConfigStore::GetInstance().ReadConfigs();
 				break;
 			case SKSE::MessagingInterface::kInputLoaded:
@@ -86,7 +86,7 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 				break;
 			case SKSE::MessagingInterface::kNewGame:
 				ConfigStore::GetInstance().ClearConfigs();
-				KeybindManager::GetInstance().ClearKeybinds();
+				KeybindManager::GetInstance().ClearModKeys();
 				break;
 			}
 		});

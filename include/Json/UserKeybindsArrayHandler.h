@@ -8,6 +8,7 @@ class UserKeybindsArrayHandler : public IHandler
 public:
 	UserKeybindsArrayHandler(ReaderHandler* master);
 
+	bool Int(int i) override;
 	bool Uint(unsigned i) override;
 	bool String(const Ch* str, SizeType length, bool copy) override;
 	bool StartObject() override;

@@ -15,6 +15,11 @@ struct KeybindInfo
 	Keybind Keybind;
 	std::string KeybindDesc;
 	std::shared_ptr<Action> Action;
+
+	bool operator==(const KeybindInfo& other) const
+	{
+		return Keybind == other.Keybind;
+	}
 };
 
 template <>
@@ -53,7 +58,7 @@ public:
 
 	void Unregister(std::uint32_t a_keyCode);
 
-	void ClearKeybinds();
+	void ClearModKeys();
 
 	void ProcessButtonEvent(RE::ButtonEvent* a_event) const;
 

@@ -4,11 +4,28 @@ UserKeybindsArrayHandler::UserKeybindsArrayHandler(ReaderHandler* master) : IHan
 {
 }
 
+bool UserKeybindsArrayHandler::Int(int i)
+{
+	switch (_state) {
+	case State::Keycode:
+		_keyCode = -1;
+		_state = State::Keybind;
+		return true;
+	default:
+		return IHandler::Int(i);
+	}
+}
+
 bool UserKeybindsArrayHandler::Uint(unsigned i)
 {
 	switch (_state) {
 	case State::Keycode:
-		_keyCode = static_cast<std::int32_t>(i);
+		if (i <= static_cast<unsigned>(std::numeric_limits<std::int32_t>::max())) {
+			_keyCode = static_cast<std::int32_t>(i);
+		}
+		else {
+			_keyCode = -1;
+		}
 		_state = State::Keybind;
 		return true;
 	default:
@@ -71,7 +88,10 @@ bool UserKeybindsArrayHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Keybind:
-		KeybindManager::GetInstance().Register(_keyCode, _modName, _id);
+		KeybindManager::GetInstance().Register(
+			static_cast<std::uint32_t>(_keyCode),
+			_modName,
+			_id);
 		_state = State::Main;
 		return true;
 	default:

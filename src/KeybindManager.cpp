@@ -113,7 +113,7 @@ void KeybindManager::CommitKeybinds()
 		for (auto& [keybind, keyCode] : _modRegs) {
 			writer.StartObject();
 			writer.Key("keycode");
-			writer.Uint(keyCode);
+			writer.Int(static_cast<std::int32_t>(keyCode));
 			writer.Key("modName");
 			writer.String(keybind.ModName.c_str());
 			writer.Key("id");
@@ -169,7 +169,18 @@ void KeybindManager::AddKeybind(
 	// Add to lookup if a key was already registered
 	auto regIt = _modRegs.find(key);
 	if (regIt != _modRegs.end()) {
-		_lookup.emplace(regIt->second, a_info);
+		auto& keyCode = regIt->second;
+		auto [it, end] = _lookup.equal_range(keyCode);
+
+		// Try to prevent duplicates
+		auto pred = [a_info](const std::pair<std::uint32_t, KeybindInfo>& entry)
+		{
+			return a_info.Keybind == entry.second.Keybind;
+		};
+
+		if (std::find_if(it, end, pred) == end) {
+			_lookup.emplace(keyCode, a_info);
+		}
 	}
 }
 
@@ -200,9 +211,12 @@ void KeybindManager::Unregister(const std::string& a_modName, const std::string&
 	auto keyIt = _modKeys.find(key);
 
 	if (regIt != _modRegs.end()) {
+		auto& keyCode = regIt->second;
 		if (keyIt != _modKeys.end()) {
-			for (auto [it, end] = _lookup.equal_range(regIt->second); it != end; ++it) {
-				if (it->second.Keybind == keyIt->second.Keybind) {
+			auto& keyInfo = keyIt->second;
+
+			for (auto [it, end] = _lookup.equal_range(keyCode); it != end; ++it) {
+				if (it->second == keyInfo) {
 					_lookup.erase(it);
 					break;
 				}
@@ -232,8 +246,10 @@ void KeybindManager::Unregister(std::uint32_t a_keyCode)
 	}
 }
 
-void KeybindManager::ClearKeybinds()
+void KeybindManager::ClearModKeys()
 {
+	std::scoped_lock lock{ _mutex };
+
 	_modKeys.clear();
 	_lookup.clear();
 }
