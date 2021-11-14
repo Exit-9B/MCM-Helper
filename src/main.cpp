@@ -47,7 +47,7 @@ extern "C" DLLEXPORT SKSE::PluginVersionData SKSEPlugin_Version =
 {
 	.dataVersion = SKSE::PluginVersionData::kVersion,
 
-	.pluginVersion = 1,
+	.pluginVersion = Version::MAJOR,
 	.name = PROJECT_NAME,
 
 	.author = "Parapets",
