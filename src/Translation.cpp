@@ -13,7 +13,7 @@ auto Translation::ScaleformTranslate(const std::string& a_key) -> std::string
 	const auto scaleformManager = RE::BSScaleformManager::GetSingleton();
 	const auto loader = scaleformManager ? scaleformManager->loader : nullptr;
 	const auto translator = loader
-		? loader->GetStateAddRef<RE::GFxTranslator>(RE::GFxState::StateType::kTranslator)
+		? loader->GetState<RE::GFxTranslator>(RE::GFxState::StateType::kTranslator)
 		: nullptr;
 
 	if (!translator) {

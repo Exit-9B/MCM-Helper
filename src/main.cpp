@@ -4,6 +4,26 @@
 #include "KeybindEventHandler.h"
 #include "KeybindManager.h"
 
+#ifndef SKYRIMVR
+
+extern "C" DLLEXPORT SKSE::PluginVersionData SKSEPlugin_Version =
+{
+	.dataVersion = SKSE::PluginVersionData::kVersion,
+
+	.pluginVersion = 1,
+	.name = PROJECT_NAME,
+
+	.author = "Parapets",
+	.supportEmail = "",
+
+	.versionIndependence = 0,
+	.compatibleVersions = { SKSE::RUNTIME_1_6_318.packed(), 0 },
+
+	.seVersionRequired = 0,
+};
+
+#else
+
 extern "C" DLLEXPORT bool SKSEAPI
 	SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
 {
@@ -43,17 +63,15 @@ extern "C" DLLEXPORT bool SKSEAPI
 	}
 
 	const auto ver = a_skse->RuntimeVersion();
-#ifndef SKYRIMVR
-	if (ver < SKSE::RUNTIME_1_5_39) {
-#else
 	if (ver != SKSE::RUNTIME_VR_1_4_15_1) {
-#endif
 		logger::critical(FMT_STRING("Unsupported runtime version {}"sv), ver.string());
 		return false;
 	}
 
 	return true;
 }
+
+#endif
 
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
@@ -90,6 +108,8 @@ extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_s
 				break;
 			}
 		});
+
+	spdlog::default_logger()->flush();
 
 	return true;
 }
