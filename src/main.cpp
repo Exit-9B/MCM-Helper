@@ -43,21 +43,15 @@ void InitLogger()
 
 #ifndef SKYRIMVR
 
-extern "C" DLLEXPORT SKSE::PluginVersionData SKSEPlugin_Version =
-{
-	.dataVersion = SKSE::PluginVersionData::kVersion,
-
-	.pluginVersion = Version::MAJOR,
-	.name = PROJECT_NAME,
-
-	.author = "Parapets",
-	.supportEmail = "",
-
-	.versionIndependence = 0,
-	.compatibleVersions = { SKSE::RUNTIME_1_6_318.packed(), 0 },
-
-	.seVersionRequired = 0,
-};
+extern "C" DLLEXPORT constinit auto SKSEPlugin_Version =
+[]() {
+	SKSE::PluginVersionData v{};
+	v.pluginVersion = Version::MAJOR;
+	v.PluginName(Version::PROJECT);
+	v.AuthorName("Parapets"sv);
+	v.UsesAddressLibrary(true);
+	return v;
+}();
 
 #else
 

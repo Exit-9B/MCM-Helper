@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": [
     "boost-stl-interfaces",
-    "span-lite",
+    "rsm-binary-io",
     "spdlog",
     "simpleini",
     "rapidjson",
