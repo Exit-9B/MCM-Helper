@@ -25,6 +25,11 @@ using ScriptObjectPtr = RE::BSTSmartPointer<RE::BSScript::Object>;
 using ScriptArrayPtr = RE::BSTSmartPointer<RE::BSScript::Array>;
 using ScriptCallbackPtr = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>;
 
+namespace util
+{
+	using SKSE::stl::report_and_fail;
+}
+
 #define DLLEXPORT __declspec(dllexport)
 
-#include "Version.h"
+#include "Plugin.h"

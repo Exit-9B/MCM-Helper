@@ -70,8 +70,8 @@ target_compile_features(
 add_cxx_files("${PROJECT_NAME}")
 
 configure_file(
-	${CMAKE_CURRENT_SOURCE_DIR}/src/Version.h.in
-	${CMAKE_CURRENT_BINARY_DIR}/src/Version.h
+	${CMAKE_CURRENT_SOURCE_DIR}/src/Plugin.h.in
+	${CMAKE_CURRENT_BINARY_DIR}/src/Plugin.h
 	@ONLY
 )
 
@@ -84,7 +84,7 @@ configure_file(
 target_sources(
 	"${PROJECT_NAME}"
 	PRIVATE
-		${CMAKE_CURRENT_BINARY_DIR}/src/Version.h
+		${CMAKE_CURRENT_BINARY_DIR}/src/Plugin.h
 		${CMAKE_CURRENT_BINARY_DIR}/version.rc
 		.clang-format
 		.editorconfig
