@@ -39,7 +39,8 @@ void PropertyString::ResetToDefault()
 
 auto ModSettingString::GetValue() -> std::string
 {
-	return SettingStore::GetInstance().GetModSettingString(ModName, ID);
+	auto value = SettingStore::GetInstance().GetModSettingString(ModName, ID);
+	return value ? value : ""s;
 }
 
 void ModSettingString::SetValue(std::string_view a_value)
