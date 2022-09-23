@@ -369,6 +369,11 @@ bool property DisablePositioning3DItem
 endProperty
 
 function LoadSettings()
+	if !MCM.IsInstalled()
+		Debug.Trace("MCM Helper DLL is not installed or not correctly loaded.")
+		return
+	endIf
+
 	; ItemList
 	ApplyItemListFontSize(GetModSettingInt("iFontSize:ItemList"))
 	SKI_SettingsManagerInstance.SetOverride("ItemList$quantityMenu$minCount", \
@@ -474,7 +479,7 @@ function ApplySettings()
 	float ar = w / h
 
 	; Widescreen
-	if (ar == 1.6) ; 16:10, 1920×1200
+	if (ar == 1.6) ; 16:10, 1920Ã—1200
 		_itemXBaseW = -32.458335876465
 	else
 		_itemXBaseW = -29.122497558594
