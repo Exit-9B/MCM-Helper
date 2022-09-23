@@ -33,7 +33,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>" CACHE STR
 
 project(
 	MCMHelper
-	VERSION 1.3.2
+	VERSION 1.3.3
 	LANGUAGES CXX
 )
 
