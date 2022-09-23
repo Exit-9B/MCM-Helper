@@ -8,6 +8,8 @@ project(
 
 set(PLUGIN_VERSION 11)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
 	message(
 		FATAL_ERROR
@@ -50,9 +52,12 @@ endif()
 list(APPEND CMAKE_IGNORE_PATH "${PROJECT_BINARY_DIR}")
 list(APPEND CMAKE_MODULE_PATH
 	"${PROJECT_SOURCE_DIR}/cmake"
+	"${PROJECT_SOURCE_DIR}/tools/BethesdaCMakeModules/Modules"
 )
 
 include(AddCXXFiles)
+include(BSArchive)
+include(Papyrus)
 
 add_library("${PROJECT_NAME}" SHARED)
 
@@ -146,9 +151,56 @@ target_include_directories(
 		${SIMPLEINI_INCLUDE_DIRS}
 )
 
-install(
-	FILES
-		"$<TARGET_FILE:${PROJECT_NAME}>"
-		"$<TARGET_PDB_FILE:${PROJECT_NAME}>"
-	DESTINATION "SKSE/Plugins"
+file(GLOB Papyrus_SOURCES
+	LIST_DIRECTORIES false
+	CONFIGURE_DEPENDS
+	"dist/Detail/Source/Scripts/*.psc"
 )
+
+list(APPEND Papyrus_SOURCES
+	"dist/Data/Source/Scripts/MCM.psc"
+	"dist/Data/Source/Scripts/SKI_ConfigMenu.psc"
+)
+
+set(Papyrus_SOURCES
+	"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/MCM.psc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/SKI_ConfigMenu.psc"
+	"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts/MCM_ConfigBase.psc"
+)
+
+add_papyrus(
+	"Papyrus"
+	GAME ${Skyrim64Path}
+	IMPORTS
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts"
+		"$ENV{SKSE64Path}/Scripts/Source"
+	SOURCES ${Papyrus_SOURCES}
+	OPTIMIZE
+	ANONYMIZE
+)
+
+source_group("Scripts" FILES ${Papyrus_SOURCES})
+
+bethesda_archive(
+	"BSA"
+	OUTPUT "MCMHelper.bsa"
+	FORMAT SSE
+	FILES
+		${Papyrus_OUTPUT}
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_CZECH.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_ENGLISH.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_FRENCH.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_GERMAN.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_ITALIAN.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_JAPANESE.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_POLISH.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_RUSSIAN.txt"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_SPANISH.txt"
+	PREFIX
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data"
+)
+
+add_dependencies("BSA" "Papyrus")
+
+include(install_files.cmake)
