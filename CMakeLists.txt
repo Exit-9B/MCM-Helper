@@ -6,7 +6,7 @@ project(
 	LANGUAGES CXX
 )
 
-set(PLUGIN_VERSION 11)
+set(PLUGIN_VERSION 12)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
