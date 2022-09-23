@@ -311,7 +311,11 @@ bool ValueOptionsHandler::EndObject(SizeType memberCount)
 		}
 		else if (_data->SourceType == "GlobalValue"s) {
 			auto globalValue = std::make_shared<GlobalValue>();
-			globalValue->SourceForm = _data->SourceForm->As<RE::TESGlobal>();
+
+			globalValue->SourceForm = _data->SourceForm
+				? _data->SourceForm->As<RE::TESGlobal>()
+				: nullptr;
+
 			globalValue->DefaultValue = _data->DefaultValue;
 
 			_data->ValueSource = globalValue;
