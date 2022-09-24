@@ -189,6 +189,12 @@ namespace SkyUI
 			std::int32_t a_keyCode,
 			bool a_noUpdate = false);
 
+		static void SetInputOptionValue(
+			ScriptObjectPtr a_object,
+			std::int32_t a_option,
+			std::string_view a_value,
+			bool a_noUpdate = false);
+
 		static void SetSliderDialogStartValue(ScriptObjectPtr a_object, float a_value);
 
 		static void SetSliderDialogDefaultValue(ScriptObjectPtr a_object, float a_value);

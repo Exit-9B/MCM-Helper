@@ -492,6 +492,30 @@ namespace SkyUI
 		SetOptionNumValue(a_object, index, static_cast<float>(a_keyCode), a_noUpdate);
 	}
 
+	void Config::SetInputOptionValue(
+		ScriptObjectPtr a_object,
+		std::int32_t a_option,
+		std::string_view a_value,
+		bool a_noUpdate)
+	{
+		std::int32_t index = a_option % 0x100;
+		std::int32_t type = -1;
+		if (auto optionFlagsBuf = GetArray(a_object, "_optionFlagsBuf"sv))
+			type = optionFlagsBuf->data()[index].GetSInt() % 0x100;
+
+		if (type != static_cast<std::int32_t>(OptionType::Input)) {
+			std::int32_t pageIdx = (a_option / 0x100) - 1;
+			std::string page = ""s;
+			if (pageIdx != -1) {
+				page = a_object->GetProperty("Pages")->GetArray()->data()[pageIdx].GetString();
+			}
+			Error(a_object, fmt::format(ErrorOptionTypeMismatch, "input"sv, page, index));
+			return;
+		}
+
+		SetOptionStrValue(a_object, index, a_value, a_noUpdate);
+	}
+
 	void Config::SetSliderDialogStartValue(ScriptObjectPtr a_object, float a_value)
 	{
 		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Slider)) {

@@ -10,10 +10,10 @@ bool UserKeybindsHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::Version:
 		_state = State::Main;
-		if (static_cast<std::size_t>(i) > Version::PLUGIN) {
+		if (static_cast<std::size_t>(i) > Plugin::VERSION_RELEASE) {
 			return ReportError(
 				"Keybind registrations require {} plugin version: {}"sv,
-				Version::PROJECT,
+				Plugin::NAME,
 				i);
 		}
 		return true;

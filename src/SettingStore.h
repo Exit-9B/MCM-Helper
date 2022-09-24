@@ -2,7 +2,7 @@
 
 class SettingStore
 {
-	using Storage = std::unordered_map<std::string, RE::Setting*>;
+	using Storage = RE::BSTHashMap<RE::BSFixedString, RE::Setting*>;
 
 public:
 	~SettingStore();
@@ -74,7 +74,7 @@ private:
 
 	void CommitModSetting(std::string_view a_modName, RE::Setting* a_modSetting);
 
-	auto GetKey(std::string_view a_modName, std::string_view a_settingName) -> std::string;
+	auto GetKey(std::string_view a_modName, std::string_view a_settingName) -> RE::BSFixedString;
 
 	Storage _defaults;
 	Storage _settingStore;

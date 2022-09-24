@@ -510,6 +510,8 @@ namespace Papyrus
 				input->ValueSource->SetValue(a_input);
 			}
 
+			input->Refresh(object, a_option);
+
 			SendSettingChangeEvent(a_vm, object, input->ID);
 
 			input->InvokeAction(a_vm);

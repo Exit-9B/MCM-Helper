@@ -1,3 +1,6 @@
 [submodule "extern/CommonLibSSE"]
 	path = extern/CommonLibSSE
 	url = https://github.com/Ryan-rsm-McKenzie/CommonLibSSE
+[submodule "tools/BethesdaCMakeModules"]
+	path = tools/BethesdaCMakeModules
+	url = https://github.com/Exit-9B/BethesdaCMakeModules.git
