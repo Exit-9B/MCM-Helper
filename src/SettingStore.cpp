@@ -397,14 +397,13 @@ void SettingStore::RegisterModSetting(
 
 	auto key = GetKey(a_modName, a_settingName);
 
-	auto it = a_settingStore.find(key);
-	if (it != a_settingStore.end()) {
+	if (auto it = a_settingStore.find(key); it != a_settingStore.end()) {
 		delete[] it->second->name;
 		::free(it->second);
 		a_settingStore.erase(it);
 	}
 
-	a_settingStore[key] = newSetting;
+	a_settingStore.insert({ key, newSetting });
 }
 
 void SettingStore::CommitModSetting(std::string_view a_modName, RE::Setting* a_modSetting)
@@ -477,7 +476,7 @@ void SettingStore::CommitModSetting(std::string_view a_modName, RE::Setting* a_m
 	}
 }
 
-std::string SettingStore::GetKey(std::string_view a_modName, std::string_view a_settingName)
+RE::BSFixedString SettingStore::GetKey(std::string_view a_modName, std::string_view a_settingName)
 {
 	return std::string{ a_modName } + ":" + std::string{ a_settingName };
 }
