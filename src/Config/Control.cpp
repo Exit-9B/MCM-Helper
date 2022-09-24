@@ -534,6 +534,8 @@ auto InputControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 
 void InputControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
+	auto value = GetValue();
+	SkyUI::Config::SetInputOptionValue(a_configScript, a_optionID, value);
 	RefreshFlags(a_configScript, a_optionID);
 }
 
