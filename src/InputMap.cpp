@@ -1,5 +1,4 @@
 #include "InputMap.h"
-#include "Encoding.h"
 #include <Windows.h>
 #include <WinUser.h>
 #include <Xinput.h>
@@ -153,10 +152,10 @@ std::string InputMap::GetKeyboardKeyName(std::uint32_t a_keyCode)
 	}
 
 	wchar_t buffer[MAX_PATH];
-	auto length = GetKeyNameTextW(lParam, buffer, MAX_PATH);
+	auto length = ::GetKeyNameTextW(lParam, buffer, MAX_PATH);
 	std::wstring keyNameW{ buffer, static_cast<std::size_t>(length) };
 
-	return Encoding::Utf16ToUtf8(keyNameW);
+	return util::utf16_to_utf8(keyNameW).value_or(""s);
 }
 
 std::string InputMap::GetMouseButtonName(std::uint32_t a_keyCode)

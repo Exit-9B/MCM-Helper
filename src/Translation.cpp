@@ -1,9 +1,5 @@
 #include "Translation.h"
 
-#include "Encoding.h"
-#include <Windows.h>
-#include <WinUser.h>
-
 auto Translation::ScaleformTranslate(const std::string& a_key) -> std::string
 {
 	if (!a_key.starts_with('$')) {
@@ -50,7 +46,7 @@ auto Translation::ScaleformTranslate(const std::string& a_key) -> std::string
 	}
 
 	// Lookup translation
-	auto key_utf16 = Encoding::Utf8ToUtf16(key);
+	std::wstring key_utf16 = util::utf8_to_utf16(key).value_or(L""s);
 	RE::GFxWStringBuffer result;
 
 	RE::GFxTranslator::TranslateInfo translateInfo;
@@ -59,7 +55,7 @@ auto Translation::ScaleformTranslate(const std::string& a_key) -> std::string
 
 	translator->Translate(std::addressof(translateInfo));
 
-	auto result_utf8 = Encoding::Utf16ToUtf8(result.c_str());
+	std::string result_utf8 = util::utf16_to_utf8(result.c_str()).value_or(""s);
 
 	// Replace tokens with nested translations from right to left
 	auto pos = result_utf8.rfind("{}"s);
