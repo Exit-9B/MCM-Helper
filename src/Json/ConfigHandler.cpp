@@ -21,7 +21,7 @@ bool ConfigHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::MinMcmVersion:
 		_state = State::Main;
-		if (static_cast<std::size_t>(i) > Plugin::VERSION_RELEASE) {
+		if (static_cast<std::size_t>(i) > MCM_VERSION_RELEASE) {
 			return ReportError("Config requires {} plugin version: {}"sv, Plugin::NAME, i);
 		}
 		return true;

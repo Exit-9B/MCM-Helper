@@ -1,10 +1,3 @@
-install(
-	FILES
-		"$<TARGET_FILE:${PROJECT_NAME}>"
-		"$<TARGET_PDB_FILE:${PROJECT_NAME}>"
-	DESTINATION "SKSE/Plugins"
-)
-
 if(NOT BUILD_SKYRIMVR)
 	install(
 		FILES
