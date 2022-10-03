@@ -62,13 +62,11 @@ extern "C" DLLEXPORT bool SKSEAPI
 	a_info->version = Plugin::VERSION[0];
 
 	if (a_skse->IsEditor()) {
-		logger::critical("Loaded in editor, marking as incompatible"sv);
 		return false;
 	}
 
 	const auto ver = a_skse->RuntimeVersion();
 	if (ver != SKSE::RUNTIME_VR_1_4_15_1) {
-		logger::critical(FMT_STRING("Unsupported runtime version {}"sv), ver.string());
 		return false;
 	}
 
