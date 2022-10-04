@@ -104,7 +104,7 @@ namespace Papyrus
 		SettingStore::GetInstance().SetModSettingString(modName, a_settingName, a_value);
 	}
 
-	void MCM_ConfigBase::OnPageReset(
+	LatentResult<> MCM_ConfigBase::OnPageReset(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -125,7 +125,7 @@ namespace Papyrus
 		if (config) {
 			config->ShowPage(object, a_page);
 
-			SendPageSelectEvent(a_vm, object, a_page);
+			co_await SendPageSelectEvent(a_vm, object, a_page);
 		}
 	}
 
@@ -141,7 +141,7 @@ namespace Papyrus
 		UpdateInfoText(object, false);
 	}
 
-	void MCM_ConfigBase::OnOptionSelect(
+	LatentResult<> MCM_ConfigBase::OnOptionSelect(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -149,7 +149,7 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
@@ -174,7 +174,7 @@ namespace Papyrus
 				}
 			}
 
-			SendSettingChangeEvent(a_vm, object, toggle->ID);
+			co_await SendSettingChangeEvent(a_vm, object, toggle->ID);
 		}
 		else if (auto stepper = std::dynamic_pointer_cast<StepperControl>(control)) {
 			if (stepper->ValueSource && !stepper->Options.empty()) {
@@ -185,18 +185,18 @@ namespace Papyrus
 
 			stepper->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, stepper->ID);
+			co_await SendSettingChangeEvent(a_vm, object, stepper->ID);
 		}
 		else if (auto error = std::dynamic_pointer_cast<ErrorControl>(control)) {
-			SkyUI::Config::ShowMessage(object, error->Error, false, nullptr);
+			co_await SkyUI::Config::ShowMessage(object, error->Error, false);
 		}
 
 		if (control) {
-			control->InvokeAction(a_vm);
+			co_await control->InvokeAction(a_vm);
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionDefault(
+	LatentResult<> MCM_ConfigBase::OnOptionDefault(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -204,7 +204,7 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
@@ -212,7 +212,7 @@ namespace Papyrus
 
 		if (control) {
 			control->ResetToDefault();
-			SendSettingChangeEvent(a_vm, object, control->ID);
+			co_await SendSettingChangeEvent(a_vm, object, control->ID);
 			control->Refresh(object, a_option);
 		}
 	}
@@ -241,7 +241,7 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionSliderAccept(
+	LatentResult<> MCM_ConfigBase::OnOptionSliderAccept(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -250,7 +250,7 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
@@ -263,9 +263,9 @@ namespace Papyrus
 
 			slider->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, slider->ID);
+			co_await SendSettingChangeEvent(a_vm, object, slider->ID);
 
-			slider->InvokeAction(a_vm);
+			co_await slider->InvokeAction(a_vm);
 		}
 	}
 
@@ -313,7 +313,7 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionMenuAccept(
+	LatentResult<> MCM_ConfigBase::OnOptionMenuAccept(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -322,7 +322,7 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
@@ -336,9 +336,9 @@ namespace Papyrus
 
 			menu->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, menu->ID);
+			co_await SendSettingChangeEvent(a_vm, object, menu->ID);
 
-			menu->InvokeAction(a_vm);
+			co_await menu->InvokeAction(a_vm);
 		}
 		else if (auto menuEnum = std::dynamic_pointer_cast<EnumControl>(control)) {
 			if (menuEnum->ValueSource) {
@@ -347,9 +347,9 @@ namespace Papyrus
 
 			menuEnum->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, menuEnum->ID);
+			co_await SendSettingChangeEvent(a_vm, object, menuEnum->ID);
 
-			menuEnum->InvokeAction(a_vm);
+			co_await menuEnum->InvokeAction(a_vm);
 		}
 	}
 
@@ -375,7 +375,7 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionColorAccept(
+	LatentResult<> MCM_ConfigBase::OnOptionColorAccept(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -384,7 +384,7 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
@@ -397,13 +397,13 @@ namespace Papyrus
 
 			color->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, color->ID);
+			co_await SendSettingChangeEvent(a_vm, object, color->ID);
 
-			color->InvokeAction(a_vm);
+			co_await color->InvokeAction(a_vm);
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionKeyMapChange(
+	LatentResult<> MCM_ConfigBase::OnOptionKeyMapChange(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -414,38 +414,18 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
 		auto control = configPageCache.GetControl(a_option);
 
 		if (auto keymap = std::dynamic_pointer_cast<KeyMapControl>(control)) {
-			std::function<void(bool)> updateKey = [=](bool confirm)
-			{
-				if (confirm) {
-					if (keymap->ValueSource) {
-						// Keycodes are normally unsigned ints, but SkyUI will send -1 to indicate
-						// a key being unmapped; the double cast fixes this
-						auto iKeyCode = static_cast<std::int32_t>(a_keyCode);
-						keymap->ValueSource->SetValue(static_cast<float>(iKeyCode));
-					}
-					else if (!keymap->ID.empty()) {
-						auto modName = FormUtil::GetModName(a_self);
-						auto& keybindManager = KeybindManager::GetInstance();
-						keybindManager.Register(a_keyCode, modName, keymap->ID);
-						keybindManager.CommitKeybinds();
-					}
 
-					keymap->Refresh(object, a_option);
-					SendSettingChangeEvent(a_vm, object, keymap->ID);
-				}
-			};
+			bool confirm = true;
 
-			if (!a_conflictControl.empty() &&
-				!keymap->IgnoreConflicts &&
-				a_keyCode != keymap->GetKeyCode() &&
-				a_keyCode != static_cast<std::uint32_t>(-1)) {
+			if (!a_conflictControl.empty() && !keymap->IgnoreConflicts &&
+				a_keyCode != keymap->GetKeyCode() && a_keyCode != static_cast<std::uint32_t>(-1)) {
 
 				auto conflictControl = Translation::ScaleformTranslate(
 					std::string{ a_conflictControl });
@@ -461,13 +441,28 @@ namespace Papyrus
 					msg = fmt::format("$MCM_KeyAlreadyMapped{{{}}}"sv, conflictControl);
 				}
 
-				SkyUI::Config::ShowMessage(object, msg, updateKey);
-			}
-			else {
-				updateKey(true);
+				confirm = co_await SkyUI::Config::ShowMessage(object, msg);
 			}
 
-			keymap->InvokeAction(a_vm);
+			if (confirm) {
+				if (keymap->ValueSource) {
+					// Keycodes are normally unsigned ints, but SkyUI will send -1 to indicate a
+					// key being unmapped; the double cast fixes this
+					auto iKeyCode = static_cast<std::int32_t>(a_keyCode);
+					keymap->ValueSource->SetValue(static_cast<float>(iKeyCode));
+				}
+				else if (!keymap->ID.empty()) {
+					auto modName = FormUtil::GetModName(a_self);
+					auto& keybindManager = KeybindManager::GetInstance();
+					keybindManager.Register(a_keyCode, modName, keymap->ID);
+					keybindManager.CommitKeybinds();
+				}
+
+				keymap->Refresh(object, a_option);
+				co_await SendSettingChangeEvent(a_vm, object, keymap->ID);
+
+				co_await keymap->InvokeAction(a_vm);
+			}
 		}
 	}
 
@@ -490,7 +485,7 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::OnOptionInputAccept(
+	LatentResult<> MCM_ConfigBase::OnOptionInputAccept(
 		RE::BSScript::IVirtualMachine* a_vm,
 		[[maybe_unused]] RE::VMStackID a_stackID,
 		RE::TESQuest* a_self,
@@ -499,7 +494,7 @@ namespace Papyrus
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 		if (a_self != configPageCache.GetCurrentForm())
-			return;
+			co_return;
 
 		auto object = ScriptObject::FromForm(a_self, ScriptName);
 
@@ -512,9 +507,9 @@ namespace Papyrus
 
 			input->Refresh(object, a_option);
 
-			SendSettingChangeEvent(a_vm, object, input->ID);
+			co_await SendSettingChangeEvent(a_vm, object, input->ID);
 
-			input->InvokeAction(a_vm);
+			co_await input->InvokeAction(a_vm);
 		}
 	}
 
@@ -541,7 +536,7 @@ namespace Papyrus
 		auto configManager = SkyUI::ConfigManager::GetInstance();
 		if (configStore.GetConfig(modName) &&
 			SkyUI::ConfigManager::HasConfig(configManager, object)) {
-				return;
+			return;
 		}
 
 		auto startTime = std::chrono::steady_clock::now();
@@ -574,34 +569,32 @@ namespace Papyrus
 		}
 	}
 
-	void MCM_ConfigBase::SendSettingChangeEvent(
+	VMAwaitable MCM_ConfigBase::SendSettingChangeEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
 		ScriptObjectPtr a_object,
 		std::string a_ID)
 	{
 		assert(a_vm);
 
-		if (!a_ID.empty()) {
-			ScriptCallbackPtr nullCallback;
-			auto args = RE::MakeFunctionArguments(std::move(a_ID));
-			a_vm->DispatchMethodCall(a_object, "OnSettingChange"sv, args, nullCallback);
-			delete args;
+		UpdateInfoText(a_object, true);
+
+		if (a_ID.empty()) {
+			return {};
 		}
 
-		UpdateInfoText(a_object, true);
+		ScriptArgs args{ RE::MakeFunctionArguments(std::move(a_ID)) };
+		return a_vm->DispatchMethodCall(a_object, "OnSettingChange"sv, args.get());
 	}
 
-	void MCM_ConfigBase::SendPageSelectEvent(
+	VMAwaitable MCM_ConfigBase::SendPageSelectEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
 		ScriptObjectPtr a_object,
 		std::string a_page)
 	{
 		assert(a_vm);
 
-		ScriptCallbackPtr nullCallback;
-		auto args = RE::MakeFunctionArguments(std::move(a_page));
-		a_vm->DispatchMethodCall(a_object, "OnPageSelect"sv, args, nullCallback);
-		delete args;
+		ScriptArgs args{ RE::MakeFunctionArguments(std::move(a_page)) };
+		return a_vm->DispatchMethodCall(a_object, "OnPageSelect"sv, args.get());
 	}
 
 	bool MCM_ConfigBase::RegisterFuncs(RE::BSScript::IVirtualMachine* a_vm)

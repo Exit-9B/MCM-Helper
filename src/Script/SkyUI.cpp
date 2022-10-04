@@ -19,9 +19,7 @@ namespace SkyUI
 			: nullptr;
 	}
 
-	bool ConfigManager::HasConfig(
-		ScriptObjectPtr a_configManager,
-		ScriptObjectPtr a_config)
+	bool ConfigManager::HasConfig(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config)
 	{
 		if (!a_configManager || !a_config) {
 			return false;
@@ -39,8 +37,8 @@ namespace SkyUI
 		}
 
 		auto modConfigsVar = ScriptObject::GetVariable(a_configManager, "_modConfigs"sv);
-		auto modConfigsArray =
-			modConfigsVar && modConfigsVar->IsArray() ? modConfigsVar->GetArray()
+		auto modConfigsArray = modConfigsVar && modConfigsVar->IsArray()
+			? modConfigsVar->GetArray()
 			: nullptr;
 
 		if (!modConfigsArray) {
@@ -70,13 +68,13 @@ namespace SkyUI
 
 		auto index = configIDVar->GetSInt() % 128;
 
-		auto modConfigVarName =
-			a_subPage == 0 ? "_MainMenu"s
+		auto modConfigVarName = a_subPage == 0
+			? "_MainMenu"s
 			: fmt::format("_modConfigsP{}"sv, a_subPage);
 
 		auto modConfigsVar = ScriptObject::GetVariable(a_configManager, modConfigVarName);
-		auto modConfigsArray =
-			modConfigsVar && modConfigsVar->IsArray() ? modConfigsVar->GetArray()
+		auto modConfigsArray = modConfigsVar && modConfigsVar->IsArray()
+			? modConfigsVar->GetArray()
 			: nullptr;
 
 		if (!modConfigsArray) {
@@ -103,8 +101,8 @@ namespace SkyUI
 		}
 
 		auto modNamesVar = ScriptObject::GetVariable(a_configManager, "_modNames"sv);
-		auto modNamesArray =
-			modNamesVar && modNamesVar->IsArray() ? modNamesVar->GetArray()
+		auto modNamesArray = modNamesVar && modNamesVar->IsArray()
+			? modNamesVar->GetArray()
 			: nullptr;
 
 		if (!modNamesArray) {
@@ -137,13 +135,13 @@ namespace SkyUI
 			return;
 		}
 
-		auto modNameVarName =
-			a_subPage == 0 ? "_MainMenuP"s
+		auto modNameVarName = a_subPage == 0
+			? "_MainMenuP"s
 			: fmt::format("_modNamesP{}"sv, a_subPage);
 
 		auto modNamesVar = ScriptObject::GetVariable(a_configManager, modNameVarName);
-		auto modNamesArray =
-			modNamesVar && modNamesVar->IsArray() ? modNamesVar->GetArray()
+		auto modNamesArray = modNamesVar && modNamesVar->IsArray()
+			? modNamesVar->GetArray()
 			: nullptr;
 
 		if (!modNamesArray) {
@@ -647,115 +645,74 @@ namespace SkyUI
 		SetString(a_object, "_inputStartText"sv, a_text);
 	}
 
-	void Config::ShowMessage(
-		ScriptObjectPtr a_object,
-		std::string_view a_message,
-		std::function<void(bool)> a_callback)
+	CO::Task<bool> Config::ShowMessage(ScriptObjectPtr a_object, std::string_view a_message)
 	{
-		ShowMessage(a_object, a_message, true, "$Accept"sv, "$Cancel"sv, a_callback);
+		return ShowMessage(a_object, a_message, true, "$Accept"sv, "$Cancel"sv);
 	}
 
-	void Config::ShowMessage(
+	CO::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
-		bool a_withCancel,
-		std::function<void(bool)> a_callback)
+		bool a_withCancel)
 	{
-		ShowMessage(a_object, a_message, a_withCancel, "$Accept"sv, "$Cancel"sv, a_callback);
+		return ShowMessage(a_object, a_message, a_withCancel, "$Accept"sv, "$Cancel"sv);
 	}
 
-	void Config::ShowMessage(
+	CO::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
-		std::string_view a_acceptLabel,
-		std::function<void(bool)> a_callback)
+		std::string_view a_acceptLabel)
 	{
-		ShowMessage(a_object, a_message, false, a_acceptLabel, ""sv, a_callback);
+		return ShowMessage(a_object, a_message, false, a_acceptLabel, ""sv);
 	}
 
-	void Config::ShowMessage(
+	CO::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
 		std::string_view a_acceptLabel,
-		std::string_view a_cancelLabel,
-		std::function<void(bool)> a_callback)
+		std::string_view a_cancelLabel)
 	{
-		ShowMessage(a_object, a_message, true, a_acceptLabel, a_cancelLabel, a_callback);
+		return ShowMessage(a_object, a_message, true, a_acceptLabel, a_cancelLabel);
 	}
 
-	void Config::ShowMessage(
+	CO::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
 		bool a_withCancel,
 		std::string_view a_acceptLabel,
-		std::string_view a_cancelLabel,
-		std::function<void(bool)> a_callback)
+		std::string_view a_cancelLabel)
 	{
 		if (GetBool(a_object, "_waitForMessage"sv)) {
 			Error(a_object, "Called ShowMessage() while another message was already open"sv);
-			if (a_callback)
-				return a_callback(false);
-			return;
+			co_return false;
 		}
-
-		SetBool(a_object, "_waitForMessage"sv, true);
-		SetBool(a_object, "_messageResult"sv, false);
 
 		const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 		const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+		if (!vm)
+			co_return false;
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		auto movie = menu ? menu->uiMovie : nullptr;
-		if (vm && movie) {
-			RegisterForModEvent(a_object, "SKICP_messageDialogClosed"sv, "OnMessageDialogClose"sv);
+		if (!movie)
+			co_return false;
 
-			RE::GFxValue params[]{ a_message, a_acceptLabel, a_withCancel ? a_cancelLabel : ""sv };
-			movie->Invoke(MENU_ROOT ".showMessageDialog", nullptr, params, 3);
+		SetBool(a_object, "_waitForMessage"sv, true);
+		SetBool(a_object, "_messageResult"sv, false);
 
-			struct Awaiter : RE::BSScript::IStackCallbackFunctor
-			{
-				ScriptObjectPtr self;
-				std::function<void(bool)> callback;
+		RegisterForModEvent(a_object, "SKICP_messageDialogClosed"sv, "OnMessageDialogClose"sv);
 
-				Awaiter(ScriptObjectPtr a_self, std::function<void(bool)> a_callback) :
-					self(a_self),
-					callback(a_callback)
-				{}
+		RE::GFxValue params[]{ a_message, a_acceptLabel, a_withCancel ? a_cancelLabel : ""sv };
+		movie->Invoke(MENU_ROOT ".showMessageDialog", nullptr, params, 3);
 
-				virtual void operator()([[maybe_unused]] RE::BSScript::Variable a_result) override
-				{
-					const auto skyrimVM = RE::SkyrimVM::GetSingleton();
-					const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
-
-					if (!GetBool(self, "_waitForMessage"sv)) {
-						UnregisterForModEvent(self, "SKICP_messageDialogClosed"sv);
-						if (callback)
-							return callback(GetBool(self, "_messageResult"sv));
-						return;
-					}
-
-					auto loopCallback = ScriptCallbackPtr{ new Awaiter{ self, callback } };
-
-					if (vm) {
-						auto args = RE::MakeFunctionArguments(0.1f);
-						vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args, loopCallback);
-						delete args;
-					}
-				}
-
-				virtual void SetObject([[maybe_unused]] const ScriptObjectPtr& a_object) override
-				{}
-			};
-
-			auto waitCallback = ScriptCallbackPtr{ new Awaiter{ a_object, a_callback } };
-
-			if (vm) {
-				auto args = RE::MakeFunctionArguments(0.1f);
-				vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args, waitCallback);
-				delete args;
-			}
+		while (GetBool(a_object, "_waitForMessage"sv)) {
+			ScriptArgs args{ RE::MakeFunctionArguments(0.1f) };
+			co_await vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args.get());
 		}
+
+		UnregisterForModEvent(a_object, "SKICP_messageDialogClosed"sv);
+		co_return GetBool(a_object, "_messageResult"sv);
 	}
 
 	void Config::Error(ScriptObjectPtr a_object, std::string_view a_msg)

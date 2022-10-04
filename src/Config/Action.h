@@ -23,7 +23,7 @@ public:
 	};
 
 	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
-	virtual void Invoke(VM* a_vm, FunctionParam a_value = "{value}"s) = 0;
+	virtual VMAwaitable Invoke(VM* a_vm, FunctionParam a_value = "{value}"s) = 0;
 
 	std::vector<std::string> Params;
 	std::string Function;
@@ -33,7 +33,7 @@ public:
 class CallFunction : public Function
 {
 public:
-	void Invoke(VM* a_vm, FunctionParam a_value) override;
+	VMAwaitable Invoke(VM* a_vm, FunctionParam a_value) override;
 
 	RE::TESForm* Form;
 };
@@ -41,7 +41,7 @@ public:
 class CallGlobalFunction : public Function
 {
 public:
-	void Invoke(VM* a_vm, FunctionParam a_value) override;
+	VMAwaitable Invoke(VM* a_vm, FunctionParam a_value) override;
 };
 
 class SendEvent : public Action

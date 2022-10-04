@@ -78,36 +78,32 @@ void Function::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)
 
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+
 	if (vm) {
 		Invoke(vm.get());
 	}
 }
 
-void CallFunction::Invoke(VM* a_vm, FunctionParam a_value)
+VMAwaitable CallFunction::Invoke(VM* a_vm, FunctionParam a_value)
 {
 	if (!a_vm || Function.empty())
-		return;
+		return {};
 
 	auto object = ScriptObject::FromForm(Form, ScriptName);
-	if (object) {
-		auto args = FunctionArguments::Make(Params, a_value);
+	if (!object)
+		return {};
 
-		ScriptCallbackPtr nullCallback;
-		a_vm->DispatchMethodCall(object, Function, args.get(), nullCallback);
-	}
+	auto args = FunctionArguments::Make(Params, a_value);
+	return a_vm->DispatchMethodCall(object, Function, args.get());
 }
 
-void CallGlobalFunction::Invoke(VM* a_vm, FunctionParam a_value)
+VMAwaitable CallGlobalFunction::Invoke(VM* a_vm, FunctionParam a_value)
 {
-	if (!a_vm || Function.empty())
-		return;
+	if (!a_vm || Function.empty() || ScriptName.empty())
+		return {};
 
-	if (!ScriptName.empty()) {
-		auto args = FunctionArguments::Make(Params, a_value);
-
-		ScriptCallbackPtr nullCallback;
-		a_vm->DispatchStaticCall(ScriptName, Function, args.get(), nullCallback);
-	}
+	auto args = FunctionArguments::Make(Params, a_value);
+	return a_vm->DispatchStaticCall(ScriptName, Function, args.get());
 }
 
 void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
@@ -122,13 +118,11 @@ void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
 	RE::BSFixedString control{ Control };
 	auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
 
-	auto args =
+	ScriptArgs args{
 		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
-		: RE::MakeFunctionArguments(std::move(control));
+		: RE::MakeFunctionArguments(std::move(control)) };
 
-	ScriptCallbackPtr nullCallback;
-	vm->DispatchMethodCall(object, fnName, args, nullCallback);
-	delete args;
+	vm->DispatchMethodCall(object, fnName, args.get());
 }
 
 void RunConsoleCommand::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)

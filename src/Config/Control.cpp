@@ -14,11 +14,12 @@ void Control::Refresh(
 {
 }
 
-void Control::InvokeAction(VM* a_vm)
+VMAwaitable Control::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm);
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm);
 }
 
 void Control::ResetToDefault()
@@ -121,11 +122,12 @@ void TextControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void TextControl::InvokeAction(VM* a_vm)
+VMAwaitable TextControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void TextControl::ResetToDefault()
@@ -161,11 +163,12 @@ void ToggleControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void ToggleControl::InvokeAction(VM* a_vm)
+VMAwaitable ToggleControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void ToggleControl::ResetToDefault()
@@ -201,11 +204,12 @@ void SliderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void SliderControl::InvokeAction(VM* a_vm)
+VMAwaitable SliderControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void SliderControl::ResetToDefault()
@@ -249,11 +253,12 @@ void StepperControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void StepperControl::InvokeAction(VM* a_vm)
+VMAwaitable StepperControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void StepperControl::ResetToDefault()
@@ -299,11 +304,12 @@ void MenuControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void MenuControl::InvokeAction(VM* a_vm)
+VMAwaitable MenuControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void MenuControl::ResetToDefault()
@@ -360,11 +366,12 @@ void EnumControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void EnumControl::InvokeAction(VM* a_vm)
+VMAwaitable EnumControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void EnumControl::ResetToDefault()
@@ -419,11 +426,12 @@ void ColorControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void ColorControl::InvokeAction(VM* a_vm)
+VMAwaitable ColorControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, static_cast<std::int32_t>(GetColor()));
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, static_cast<std::int32_t>(GetColor()));
 }
 
 void ColorControl::ResetToDefault()
@@ -459,11 +467,12 @@ void KeyMapControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void KeyMapControl::InvokeAction(VM* a_vm)
+VMAwaitable KeyMapControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
 }
 
 void KeyMapControl::ResetToDefault()
@@ -539,11 +548,12 @@ void InputControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-void InputControl::InvokeAction(VM* a_vm)
+VMAwaitable InputControl::InvokeAction(VM* a_vm)
 {
-	if (Action) {
-		Action->Invoke(a_vm, GetValue());
-	}
+	if (!Action)
+		return {};
+
+	return Action->Invoke(a_vm, GetValue());
 }
 
 void InputControl::ResetToDefault()

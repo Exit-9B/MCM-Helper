@@ -24,6 +24,11 @@ namespace logger = SKSE::log;
 using ScriptObjectPtr = RE::BSTSmartPointer<RE::BSScript::Object>;
 using ScriptArrayPtr = RE::BSTSmartPointer<RE::BSScript::Array>;
 using ScriptCallbackPtr = RE::BSTSmartPointer<RE::BSScript::IStackCallbackFunctor>;
+using ScriptArgs = std::unique_ptr<RE::BSScript::IFunctionArguments>;
+using VMAwaitable = RE::BSScript::IVirtualMachine::Awaitable;
+
+template <typename T = void>
+using LatentResult = RE::BSScript::LatentResult<T>;
 
 namespace util
 {

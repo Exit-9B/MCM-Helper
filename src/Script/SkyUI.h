@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CO/Task.h"
 #include "Script/ScriptObject.h"
 
 #define MENU_ROOT "_root.ConfigPanelFader.configPanel"
@@ -220,37 +221,32 @@ namespace SkyUI
 
 		static void SetInputDialogStartText(ScriptObjectPtr a_object, std::string_view a_text);
 
-		static void ShowMessage(
+		static CO::Task<bool> ShowMessage(
+			ScriptObjectPtr a_object,
+			std::string_view a_message);
+
+		static CO::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
-			std::function<void(bool)> a_callback);
+			bool a_withCancel);
 
-		static void ShowMessage(
+		static CO::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
-			bool a_withCancel,
-			std::function<void(bool)> a_callback);
+			std::string_view a_acceptLabel);
 
-		static void ShowMessage(
-			ScriptObjectPtr a_object,
-			std::string_view a_message,
-			std::string_view a_acceptLabel,
-			std::function<void(bool)> a_callback);
-
-		static void ShowMessage(
+		static CO::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			std::string_view a_acceptLabel,
-			std::string_view a_cancelLabel,
-			std::function<void(bool)> a_callback);
+			std::string_view a_cancelLabel);
 
-		static void ShowMessage(
+		static CO::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			bool a_withCancel,
 			std::string_view a_acceptLabel,
-			std::string_view a_cancelLabel,
-			std::function<void(bool)> a_callback);
+			std::string_view a_cancelLabel);
 
 	private:
 		static void Error(ScriptObjectPtr a_object, std::string_view a_msg);

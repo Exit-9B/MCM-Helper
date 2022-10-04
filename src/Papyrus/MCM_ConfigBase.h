@@ -58,7 +58,7 @@ namespace Papyrus
 			std::string_view a_value);
 
 		// SkyUI Overrides
-		static void OnPageReset(
+		static LatentResult<> OnPageReset(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
@@ -66,13 +66,13 @@ namespace Papyrus
 
 		static void OnOptionHighlight(RE::TESQuest* a_self, std::int32_t a_option);
 
-		static void OnOptionSelect(
+		static LatentResult<> OnOptionSelect(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
 			std::int32_t a_option);
 
-		static void OnOptionDefault(
+		static LatentResult<> OnOptionDefault(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
@@ -80,7 +80,7 @@ namespace Papyrus
 
 		static void OnOptionSliderOpen(RE::TESQuest* a_self, std::int32_t a_option);
 
-		static void OnOptionSliderAccept(
+		static LatentResult<> OnOptionSliderAccept(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
@@ -89,7 +89,7 @@ namespace Papyrus
 
 		static void OnOptionMenuOpen(RE::TESQuest* a_self, std::int32_t a_option);
 
-		static void OnOptionMenuAccept(
+		static LatentResult<> OnOptionMenuAccept(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
@@ -98,14 +98,14 @@ namespace Papyrus
 
 		static void OnOptionColorOpen(RE::TESQuest* a_self, std::int32_t a_option);
 
-		static void OnOptionColorAccept(
+		static LatentResult<> OnOptionColorAccept(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
 			std::int32_t a_option,
 			std::uint32_t a_color);
 
-		static void OnOptionKeyMapChange(
+		static LatentResult<> OnOptionKeyMapChange(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
@@ -116,7 +116,7 @@ namespace Papyrus
 
 		static void OnOptionInputOpen(RE::TESQuest* a_self, std::int32_t a_option);
 
-		static void OnOptionInputAccept(
+		static LatentResult<> OnOptionInputAccept(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
 			RE::TESQuest* a_self,
@@ -130,12 +130,12 @@ namespace Papyrus
 
 		static void UpdateInfoText(ScriptObjectPtr a_object, bool a_forceUpdate);
 
-		static void SendSettingChangeEvent(
+		static [[nodiscard]] VMAwaitable SendSettingChangeEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,
 			std::string a_ID);
 
-		static void SendPageSelectEvent(
+		static [[nodiscard]] VMAwaitable SendPageSelectEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,
 			std::string a_page);

@@ -21,7 +21,7 @@ public:
 
 	[[nodiscard]] virtual auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t = 0;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
-	virtual void InvokeAction(VM* a_vm);
+	virtual VMAwaitable InvokeAction(VM* a_vm);
 	virtual void ResetToDefault();
 	virtual auto GetInfoText() -> std::string;
 	virtual auto GetValueString() -> std::string;
@@ -64,7 +64,7 @@ class TextControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -79,7 +79,7 @@ class ToggleControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -94,7 +94,7 @@ class SliderControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -112,7 +112,7 @@ class StepperControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -128,7 +128,7 @@ class MenuControl : public MenuDialogControl
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -144,7 +144,7 @@ class EnumControl : public MenuDialogControl
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -159,7 +159,7 @@ class ColorControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
@@ -173,7 +173,7 @@ class KeyMapControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetInfoText() -> std::string override;
 	auto GetValueString() -> std::string override;
@@ -192,7 +192,7 @@ class InputControl : public Control
 public:
 	[[nodiscard]] auto Add(const ScriptObjectPtr& a_configScript) -> std::int32_t override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	void InvokeAction(VM* a_vm) override;
+	VMAwaitable InvokeAction(VM* a_vm) override;
 	void ResetToDefault() override;
 	auto GetValueString() -> std::string override;
 
