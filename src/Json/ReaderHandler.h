@@ -17,6 +17,8 @@ public:
 
 	void PopHandler() { _handlers.pop(); }
 
+	rapidjson::ParseResult ReadFile(const std::filesystem::path& path);
+
 	void SetError(const std::string& error);
 	const std::string& GetError() const;
 

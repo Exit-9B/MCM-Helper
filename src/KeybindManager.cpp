@@ -3,7 +3,6 @@
 #include "Json/KeybindsHandler.h"
 #include "Json/UserKeybindsHandler.h"
 #include "InputMap.h"
-#include <rapidjson/filereadstream.h>
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/prettywriter.h>
 
@@ -25,20 +24,7 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 	ReaderHandler handler;
 	handler.PushHandler<KeybindsHandler>(a_modName);
 
-	FILE* fp = nullptr;
-	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
-	if (err != 0) {
-		logger::warn("Failed to open keybinds for {}"sv, a_modName);
-		return;
-	}
-
-	char readBuffer[65536]{};
-	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
-	rapidjson::Reader reader;
-
-	auto result = reader.Parse(is, handler);
-	fclose(fp);
-	if (!result) {
+	if (!handler.ReadFile(keybindsLocation)) {
 		logger::warn("Failed to parse keybinds for {}"sv, a_modName);
 	}
 }
@@ -53,19 +39,7 @@ void KeybindManager::ReadKeybindRegistrations()
 	ReaderHandler handler;
 	handler.PushHandler<UserKeybindsHandler>();
 
-	FILE* fp = nullptr;
-	auto err = _wfopen_s(std::addressof(fp), keybindsLocation.c_str(), L"r");
-	if (err != 0) {
-		return;
-	}
-
-	char readBuffer[65536]{};
-	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
-	rapidjson::Reader reader;
-
-	auto result = reader.Parse(is, handler);
-	fclose(fp);
-	if (!result) {
+	if (!handler.ReadFile(keybindsLocation)) {
 		logger::warn("Failed to parse keybind registrations"sv);
 	}
 

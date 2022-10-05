@@ -5,7 +5,6 @@
 #include "Script/ScriptObject.h"
 #include "Json/ReaderHandler.h"
 #include "Json/ConfigHandler.h"
-#include <rapidjson/filereadstream.h>
 
 #undef GetObject
 
@@ -97,20 +96,7 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 	auto config = std::make_shared<Config>();
 	handler.PushHandler<ConfigHandler>(config.get(), a_modName, a_configScript);
 
-	FILE* fp = nullptr;
-	auto err = _wfopen_s(std::addressof(fp), configLocation.c_str(), L"r");
-	if (err != 0) {
-		logger::warn("Failed to open config for {}"sv, a_modName);
-		return false;
-	}
-
-	char readBuffer[65536]{};
-	rapidjson::FileReadStream is{ fp, readBuffer, sizeof(readBuffer) };
-	rapidjson::Reader reader;
-
-	auto result = reader.Parse(is, handler);
-	fclose(fp);
-	if (!result) {
+	if (!handler.ReadFile(configLocation)) {
 		logger::warn("Failed to parse config for {}"sv, a_modName);
 		if (MakeErrorPage(a_modName, a_configScript, config, handler.GetError())) {
 			_configStore[a_modName] = config;

@@ -1,5 +1,31 @@
 #include "Json/ReaderHandler.h"
 #include "Json/IHandler.h"
+#include <rapidjson/filereadstream.h>
+
+rapidjson::ParseResult ReaderHandler::ReadFile(const std::filesystem::path& path)
+{
+	::errno_t err = 0;
+	std::unique_ptr<FILE, decltype(&::fclose)> fp{
+		[&path, &err]
+		{
+			FILE* fp = nullptr;
+			err = _wfopen_s(&fp, path.c_str(), L"r");
+			return fp;
+		}(),
+		&::fclose
+	};
+
+	if (err != 0) {
+		logger::warn("Failed to open file: {}", path.string());
+		return { rapidjson::kParseErrorDocumentEmpty, 0 };
+	}
+
+	char readBuffer[65536]{};
+	rapidjson::FileReadStream is{ fp.get(), readBuffer, sizeof(readBuffer) };
+	rapidjson::Reader reader;
+
+	return reader.Parse(is, *this);
+}
 
 void ReaderHandler::SetError(const std::string& error)
 {
