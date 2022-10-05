@@ -4,27 +4,52 @@
 auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName)
 	-> ScriptObjectPtr
 {
+	ScriptObjectPtr object;
+
 	if (!a_form) {
 		logger::warn("Cannot retrieve script object from a None form."sv);
 
-		return nullptr;
+		return object;
 	}
 
-	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	const auto vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
 	if (!vm) {
-		return nullptr;
+		return object;
 	}
 
-	auto typeID = static_cast<RE::VMTypeID>(a_form->GetFormType());
-	auto handle = skyrimVM->handlePolicy.GetHandleForObject(typeID, a_form);
+	const auto typeID = static_cast<RE::VMTypeID>(a_form->GetFormType());
+	const auto policy = vm->GetObjectHandlePolicy();
+	const auto handle = policy ? policy->GetHandleForObject(typeID, a_form) : 0;
 
-	ScriptObjectPtr object;
-	vm->FindBoundObject(handle, a_scriptName.c_str(), object);
+	if (!a_scriptName.empty()) {
+		// Just call the virtual function if we know the script name
+		vm->FindBoundObject(handle, a_scriptName.c_str(), object);
 
-	if (!object) {
-		std::string formIdentifier = FormUtil::GetIdentifierFromForm(a_form);
-		logger::warn("Script {} is not attached to form. {}"sv, a_scriptName, formIdentifier);
+		if (!object) {
+			std::string formIdentifier = FormUtil::GetIdentifierFromForm(a_form);
+			logger::warn("Script {} is not attached to form. {}"sv, a_scriptName, formIdentifier);
+		}
+	}
+	else {
+		// Script name wasn't specified, so look for one in the internal structure
+		RE::BSSpinLockGuard lk{ vm->attachedScriptsLock };
+		if (auto it = vm->attachedScripts.find(handle); it != vm->attachedScripts.end()) {
+			auto& scriptArray = it->second;
+			const auto size = scriptArray.size();
+			if (size == 1) {
+				object = ScriptObjectPtr(scriptArray[0].get());
+			}
+			else if (size == 0) {
+				std::string formIdentifier = FormUtil::GetIdentifierFromForm(a_form);
+				logger::warn("No scripts are attached to form. {}"sv, formIdentifier);
+				return nullptr;
+			}
+			else {
+				std::string formIdentifier = FormUtil::GetIdentifierFromForm(a_form);
+				logger::warn("Multiple scripts are attached to form. {}"sv, formIdentifier);
+				return nullptr;
+			}
+		}
 	}
 
 	return object;
