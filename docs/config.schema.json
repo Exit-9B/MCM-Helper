@@ -1,0 +1,525 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Exit-9B/MCM-Helper/main/docs/config.schema.json",
+  "title": "MCM Config",
+  "description": "Defines MCM Config layout",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "modName": {
+      "description": "Plugin name without file extension",
+      "type": "string"
+    },
+    "displayName": {
+      "description": "The name to be displayed in the menu",
+      "type": "string"
+    },
+    "minMcmVersion": {
+      "description": "Version code for minimum compatible MCM Helper release",
+      "type": "integer",
+      "minimum": 13
+    },
+    "pluginRequirements": {
+      "description": "Required plugins to load the config",
+      "type": "array",
+      "items": {
+        "description": "Plugin filename",
+        "type": "string"
+      }
+    },
+    "cursorFillMode": {
+      "description": "Direction to fill the menu (left-to-right or top-to-bottom)",
+      "enum": [ "leftToRight", "topToBottom" ],
+      "default": "leftToRight"
+    },
+    "pages": {
+      "description": "Configuration menu sub-pages",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "pageDisplayName": {
+            "description": "Page label",
+            "allOf": [ { "$ref": "#/$defs/localizedString" } ]
+          }
+        },
+        "required": [ "pageDisplayName" ],
+        "allOf": [ { "$ref": "#/$defs/content-or-customContent" } ],
+        "unevaluatedProperties": false
+      }
+    }
+  },
+  "required": [ "modName", "displayName" ],
+  "allOf": [ { "$ref": "#/$defs/content-or-customContent" } ],
+  "unevaluatedProperties": false,
+
+  "$defs": {
+    "localizedString": {
+      "type": "string",
+      "oneOf": [
+        {
+          "pattern": "^[^\\$]",
+          "description": "WARNING: String will not be localized",
+          "deprecated": true
+        },
+        {
+          "pattern": "^\\$",
+          "description": "Localized string"
+        }
+      ]
+    },
+
+    "form": {
+      "description": "Look up a Form by a plugin file and Form ID (e.g. \"MyMod.esp|D62\")",
+      "type": "string",
+      "pattern": "^[\\w\\-. ]+\\.es[lmp]\\|(0[Xx])?[\\dA-Fa-f]{1,8}$"
+    },
+
+    "content": {
+      "description": "Config page content",
+      "type": "array",
+      "items": {
+        "description": "MCM control definition",
+        "type": "object",
+        "properties": {
+          "position": { "type": "integer" },
+          "id": { "type": "string" },
+          "text": {
+            "description": "Text label for the control",
+            "allOf": [ { "$ref": "#/$defs/localizedString" } ]
+          },
+          "type": {
+            "description": "MCM control type",
+            "enum": [
+              "empty",
+              "header",
+              "text",
+              "toggle",
+              "hiddenToggle",
+              "slider",
+              "stepper",
+              "menu",
+              "enum",
+              "color",
+              "keymap",
+              "input"
+            ]
+          },
+          "help": {
+            "description": "Info text for the control (supports replacement of {value} tokens)",
+            "allOf": [ { "$ref": "#/$defs/localizedString" } ]
+          },
+          "groupCondition": { "$ref": "#/$defs/groupCondition" },
+          "groupBehavior": {
+            "description": "Specifies the control's behavior when the group condition is false",
+            "enum": [ "disable", "hide", "skip" ],
+            "default": "disable"
+          },
+          "action": {
+            "description": "An action to invoke when the control is edited",
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [ "CallFunction", "CallGlobalFunction" ]
+              },
+              "function": {
+                "description": "Name of a function to call",
+                "type": "string"
+              },
+              "params": {
+                "description": "Function parameters (use {value} for control value)",
+                "type": "array",
+                "items": {
+                  "anyOf": [
+                    { "type": "boolean" },
+                    { "type": "number" },
+                    { "type": "string" }
+                  ]
+                }
+              }
+            },
+            "required": [ "type", "function" ],
+            "allOf": [
+              {
+                "$comment": "CallFunction properties",
+                "if": {
+                  "properties": {
+                    "type": { "const": "CallFunction" }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "form": { "$ref": "#/$defs/form" },
+                    "scriptName": {
+                      "description": "Name of the script containing the function",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              {
+                "$comment": "CallGlobalFunction properties",
+                "if": {
+                  "properties": {
+                    "type": { "const": "CallGlobalFunction" }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "script": {
+                      "description": "Name of the script containing the global function",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            ],
+            "unevaluatedProperties": false
+          }
+        },
+        "required": [ "type" ],
+
+        "allOf": [
+
+          {
+            "$comment": "Toggle/HiddenToggle properties",
+            "if": {
+              "properties": {
+                "type": { "enum": [ "toggle", "hiddenToggle" ] }
+              }
+            },
+            "then": {
+              "properties": {
+                "groupControl": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Keymap properties",
+            "if": {
+              "properties": {
+                "type": { "const": "keymap" }
+              }
+            },
+            "then": {
+              "properties": {
+                "ignoreConflicts": {
+                  "type": "bool",
+                  "default": false
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Generic numeric control value options",
+            "if": {
+              "properties": {
+                "type": {
+                  "enum": [
+                    "toggle",
+                    "hiddenToggle",
+                    "stepper",
+                    "enum",
+                    "color",
+                    "keymap"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "allOf": [ { "$ref": "#/$defs/valueOptions-valueSource" } ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Text value options",
+            "if": {
+              "properties": {
+                "type": { "const": "text" }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "properties": {
+                    "value": { "type": "string" }
+                  },
+                  "allOf": [ { "$ref": "#/$defs/valueOptions-textSource" } ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Slider value options",
+            "if": {
+              "properties": {
+                "type": { "const": "slider" }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "properties": {
+                    "min": { "type": "number" },
+                    "max": { "type": "number" },
+                    "step": { "type": "number" },
+                    "formatString": { "type": "string" }
+                  },
+                  "allOf": [ { "$ref": "#/$defs/valueOptions-valueSource" } ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Stepper value options",
+            "if": {
+              "properties": {
+                "type": { "const": "stepper" }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "allOf": [
+                    { "$ref": "#/$defs/valueOptions-valueSource" },
+                    { "$ref": "#/$defs/valueOptions-options" }
+                  ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Menu value options",
+            "if": {
+              "properties": {
+                "type": { "const": "menu" }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "allOf": [
+                    { "$ref": "#/$defs/valueOptions-textSource" },
+                    { "$ref": "#/$defs/valueOptions-options" },
+                    { "$ref": "#/$defs/valueOptions-shortNames" }
+                  ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          },
+
+          {
+            "if": {
+              "properties": {
+                "type": { "const": "enum" }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "allOf": [
+                    { "$ref": "#/$defs/valueOptions-valueSource" },
+                    { "$ref": "#/$defs/valueOptions-options" },
+                    { "$ref": "#/$defs/valueOptions-shortNames" }
+                  ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          },
+
+          {
+            "$comment": "Input value options",
+            "if": {
+              "properties": {
+                "type": { "const": "input" }
+              }
+            },
+            "then": {
+              "properties": {
+                "valueOptions": {
+                  "type": "object",
+                  "allOf": [ { "$ref": "#/$defs/valueOptions-textSource" } ],
+                  "unevaluatedProperties": false
+                }
+              }
+            }
+          }
+
+        ],
+
+        "unevaluatedProperties": false
+      }
+    },
+
+    "content-or-customContent": {
+      "oneOf": [
+        {
+          "properties": {
+            "content": { "$ref": "#/$defs/content" }
+          },
+          "required": [ "content" ]
+        },
+        {
+          "properties": {
+            "customContent": {
+              "description": "An external file (SWF or DDS) to load into the config area",
+              "type": "object",
+              "properties": {
+                "source": { "type": "string" },
+                "x": {
+                  "description": "X offset",
+                  "type": "number",
+                  "maximum": 770,
+                  "exclusiveMaximum": true,
+                  "default": 0
+                },
+                "y": {
+                  "description": "Y offset",
+                  "type": "number",
+                  "maximum": 446,
+                  "exclusiveMaximum": true,
+                  "default": 0
+                }
+              },
+              "required": [ "source" ],
+              "additionalProperties": false
+            }
+          },
+          "required": [ "customContent" ]
+        }
+      ]
+    },
+
+    "groupCondition": {
+      "description": "Condition tree for enabling this control",
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/groupCondition"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "OR": { "$ref": "#/$defs/groupCondition" },
+            "AND": { "$ref": "#/$defs/groupCondition" },
+            "ONLY": { "$ref": "#/$defs/groupCondition" },
+            "NOT": { "$ref": "#/$defs/groupCondition" }
+          },
+          "minProperties": 1,
+          "maxProperties": 1,
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "valueOptions-valueSource": {
+      "properties": {
+        "sourceType": {
+          "enum": [
+            "PropertyValueBool",
+            "PropertyValueInt",
+            "PropertyValueFloat",
+            "ModSettingBool",
+            "ModSettingInt",
+            "ModSettingFloat",
+            "GlobalValue"
+          ]
+        },
+        "sourceForm": { "$ref": "#/$defs/form" },
+        "scriptName": { "type": "string" },
+        "defaultValue": {
+          "anyOf": [
+            { "type": "boolean" },
+            { "type": "number" }
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "sourceType": {
+            "enum": [
+              "PropertyValueBool",
+              "PropertyValueInt",
+              "PropertyValueFloat"
+            ]
+          }
+        },
+        "required": [ "sourceType" ]
+      },
+      "then": {
+        "properties": {
+          "propertyName": { "type": "string" }
+        },
+        "required": [ "propertyName" ]
+      }
+    },
+
+    "valueOptions-textSource": {
+      "properties": {
+        "sourceType": {
+          "type": {
+            "enum": [
+              "PropertyValueString",
+              "ModSettingString"
+            ]
+          },
+          "deprecated": true
+        },
+        "sourceForm": { "$ref": "#/$defs/form" },
+        "scriptName": { "type": "string" },
+        "propertyName": { "type": "string" },
+        "defaultValue": { "type": "string" }
+      }
+    },
+
+    "valueOptions-options": {
+      "description": "Option names that may be selected",
+      "properties": {
+        "options": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "valueOptions-shortNames": {
+      "description": "Alternate option names to display on the config page",
+      "properties": {
+        "shortNames": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

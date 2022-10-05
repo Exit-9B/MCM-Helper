@@ -21,7 +21,7 @@ bool ConfigHandler::Uint(unsigned i)
 	switch (_state) {
 	case State::MinMcmVersion:
 		_state = State::Main;
-		if (static_cast<std::size_t>(i) > MCM_VERSION_RELEASE) {
+		if (i > MCM_VERSION_RELEASE) {
 			return ReportError("Config requires {} plugin version: {}"sv, Plugin::NAME, i);
 		}
 		return true;
@@ -33,6 +33,10 @@ bool ConfigHandler::Uint(unsigned i)
 bool ConfigHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
+	case State::Schema:
+		// Ignored
+		_state = State::Main;
+		return true;
 	case State::ModName:
 		_hasModName = true;
 		_state = State::Main;
@@ -84,7 +88,11 @@ bool ConfigHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
-		if (strcmp(str, "modName") == 0) {
+		if (strcmp(str, "$schema") == 0) {
+			_state = State::Schema;
+			return true;
+		}
+		else if (strcmp(str, "modName") == 0) {
 			_state = State::ModName;
 			return true;
 		}

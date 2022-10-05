@@ -18,6 +18,7 @@ private:
 	{
 		Init,
 		Main,
+		Schema,
 		ModName,
 	};
 

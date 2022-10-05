@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Exit-9B/MCM-Helper/main/docs/keybinds.schema.json",
+  "title": "MCM Keybinds",
+  "description": "Defines MCM Helper keybinds",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "modName": {
+      "description": "Plugin name without file extension",
+      "type": "string"
+    },
+    "keybinds": {
+      "description": "Hotkey definitions",
+      "type": "array",
+      "items": {
+        "description": "Hotkey definition",
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "desc": {
+            "description": "Hotkey action description",
+            "allOf": [ { "$ref": "#/$defs/localizedString" } ]
+          },
+          "action": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "enum": [
+                  "CallFunction",
+                  "CallGlobalFunction",
+                  "SendEvent",
+                  "RunConsoleCommand"
+                ]
+              }
+            },
+            "allOf": [
+              {
+                "$comment": "CallFunction/SendEvent shared properties",
+                "if": {
+                  "properties": {
+                    "type": { "enum": [ "CallFunction", "SendEvent" ] }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "form": { "$ref": "#/$defs/form" },
+                    "scriptName": {
+                      "description": "Name of the script defining the function/event",
+                      "type": "string"
+                    }
+                  },
+                  "required": [ "form" ]
+                }
+              },
+              {
+                "$comment": "CallGlobalFunction properties",
+                "if": {
+                  "properties": {
+                    "type": { "const": "CallGlobalFunction" }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "script": {
+                      "description": "Name of the script containing the global function",
+                      "type": "string"
+                    }
+                  },
+                  "required": [ "script" ]
+                }
+              },
+              {
+                "$comment": "CallFunction/CallGlobalFunction shared properties",
+                "if": {
+                  "properties": {
+                    "type": { "enum": [ "CallFunction", "CallGlobalFunction" ] }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "function": {
+                      "description": "Name of a function to call",
+                      "type": "string"
+                    },
+                    "params": {
+                      "description": "Function parameters",
+                      "type": "array",
+                      "items": {
+                        "anyOf": [
+                          { "type": "boolean" },
+                          { "type": "number" },
+                          { "type": "string" }
+                        ]
+                      }
+                    }
+                  },
+                  "required": [ "function" ]
+                }
+              },
+              {
+                "$comment": "RunConsoleCommand properties",
+                "if": {
+                  "properties": {
+                    "type": { "const": "RunConsoleCommand" }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "command": {
+                      "description": "Console command to run",
+                      "type": "string"
+                    }
+                  },
+                  "required": [ "command" ]
+                }
+              }
+            ],
+            "unevaluatedProperties": false
+          }
+        },
+        "required": [ "id", "action" ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [ "modName", "keybinds" ],
+  "additionalProperties": false,
+
+  "$defs": {
+    "localizedString": {
+      "type": "string",
+      "oneOf": [
+        {
+          "pattern": "^[^\\$]",
+          "description": "WARNING: String will not be localized",
+          "deprecated": true
+        },
+        {
+          "pattern": "^\\$",
+          "description": "Localized string"
+        }
+      ]
+    },
+
+    "form": {
+      "description": "Look up a Form by a plugin file and Form ID (e.g. \"MyMod.esp|D62\")",
+      "type": "string",
+      "pattern": "^[\\w\\-. ]+\\.es[lmp]\\|(0[Xx])?[\\dA-Fa-f]{1,8}$"
+    }
+  }
+}

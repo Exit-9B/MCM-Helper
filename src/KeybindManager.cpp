@@ -106,7 +106,7 @@ void KeybindManager::CommitKeybinds()
 
 		writer.StartObject();
 		writer.Key("version");
-		writer.Uint(static_cast<std::uint32_t>(MCM_VERSION_RELEASE));
+		writer.Uint(MCM_VERSION_RELEASE);
 		writer.Key("keybinds");
 		writer.StartArray();
 

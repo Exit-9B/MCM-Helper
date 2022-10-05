@@ -24,6 +24,7 @@ private:
 	{
 		Init,
 		Main,
+		Schema,
 		ModName,
 		DisplayName,
 		MinMcmVersion,

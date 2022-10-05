@@ -10,6 +10,10 @@ KeybindsHandler::KeybindsHandler(ReaderHandler* master, const std::string& modNa
 bool KeybindsHandler::String(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
+	case State::Schema:
+		// Ignored
+		_state = State::Main;
+		return true;
 	case State::ModName:
 		_hasModName = true;
 		_state = State::Main;
@@ -37,7 +41,11 @@ bool KeybindsHandler::Key(const Ch* str, SizeType length, bool copy)
 {
 	switch (_state) {
 	case State::Main:
-		if (strcmp(str, "modName") == 0) {
+		if (strcmp(str, "$schema") == 0) {
+			_state = State::Schema;
+			return true;
+		}
+		else if (strcmp(str, "modName") == 0) {
 			_state = State::ModName;
 			return true;
 		}
