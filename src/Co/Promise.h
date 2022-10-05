@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CO/Task.h"
+#include "Co/Task.h"
 
-namespace CO
+namespace Co
 {
 	struct PromiseBase
 	{

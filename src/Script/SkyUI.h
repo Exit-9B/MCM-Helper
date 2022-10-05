@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CO/Task.h"
+#include "Co/Task.h"
 #include "Script/ScriptObject.h"
 
 #define MENU_ROOT "_root.ConfigPanelFader.configPanel"
@@ -221,27 +221,27 @@ namespace SkyUI
 
 		static void SetInputDialogStartText(ScriptObjectPtr a_object, std::string_view a_text);
 
-		static CO::Task<bool> ShowMessage(
+		static Co::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message);
 
-		static CO::Task<bool> ShowMessage(
+		static Co::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			bool a_withCancel);
 
-		static CO::Task<bool> ShowMessage(
+		static Co::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			std::string_view a_acceptLabel);
 
-		static CO::Task<bool> ShowMessage(
+		static Co::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			std::string_view a_acceptLabel,
 			std::string_view a_cancelLabel);
 
-		static CO::Task<bool> ShowMessage(
+		static Co::Task<bool> ShowMessage(
 			ScriptObjectPtr a_object,
 			std::string_view a_message,
 			bool a_withCancel,

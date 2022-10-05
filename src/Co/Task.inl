@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CO/Task.h"
-#include "CO/Promise.h"
+#include "Co/Task.h"
+#include "Co/Promise.h"
 
-namespace CO
+namespace Co
 {
 	template <typename T>
 	inline bool Task<T>::await_ready() const

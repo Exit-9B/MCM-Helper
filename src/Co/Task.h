@@ -1,6 +1,6 @@
 #pragma once
 
-namespace CO
+namespace Co
 {
 	template <typename T>
 	struct Promise;

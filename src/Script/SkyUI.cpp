@@ -645,12 +645,12 @@ namespace SkyUI
 		SetString(a_object, "_inputStartText"sv, a_text);
 	}
 
-	CO::Task<bool> Config::ShowMessage(ScriptObjectPtr a_object, std::string_view a_message)
+	Co::Task<bool> Config::ShowMessage(ScriptObjectPtr a_object, std::string_view a_message)
 	{
 		return ShowMessage(a_object, a_message, true, "$Accept"sv, "$Cancel"sv);
 	}
 
-	CO::Task<bool> Config::ShowMessage(
+	Co::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
 		bool a_withCancel)
@@ -658,7 +658,7 @@ namespace SkyUI
 		return ShowMessage(a_object, a_message, a_withCancel, "$Accept"sv, "$Cancel"sv);
 	}
 
-	CO::Task<bool> Config::ShowMessage(
+	Co::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
 		std::string_view a_acceptLabel)
@@ -666,7 +666,7 @@ namespace SkyUI
 		return ShowMessage(a_object, a_message, false, a_acceptLabel, ""sv);
 	}
 
-	CO::Task<bool> Config::ShowMessage(
+	Co::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
 		std::string_view a_acceptLabel,
@@ -675,7 +675,7 @@ namespace SkyUI
 		return ShowMessage(a_object, a_message, true, a_acceptLabel, a_cancelLabel);
 	}
 
-	CO::Task<bool> Config::ShowMessage(
+	Co::Task<bool> Config::ShowMessage(
 		ScriptObjectPtr a_object,
 		std::string_view a_message,
 		bool a_withCancel,
