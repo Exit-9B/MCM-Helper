@@ -20,7 +20,7 @@ public:
 	rapidjson::ParseResult ReadFile(const std::filesystem::path& path);
 
 	void SetError(const std::string& error);
-	const std::string& GetError() const;
+	[[nodiscard]] const std::string& GetError() const;
 
 	bool Null();
 	bool Bool(bool b);

@@ -43,11 +43,13 @@ protected:
 
 	IHandler(ReaderHandler* master);
 
-	template <typename... Args>
-	inline bool ReportError(ErrorType errType, Args&&... args);
+	[[nodiscard]] static constexpr std::string_view GetErrorMessage(ErrorType errType);
 
 	template <typename... Args>
-	inline bool ReportError(std::string_view message, Args&&... args);
+	bool ReportError(ErrorType errType, Args&&... args);
+
+	template <typename... Args>
+	bool ReportError(std::string_view message, Args&&... args);
 
 	ReaderHandler* _master;
 };

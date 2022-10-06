@@ -1,52 +1,46 @@
 #pragma once
 #include "Json/IHandler.h"
 
-template <typename... Args>
-bool IHandler::ReportError(ErrorType errType, Args&&... args)
+inline constexpr std::string_view IHandler::GetErrorMessage(ErrorType errType)
 {
-	std::string_view message;
-
 	switch (errType) {
 	case ErrorType::UnexpectedNull:
-		message = "Unexpected null"sv;
-		break;
+		return "Unexpected null"sv;
 	case ErrorType::UnexpectedValueType:
-		message = "Unexpected {}: {}"sv;
-		break;
+		return "Unexpected {}: {}"sv;
 	case ErrorType::UnexpectedStartObject:
-		message = "Unexpected object: {}"sv;
-		break;
+		return "Unexpected object: {}"sv;
 	case ErrorType::UnexpectedKey:
-		message = "Unexpected key: {}"sv;
-		break;
+		return "Unexpected key: {}"sv;
 	case ErrorType::UnexpectedEndObject:
-		message = "Unexpected end of object with {} members"sv;
-		break;
+		return "Unexpected end of object with {} members"sv;
 	case ErrorType::UnexpectedStartArray:
-		message = "Unexpected array"sv;
-		break;
+		return "Unexpected array"sv;
 	case ErrorType::UnexpectedEndArray:
-		message = "Unexpected end of array with {} elements"sv;
-		break;
+		return "Unexpected end of array with {} elements"sv;
 	case ErrorType::InvalidKey:
-		message = "Invalid key: {}"sv;
-		break;
+		return "Invalid key: {}"sv;
 	case ErrorType::InvalidValue:
-		message = "Invalid value: {}"sv;
-		break;
+		return "Invalid value: {}"sv;
 	case ErrorType::MissingRequiredField:
-		message = "Missing required field: {}"sv;
-		break;
+		return "Missing required field: {}"sv;
+	default:
+		return "Unknown error"sv;
 	}
-
-	return ReportError(message, std::forward<Args>(args)...);
 }
 
 template <typename... Args>
-bool IHandler::ReportError(std::string_view message, Args&&... args)
+inline bool IHandler::ReportError(ErrorType errType, Args&&... args)
 {
-	std::string error = fmt::format(std::move(message), std::forward<Args>(args)...);
+	return ReportError(GetErrorMessage(errType), std::forward<Args>(args)...);
+}
+
+template <typename... Args>
+inline bool IHandler::ReportError(std::string_view message, Args&&... args)
+{
+	std::string error = fmt::vformat(message, fmt::make_format_args(std::forward<Args>(args)...));
 	_master->SetError(error);
-	logger::warn(std::move(error));
+	logger::warn("{}"sv, error);
+
 	return false;
 }
