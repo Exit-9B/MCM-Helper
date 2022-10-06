@@ -58,20 +58,17 @@ target_include_directories(
 		${SIMPLEINI_INCLUDE_DIRS}
 )
 
-set(Papyrus_SOURCES
-	"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/MCM.psc"
-	"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/SKI_ConfigMenu.psc"
-	"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts/MCM_ConfigBase.psc"
-)
-
 Papyrus_Add(
 	"Papyrus"
-	GAME ${Skyrim64Path}
+	GAME ${SkyrimSE_PATH}
 	IMPORTS
 		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts"
 		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts"
 		"$ENV{SKSE64Path}/Scripts/Source"
-	SOURCES ${Papyrus_SOURCES}
+	SOURCES
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/MCM.psc"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/SKI_ConfigMenu.psc"
+		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts/MCM_ConfigBase.psc"
 	OPTIMIZE
 	ANONYMIZE
 )
