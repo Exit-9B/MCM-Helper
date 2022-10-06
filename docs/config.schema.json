@@ -36,10 +36,11 @@
       "description": "Configuration menu sub-pages",
       "type": "array",
       "items": {
+        "description": "Sub-page specification",
         "type": "object",
         "properties": {
           "pageDisplayName": {
-            "description": "Page label",
+            "description": "The display name of the page",
             "allOf": [ { "$ref": "#/$defs/localizedString" } ]
           }
         },
@@ -331,6 +332,7 @@
           },
 
           {
+            "$comment": "Enum value options",
             "if": {
               "properties": {
                 "type": { "const": "enum" }
@@ -445,6 +447,7 @@
     "valueOptions-valueSource": {
       "properties": {
         "sourceType": {
+          "description": "Source type for the control to store and retrieve its value",
           "enum": [
             "PropertyValueBool",
             "PropertyValueInt",
@@ -456,8 +459,8 @@
           ]
         },
         "sourceForm": { "$ref": "#/$defs/form" },
-        "scriptName": { "type": "string" },
         "defaultValue": {
+          "description": "Value used when resetting to default",
           "anyOf": [
             { "type": "boolean" },
             { "type": "number" }
@@ -478,7 +481,14 @@
       },
       "then": {
         "properties": {
-          "propertyName": { "type": "string" }
+          "scriptName": {
+            "description": "Name of the script containing the property",
+            "type": "string"
+          },
+          "propertyName": {
+            "description": "Name of an Auto Property (bool, int, or float) in the script",
+            "type": "string"
+          }
         },
         "required": [ "propertyName" ]
       }
@@ -487,6 +497,7 @@
     "valueOptions-textSource": {
       "properties": {
         "sourceType": {
+          "description": "Unused property",
           "type": {
             "enum": [
               "PropertyValueString",
@@ -496,9 +507,18 @@
           "deprecated": true
         },
         "sourceForm": { "$ref": "#/$defs/form" },
-        "scriptName": { "type": "string" },
-        "propertyName": { "type": "string" },
-        "defaultValue": { "type": "string" }
+        "scriptName": {
+          "description": "Name of the script containing the property",
+          "type": "string"
+        },
+        "propertyName": {
+          "description": "Name of an Auto Property (string) in the script",
+          "type": "string"
+        },
+        "defaultValue": {
+          "description": "Value used when resetting to default",
+          "type": "string"
+        }
       }
     },
 
