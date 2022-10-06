@@ -61,30 +61,6 @@
       "cacheVariables": {
         "CMAKE_CXX_FLAGS": "/EHsc /MP /W4 /WX"
       },
-      "generator": "Visual Studio 16 2019",
-      "inherits": [
-        "cmake-dev",
-        "vcpkg",
-        "windows"
-      ],
-      "name": "vs2019-windows",
-      "toolset": "v142"
-    },
-    {
-      "inherits": [
-        "vr",
-        "vs2019-windows"
-      ],
-      "name": "vs2019-windows-vr"
-    },
-    {
-      "architecture": {
-        "strategy": "set",
-        "value": "x64"
-      },
-      "cacheVariables": {
-        "CMAKE_CXX_FLAGS": "/EHsc /MP /W4 /WX"
-      },
       "generator": "Visual Studio 17 2022",
       "inherits": [
         "cmake-dev",
