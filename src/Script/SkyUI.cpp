@@ -7,7 +7,7 @@ namespace SkyUI
 	constexpr auto ErrorOptionTypeMismatch =
 		"Option type mismatch. Expected {} option, page \"{}\", index {}"sv;
 
-	auto ConfigManager::GetInstance() -> ScriptObjectPtr
+	ScriptObjectPtr ConfigManager::GetInstance()
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
 		auto configManagerInstance = dataHandler
@@ -211,80 +211,82 @@ namespace SkyUI
 		}
 	}
 
-	auto Config::AddEmptyOption(ScriptObjectPtr a_object) -> std::int32_t
+	std::int32_t Config::AddEmptyOption(ScriptObjectPtr a_object)
 	{
 		return AddOption(a_object, OptionType::Empty, ""sv, ""sv, 0.0f, Flags::None);
 	}
 
-	auto Config::AddHeaderOption(ScriptObjectPtr a_object, std::string_view a_text, Flags a_flags)
-		-> std::int32_t
+	std::int32_t Config::AddHeaderOption(
+		ScriptObjectPtr a_object,
+		std::string_view a_text,
+		Flags a_flags)
 	{
 		return AddOption(a_object, OptionType::Header, a_text, ""sv, 0.0f, a_flags);
 	}
 
-	auto Config::AddTextOption(
+	std::int32_t Config::AddTextOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::string_view a_value,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		return AddOption(a_object, OptionType::Text, a_text, a_value, 0.0f, a_flags);
 	}
 
-	auto Config::AddToggleOption(
+	std::int32_t Config::AddToggleOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		bool a_checked,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		float numValue = a_checked ? 1.0f : 0.0f;
 		return AddOption(a_object, OptionType::Toggle, a_text, ""sv, numValue, a_flags);
 	}
 
-	auto Config::AddSliderOption(
+	std::int32_t Config::AddSliderOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		float a_value,
 		std::string_view a_formatString,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		return AddOption(a_object, OptionType::Slider, a_text, a_formatString, a_value, a_flags);
 	}
 
-	auto Config::AddMenuOption(
+	std::int32_t Config::AddMenuOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::string_view a_value,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		return AddOption(a_object, OptionType::Menu, a_text, a_value, 0.0f, a_flags);
 	}
 
-	auto Config::AddColorOption(
+	std::int32_t Config::AddColorOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::uint32_t a_color,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		float numValue = static_cast<float>(a_color);
 		return AddOption(a_object, OptionType::Color, a_text, ""sv, numValue, a_flags);
 	}
 
-	auto Config::AddKeyMapOption(
+	std::int32_t Config::AddKeyMapOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::int32_t a_keyCode,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		float numValue = static_cast<float>(a_keyCode);
 		return AddOption(a_object, OptionType::KeyMap, a_text, ""sv, numValue, a_flags);
 	}
 
-	auto Config::AddInputOption(
+	std::int32_t Config::AddInputOption(
 		ScriptObjectPtr a_object,
 		std::string_view a_text,
 		std::string_view a_value,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		return AddOption(a_object, OptionType::Input, a_text, a_value, 0.0f, a_flags);
 	}
@@ -721,13 +723,13 @@ namespace SkyUI
 		logger::error("{} ERROR: {}"sv, a_object->GetTypeInfo()->GetName(), a_msg);
 	}
 
-	auto Config::AddOption(
+	std::int32_t Config::AddOption(
 		ScriptObjectPtr a_object,
 		OptionType a_optionType,
 		std::string_view a_text,
 		std::string_view a_strValue,
 		float a_numValue,
-		Flags a_flags) -> std::int32_t
+		Flags a_flags)
 	{
 		if (GetInt(a_object, "_state"sv) != static_cast<std::int32_t>(State::Reset)) {
 			Error(a_object, fmt::format("Cannot add option {} outside of OnPageReset()", a_text));

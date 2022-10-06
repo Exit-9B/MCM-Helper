@@ -4,7 +4,7 @@
 #include "Config/GroupConditionTree.h"
 #include "Config/Action.h"
 
-class ConfigStore
+class ConfigStore final
 {
 	using Storage = std::unordered_map<std::string, std::shared_ptr<Config>>;
 
@@ -15,12 +15,12 @@ public:
 	ConfigStore& operator=(const ConfigStore&) = delete;
 	ConfigStore& operator=(ConfigStore&&) = delete;
 
-	static auto GetInstance() -> ConfigStore&;
+	[[nodiscard]] static ConfigStore& GetInstance();
 
 	void ReadConfigs();
 	bool ReadConfig(const std::string& a_modName, ScriptObjectPtr a_configScript);
-	auto GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>;
-	auto GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>;
+	[[nodiscard]] auto GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>;
+	[[nodiscard]] auto GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>;
 
 	void ClearConfigs();
 
@@ -33,8 +33,8 @@ private:
 		std::shared_ptr<Config> a_config,
 		const std::string& a_error);
 
-	auto GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*;
-	auto GetModName(ScriptObjectPtr& a_configScript) -> std::string;
+	[[nodiscard]] RE::TESQuest* GetFormFromScript(ScriptObjectPtr& a_configScript);
+	[[nodiscard]] std::string GetModName(ScriptObjectPtr& a_configScript);
 
 	Storage _configStore;
 };

@@ -5,9 +5,10 @@ class KeybindEventHandler final : public RE::BSInputDeviceManager::Sink
 public:
 	using Event = RE::InputEvent*;
 
-	static auto GetInstance() -> KeybindEventHandler&;
+	[[nodiscard]] static KeybindEventHandler& GetInstance();
 	void Register();
 
-	auto ProcessEvent(const Event* a_event, RE::BSTEventSource<Event>* a_eventSource)
-		-> RE::BSEventNotifyControl override;
+	RE::BSEventNotifyControl ProcessEvent(
+		const Event* a_event,
+		RE::BSTEventSource<Event>* a_eventSource) override;
 };

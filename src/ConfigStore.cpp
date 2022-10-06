@@ -13,9 +13,9 @@ ConfigStore::ConfigStore()
 	logger::info("ModConfigStore initializing."sv);
 }
 
-auto ConfigStore::GetInstance() -> ConfigStore&
+ConfigStore& ConfigStore::GetInstance()
 {
-	static ConfigStore instance;
+	static ConfigStore instance{};
 	return instance;
 }
 
@@ -179,14 +179,14 @@ void ConfigStore::ClearConfigs()
 	_configStore.clear();
 }
 
-auto ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript) -> RE::TESQuest*
+RE::TESQuest* ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript)
 {
 	auto typeID = static_cast<RE::VMTypeID>(RE::TESQuest::FORMTYPE);
 	auto quest = static_cast<RE::TESQuest*>(a_configScript->Resolve(typeID));
 	return quest;
 }
 
-auto ConfigStore::GetModName(ScriptObjectPtr& a_configScript) -> std::string
+std::string ConfigStore::GetModName(ScriptObjectPtr& a_configScript)
 {
 	auto quest = GetFormFromScript(a_configScript);
 	return FormUtil::GetModName(quest);

@@ -2,9 +2,9 @@
 
 namespace FormUtil
 {
-	auto GetFormFromIdentifier(const std::string& a_identifier) -> RE::TESForm*;
+	[[nodiscard]] RE::TESForm* GetFormFromIdentifier(const std::string& a_identifier);
 
-	auto GetIdentifierFromForm(RE::TESForm* a_form) -> std::string;
+	[[nodiscard]] std::string GetIdentifierFromForm(RE::TESForm* a_form);
 
-	auto GetModName(RE::TESForm* a_form) -> std::string;
+	[[nodiscard]] std::string GetModName(RE::TESForm* a_form);
 }

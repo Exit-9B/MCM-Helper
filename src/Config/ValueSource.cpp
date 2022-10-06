@@ -3,7 +3,7 @@
 #include "ColorUtil.h"
 #include "Script/ScriptObject.h"
 
-auto ValueSource::GetDefaultValue() -> float
+float ValueSource::GetDefaultValue() const
 {
 	return GetValue();
 }
@@ -13,12 +13,12 @@ void ValueSource::ResetToDefault()
 	SetValue(GetDefaultValue());
 }
 
-auto PropertyValue::GetValue() -> float
+float PropertyValue::GetValue() const
 {
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable) {
-		return GetValue(*variable);
+		return GetVariableValue(*variable);
 	}
 
 	return 0.0f;
@@ -29,16 +29,16 @@ void PropertyValue::SetValue(float a_value)
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable) {
-		SetValue(*variable, a_value);
+		SetVariableValue(*variable, a_value);
 	}
 }
 
-auto PropertyValue::GetDefaultValue() -> float
+float PropertyValue::GetDefaultValue() const
 {
 	return DefaultValue;
 }
 
-auto PropertyValueBool::GetValue(RE::BSScript::Variable& a_variable) -> float
+float PropertyValueBool::GetVariableValue(RE::BSScript::Variable& a_variable) const
 {
 	if (a_variable.IsBool()) {
 		return a_variable.GetBool() ? 1.0f : 0.0f;
@@ -47,12 +47,12 @@ auto PropertyValueBool::GetValue(RE::BSScript::Variable& a_variable) -> float
 	return 0.0f;
 }
 
-void PropertyValueBool::SetValue(RE::BSScript::Variable& a_variable, float a_value)
+void PropertyValueBool::SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const
 {
 	a_variable.SetBool(a_value);
 }
 
-auto PropertyValueInt::GetValue(RE::BSScript::Variable& a_variable) -> float
+float PropertyValueInt::GetVariableValue(RE::BSScript::Variable& a_variable) const
 {
 	if (a_variable.IsInt()) {
 		return static_cast<float>(a_variable.GetSInt());
@@ -61,12 +61,12 @@ auto PropertyValueInt::GetValue(RE::BSScript::Variable& a_variable) -> float
 	return 0.0f;
 }
 
-void PropertyValueInt::SetValue(RE::BSScript::Variable& a_variable, float a_value)
+void PropertyValueInt::SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const
 {
 	a_variable.SetSInt(static_cast<std::int32_t>(a_value));
 }
 
-auto PropertyValueFloat::GetValue(RE::BSScript::Variable& a_variable) -> float
+float PropertyValueFloat::GetVariableValue(RE::BSScript::Variable& a_variable) const
 {
 	if (a_variable.IsFloat()) {
 		return a_variable.GetFloat();
@@ -75,12 +75,12 @@ auto PropertyValueFloat::GetValue(RE::BSScript::Variable& a_variable) -> float
 	return 0.0f;
 }
 
-void PropertyValueFloat::SetValue(RE::BSScript::Variable& a_variable, float a_value)
+void PropertyValueFloat::SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const
 {
 	a_variable.SetFloat(a_value);
 }
 
-auto ModSettingBool::GetValue() -> float
+float ModSettingBool::GetValue() const
 {
 	auto boolValue = SettingStore::GetInstance().GetModSettingBool(ModName, ID);
 	return boolValue ? 1.0f : 0.0f;
@@ -91,7 +91,7 @@ void ModSettingBool::SetValue(float a_value)
 	SettingStore::GetInstance().SetModSettingBool(ModName, ID, a_value);
 }
 
-auto ModSettingBool::GetDefaultValue() -> float
+float ModSettingBool::GetDefaultValue() const
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting) {
@@ -102,7 +102,7 @@ auto ModSettingBool::GetDefaultValue() -> float
 	}
 }
 
-auto ModSettingInt::GetValue() -> float
+float ModSettingInt::GetValue() const
 {
 	auto intValue = SettingStore::GetInstance().GetModSettingInt(ModName, ID);
 	return static_cast<float>(intValue);
@@ -113,7 +113,7 @@ void ModSettingInt::SetValue(float a_value)
 	SettingStore::GetInstance().SetModSettingInt(ModName, ID, static_cast<std::int32_t>(a_value));
 }
 
-auto ModSettingInt::GetDefaultValue() -> float
+float ModSettingInt::GetDefaultValue() const
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting) {
@@ -131,7 +131,7 @@ auto ModSettingInt::GetDefaultValue() -> float
 	}
 }
 
-auto ModSettingFloat::GetValue() -> float
+float ModSettingFloat::GetValue() const
 {
 	return SettingStore::GetInstance().GetModSettingFloat(ModName, ID);
 }
@@ -141,7 +141,7 @@ void ModSettingFloat::SetValue(float a_value)
 	SettingStore::GetInstance().SetModSettingFloat(ModName, ID, a_value);
 }
 
-auto ModSettingFloat::GetDefaultValue() -> float
+float ModSettingFloat::GetDefaultValue() const
 {
 	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting) {
@@ -152,7 +152,7 @@ auto ModSettingFloat::GetDefaultValue() -> float
 	}
 }
 
-auto GlobalValue::GetValue() -> float
+float GlobalValue::GetValue() const
 {
 	return SourceForm ? SourceForm->value : 0.0f;
 }
@@ -164,7 +164,7 @@ void GlobalValue::SetValue(float a_value)
 	}
 }
 
-auto GlobalValue::GetDefaultValue() -> float
+float GlobalValue::GetDefaultValue() const
 {
 	return DefaultValue;
 }

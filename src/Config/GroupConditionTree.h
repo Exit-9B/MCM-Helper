@@ -14,5 +14,5 @@ struct GroupConditionTree
 	std::vector<std::uint32_t> TopLevelOperands;
 	std::vector<std::shared_ptr<GroupConditionTree>> SubTrees;
 
-	auto GetIsActive() -> bool const;
+	[[nodiscard]] bool GetIsActive() const;
 };

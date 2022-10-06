@@ -1,6 +1,6 @@
 #pragma once
 
-class SettingStore
+class SettingStore final
 {
 	using Storage = RE::BSTHashMap<RE::BSFixedString, RE::Setting*>;
 
@@ -11,19 +11,17 @@ public:
 	SettingStore& operator=(const SettingStore&) = delete;
 	SettingStore& operator=(SettingStore&&) = delete;
 
-	static auto GetInstance() -> SettingStore&;
+	static SettingStore& GetInstance();
 
 	void ReadSettings();
 
-	auto GetModSettingInt(std::string_view a_modName, std::string_view a_settingName)
-		-> std::int32_t;
+	std::int32_t GetModSettingInt(std::string_view a_modName, std::string_view a_settingName);
 
-	auto GetModSettingBool(std::string_view a_modName, std::string_view a_settingName) -> bool;
+	bool GetModSettingBool(std::string_view a_modName, std::string_view a_settingName);
 
-	auto GetModSettingFloat(std::string_view a_modName, std::string_view a_settingName) -> float;
+	float GetModSettingFloat(std::string_view a_modName, std::string_view a_settingName);
 
-	auto GetModSettingString(std::string_view a_modName, std::string_view a_settingName)
-		-> const char*;
+	const char* GetModSettingString(std::string_view a_modName, std::string_view a_settingName);
 
 	void SetModSettingInt(
 		std::string_view a_modName,
@@ -49,10 +47,13 @@ public:
 
 	void ResetToDefault(std::string_view a_modName, std::string_view a_settingName);
 
-	auto GetModSetting(std::string_view a_modName, std::string_view a_settingName) -> RE::Setting*;
+	[[nodiscard]] RE::Setting* GetModSetting(
+		std::string_view a_modName,
+		std::string_view a_settingName);
 
-	auto GetDefaultSetting(std::string_view a_modName, std::string_view a_settingName)
-		-> RE::Setting*;
+	[[nodiscard]] RE::Setting* GetDefaultSetting(
+		std::string_view a_modName,
+		std::string_view a_settingName);
 
 private:
 	SettingStore();
@@ -74,7 +75,9 @@ private:
 
 	void CommitModSetting(std::string_view a_modName, RE::Setting* a_modSetting);
 
-	auto GetKey(std::string_view a_modName, std::string_view a_settingName) -> RE::BSFixedString;
+	[[nodiscard]] RE::BSFixedString GetKey(
+		std::string_view a_modName,
+		std::string_view a_settingName);
 
 	Storage _defaults;
 	Storage _settingStore;

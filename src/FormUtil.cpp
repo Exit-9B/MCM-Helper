@@ -1,6 +1,6 @@
 #include "FormUtil.h"
 
-auto FormUtil::GetFormFromIdentifier(const std::string& a_identifier) -> RE::TESForm*
+RE::TESForm* FormUtil::GetFormFromIdentifier(const std::string& a_identifier)
 {
 	std::istringstream ss{ a_identifier };
 	std::string plugin, id;
@@ -13,7 +13,7 @@ auto FormUtil::GetFormFromIdentifier(const std::string& a_identifier) -> RE::TES
 	return dataHandler ? dataHandler->LookupForm(relativeID, plugin) : nullptr;
 }
 
-auto FormUtil::GetIdentifierFromForm(RE::TESForm* a_form) -> std::string
+std::string FormUtil::GetIdentifierFromForm(RE::TESForm* a_form)
 {
 	if (!a_form) {
 		return ""s;
@@ -36,7 +36,7 @@ auto FormUtil::GetIdentifierFromForm(RE::TESForm* a_form) -> std::string
 	return ss.str();
 }
 
-auto FormUtil::GetModName(RE::TESForm* a_form) -> std::string
+std::string FormUtil::GetModName(RE::TESForm* a_form)
 {
 	auto file = a_form ? a_form->GetFile() : nullptr;
 	auto fileName = file ? file->fileName : nullptr;

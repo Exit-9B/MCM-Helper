@@ -5,9 +5,9 @@
 class ValueSource
 {
 public:
-	virtual auto GetValue() -> float = 0;
+	[[nodiscard]] virtual float GetValue() const = 0;
 	virtual void SetValue(float a_value) = 0;
-	virtual auto GetDefaultValue() -> float;
+	[[nodiscard]] virtual float GetDefaultValue() const;
 	void ResetToDefault();
 };
 
@@ -19,33 +19,33 @@ public:
 	std::string PropertyName;
 	float DefaultValue;
 
-	virtual auto GetValue() -> float override;
+	[[nodiscard]] virtual float GetValue() const override;
 	virtual void SetValue(float a_value) override;
-	virtual auto GetDefaultValue() -> float override;
+	[[nodiscard]] virtual float GetDefaultValue() const override;
 
-	virtual auto GetValue(RE::BSScript::Variable& a_variable) -> float = 0;
-	virtual void SetValue(RE::BSScript::Variable& a_variable, float a_value) = 0;
+	[[nodiscard]] virtual float GetVariableValue(RE::BSScript::Variable& a_variable) const = 0;
+	virtual void SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const = 0;
 };
 
 class PropertyValueBool : public PropertyValue
 {
 public:
-	auto GetValue(RE::BSScript::Variable& a_variable) -> float override;
-	void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
+	[[nodiscard]] float GetVariableValue(RE::BSScript::Variable& a_variable) const override;
+	void SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const override;
 };
 
 class PropertyValueInt : public PropertyValue
 {
 public:
-	auto GetValue(RE::BSScript::Variable& a_variable) -> float override;
-	void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
+	[[nodiscard]] float GetVariableValue(RE::BSScript::Variable& a_variable) const override;
+	void SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const override;
 };
 
 class PropertyValueFloat : public PropertyValue
 {
 public:
-	auto GetValue(RE::BSScript::Variable& a_variable) -> float override;
-	void SetValue(RE::BSScript::Variable& a_variable, float a_value) override;
+	[[nodiscard]] float GetVariableValue(RE::BSScript::Variable& a_variable) const override;
+	void SetVariableValue(RE::BSScript::Variable& a_variable, float a_value) const override;
 };
 
 class ModSetting : public ValueSource
@@ -58,25 +58,25 @@ public:
 class ModSettingBool : public ModSetting
 {
 public:
-	auto GetValue() -> float override;
+	[[nodiscard]] float GetValue() const override;
 	void SetValue(float a_value) override;
-	auto GetDefaultValue() -> float override;
+	[[nodiscard]] float GetDefaultValue() const override;
 };
 
 class ModSettingInt : public ModSetting
 {
 public:
-	auto GetValue() -> float override;
+	[[nodiscard]] float GetValue() const override;
 	void SetValue(float a_value) override;
-	auto GetDefaultValue() -> float override;
+	[[nodiscard]] float GetDefaultValue() const override;
 };
 
 class ModSettingFloat : public ModSetting
 {
 public:
-	auto GetValue() -> float override;
+	[[nodiscard]] float GetValue() const override;
 	void SetValue(float a_value) override;
-	auto GetDefaultValue() -> float override;
+	[[nodiscard]] float GetDefaultValue() const override;
 };
 
 class GlobalValue : public ValueSource
@@ -85,7 +85,7 @@ public:
 	RE::TESGlobal* SourceForm;
 	float DefaultValue;
 
-	auto GetValue() -> float override;
+	[[nodiscard]] float GetValue() const override;
 	void SetValue(float a_value) override;
-	auto GetDefaultValue() -> float override;
+	[[nodiscard]] float GetDefaultValue() const override;
 };

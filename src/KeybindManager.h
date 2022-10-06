@@ -16,10 +16,7 @@ struct KeybindInfo
 	std::string KeybindDesc;
 	std::shared_ptr<Action> Action;
 
-	bool operator==(const KeybindInfo& other) const
-	{
-		return Keybind == other.Keybind;
-	}
+	bool operator==(const KeybindInfo& other) const { return Keybind == other.Keybind; }
 };
 
 template <>
@@ -32,10 +29,10 @@ struct std::hash<Keybind>
 	}
 };
 
-class KeybindManager
+class KeybindManager final
 {
 public:
-	static auto GetInstance() -> KeybindManager&;
+	[[nodiscard]] static KeybindManager& GetInstance();
 
 	void ReadKeybinds(const std::string& a_modName);
 	void ReadKeybindRegistrations();
@@ -48,11 +45,13 @@ public:
 		const std::string& a_keybindID,
 		const KeybindInfo& a_info);
 
-	auto GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
-		-> KeybindInfo;
+	[[nodiscard]] KeybindInfo GetKeybind(
+		const std::string& a_modName,
+		const std::string& a_keybindID) const;
 
-	auto GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
-		-> std::uint32_t;
+	[[nodiscard]] std::uint32_t GetRegisteredKey(
+		const std::string& a_modName,
+		const std::string& a_keybindID);
 
 	void Unregister(const std::string& a_modName, const std::string& a_keybindID);
 

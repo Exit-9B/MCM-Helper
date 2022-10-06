@@ -3,9 +3,10 @@
 #include "Config/Config.h"
 #include "Script/SkyUI.h"
 
-/* Stores data about the current MCM page and provides helpers for fetching data back
+/**
+ * Stores data about the current MCM page and provides helpers for fetching data back
  */
-class ConfigPageCache
+class ConfigPageCache final
 {
 public:
 	~ConfigPageCache() = default;
@@ -14,7 +15,7 @@ public:
 	ConfigPageCache& operator=(const ConfigPageCache&) = delete;
 	ConfigPageCache& operator=(ConfigPageCache&&) = delete;
 
-	static auto GetInstance() -> ConfigPageCache&;
+	[[nodiscard]] static ConfigPageCache& GetInstance();
 
 	// Set data
 
@@ -38,21 +39,23 @@ public:
 
 	// Get data
 
-	auto GetCurrentForm() const -> RE::TESForm*;
+	[[nodiscard]] RE::TESForm* GetCurrentForm() const;
 
-	auto GetCurrentScriptName() const -> const std::string&;
+	[[nodiscard]] auto GetCurrentScriptName() const -> const std::string&;
 
-	auto GetGroups() const -> std::unordered_set<std::uint32_t>;
+	[[nodiscard]] auto GetGroups() const -> std::unordered_set<std::uint32_t>;
 
-	auto IsGroupActive(std::uint32_t a_groupID) const -> bool;
+	[[nodiscard]] bool IsGroupActive(std::uint32_t a_groupID) const;
 
-	auto GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>;
+	[[nodiscard]] auto GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>;
 
-	auto GetMenuOptions(MenuDialogControl* a_control) const -> std::vector<std::string>;
+	[[nodiscard]] auto GetMenuOptions(const MenuDialogControl* a_control) const
+		-> std::vector<std::string>;
 
-	auto GetMenuShortNames(MenuDialogControl* a_control) const -> std::vector<std::string>;
+	[[nodiscard]] auto GetMenuShortNames(const MenuDialogControl* a_control) const
+		-> std::vector<std::string>;
 
-	auto GetHighlightedControl() const -> std::shared_ptr<Control>;
+	[[nodiscard]] auto GetHighlightedControl() const -> std::shared_ptr<Control>;
 
 	void ForEach(std::function<void(std::int32_t, std::shared_ptr<Control>)> a_func) const;
 

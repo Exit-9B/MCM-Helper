@@ -1,7 +1,7 @@
 #include "Config/GroupConditionTree.h"
 #include "ConfigPageCache.h"
 
-auto GroupConditionTree::GetIsActive() -> bool const
+bool GroupConditionTree::GetIsActive() const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
 

@@ -1,8 +1,8 @@
 #include "ConfigPageCache.h"
 
-auto ConfigPageCache::GetInstance() -> ConfigPageCache&
+ConfigPageCache& ConfigPageCache::GetInstance()
 {
-	static ConfigPageCache instance;
+	static ConfigPageCache instance{};
 	return instance;
 }
 
@@ -56,7 +56,7 @@ void ConfigPageCache::SetHighlight(std::int32_t a_option)
 	_highlight = a_option;
 }
 
-auto ConfigPageCache::GetCurrentForm() const -> RE::TESForm*
+RE::TESForm* ConfigPageCache::GetCurrentForm() const
 {
 	return _currentForm;
 }
@@ -76,7 +76,7 @@ auto ConfigPageCache::GetGroups() const -> std::unordered_set<std::uint32_t>
 	return groups;
 }
 
-auto ConfigPageCache::IsGroupActive(std::uint32_t a_groupID) const -> bool
+bool ConfigPageCache::IsGroupActive(std::uint32_t a_groupID) const
 {
 	auto it = _groupControls.find(a_groupID);
 	auto control = it != _groupControls.end() ? it->second : nullptr;
@@ -89,7 +89,7 @@ auto ConfigPageCache::GetControl(std::int32_t a_optionID) const -> std::shared_p
 	return it != _pageCache.end() ? it->second : nullptr;
 }
 
-auto ConfigPageCache::GetMenuOptions(MenuDialogControl* a_control) const
+auto ConfigPageCache::GetMenuOptions(const MenuDialogControl* a_control) const
 	-> std::vector<std::string>
 {
 	if (!a_control)
@@ -100,7 +100,7 @@ auto ConfigPageCache::GetMenuOptions(MenuDialogControl* a_control) const
 	return it != _menuOptions.end() ? it->second : a_control->Options;
 }
 
-auto ConfigPageCache::GetMenuShortNames(MenuDialogControl* a_control) const
+auto ConfigPageCache::GetMenuShortNames(const MenuDialogControl* a_control) const
 	-> std::vector<std::string>
 {
 	if (!a_control)

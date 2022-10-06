@@ -27,7 +27,7 @@ void Control::ResetToDefault()
 	// base behavior is to do nothing
 }
 
-auto Control::GetInfoText() -> std::string
+std::string Control::GetInfoText() const
 {
 	std::string text = Help;
 	std::string value = Translation::ScaleformTranslate(GetValueString());
@@ -44,12 +44,12 @@ auto Control::GetInfoText() -> std::string
 	return text;
 }
 
-auto Control::GetValueString() -> std::string
+std::string Control::GetValueString() const
 {
 	return "{value}"s;
 }
 
-auto Control::GetFlags() -> SkyUI::Flags
+SkyUI::Flags Control::GetFlags() const
 {
 	if (GroupCondition && !GroupCondition->GetIsActive()) {
 		switch (GroupBehavior) {
@@ -63,7 +63,7 @@ auto Control::GetFlags() -> SkyUI::Flags
 	return SkyUI::Flags::None;
 }
 
-auto Control::GetDesiredBehavior() -> Behavior
+auto Control::GetDesiredBehavior() const -> Behavior
 {
 	if (GroupCondition && !GroupCondition->GetIsActive()) {
 		return GroupBehavior;
@@ -82,7 +82,7 @@ void Control::RefreshFlags(const ScriptObjectPtr& a_configScript, std::int32_t a
 	}
 }
 
-auto EmptyControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t EmptyControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -93,7 +93,7 @@ auto EmptyControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
 	return SkyUI::Config::AddEmptyOption(a_configScript);
 }
 
-auto HeaderControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t HeaderControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -106,7 +106,7 @@ void HeaderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-auto TextControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t TextControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -137,17 +137,17 @@ void TextControl::ResetToDefault()
 	}
 }
 
-auto TextControl::GetValueString() -> std::string
+std::string TextControl::GetValueString() const
 {
 	return GetValue();
 }
 
-auto TextControl::GetValue() -> std::string
+std::string TextControl::GetValue() const
 {
 	return ValueSource ? ValueSource->GetValue() : Value;
 }
 
-auto ToggleControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t ToggleControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -178,17 +178,17 @@ void ToggleControl::ResetToDefault()
 	}
 }
 
-auto ToggleControl::GetValueString() -> std::string
+std::string ToggleControl::GetValueString() const
 {
 	return GetValue() ? "1"s : "0"s;
 }
 
-auto ToggleControl::GetValue() -> bool
+bool ToggleControl::GetValue() const
 {
 	return ValueSource && ValueSource->GetValue() != 0.0f;
 }
 
-auto SliderControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t SliderControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -219,7 +219,7 @@ void SliderControl::ResetToDefault()
 	}
 }
 
-auto SliderControl::GetValueString() -> std::string
+std::string SliderControl::GetValueString() const
 {
 	auto stepStr = std::to_string(Step);
 	auto precision = stepStr.find_last_not_of('0') - stepStr.find('.');
@@ -232,12 +232,12 @@ auto SliderControl::GetValueString() -> std::string
 	return valueStr;
 }
 
-auto SliderControl::GetValue() -> float
+float SliderControl::GetValue() const
 {
 	return ValueSource ? ValueSource->GetValue() : 0.0f;
 }
 
-auto StepperControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t StepperControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -268,17 +268,17 @@ void StepperControl::ResetToDefault()
 	}
 }
 
-auto StepperControl::GetValueString() -> std::string
+std::string StepperControl::GetValueString() const
 {
 	return std::to_string(GetValue());
 }
 
-auto StepperControl::GetValue() -> std::int32_t
+std::int32_t StepperControl::GetValue() const
 {
 	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
 }
 
-auto StepperControl::GetText() -> std::string
+std::string StepperControl::GetText() const
 {
 	auto value = GetValue();
 	if (value >= 0 && value < Options.size()) {
@@ -288,7 +288,7 @@ auto StepperControl::GetText() -> std::string
 	return ""s;
 }
 
-auto MenuControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t MenuControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -319,22 +319,22 @@ void MenuControl::ResetToDefault()
 	}
 }
 
-auto MenuControl::GetValueString() -> std::string
+std::string MenuControl::GetValueString() const
 {
 	return GetValue();
 }
 
-auto MenuControl::GetValue() -> std::string
+std::string MenuControl::GetValue() const
 {
 	return ValueSource ? ValueSource->GetValue() : ""s;
 }
 
-auto MenuControl::GetDefaultValue() -> std::string
+std::string MenuControl::GetDefaultValue() const
 {
 	return ValueSource ? ValueSource->GetDefaultValue() : ""s;
 }
 
-auto MenuControl::GetShortText() -> std::string
+std::string MenuControl::GetShortText() const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
 	auto options = configPageCache.GetMenuOptions(this);
@@ -350,7 +350,7 @@ auto MenuControl::GetShortText() -> std::string
 	return shortNames[index];
 }
 
-auto EnumControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t EnumControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -381,17 +381,17 @@ void EnumControl::ResetToDefault()
 	}
 }
 
-auto EnumControl::GetValueString() -> std::string
+std::string EnumControl::GetValueString() const
 {
 	return std::to_string(GetValue());
 }
 
-auto EnumControl::GetValue() -> std::int32_t
+std::int32_t EnumControl::GetValue() const
 {
 	return ValueSource ? static_cast<std::int32_t>(ValueSource->GetValue()) : 0;
 }
 
-auto EnumControl::GetShortText() -> std::string
+std::string EnumControl::GetShortText() const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
 	auto options = configPageCache.GetMenuOptions(this);
@@ -410,7 +410,7 @@ auto EnumControl::GetShortText() -> std::string
 	return shortNames[index];
 }
 
-auto ColorControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t ColorControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -441,17 +441,17 @@ void ColorControl::ResetToDefault()
 	}
 }
 
-auto ColorControl::GetValueString() -> std::string
+std::string ColorControl::GetValueString() const
 {
 	return std::to_string(UnpackARGB(GetColor()));
 }
 
-auto ColorControl::GetColor() -> std::uint32_t
+std::uint32_t ColorControl::GetColor() const
 {
 	return ValueSource ? static_cast<std::uint32_t>(ValueSource->GetValue()) : 0;
 }
 
-auto KeyMapControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t KeyMapControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -482,7 +482,7 @@ void KeyMapControl::ResetToDefault()
 	}
 }
 
-auto KeyMapControl::GetInfoText() -> std::string
+std::string KeyMapControl::GetInfoText() const
 {
 	auto text = Control::GetInfoText();
 	if (!text.empty()) {
@@ -498,18 +498,18 @@ auto KeyMapControl::GetInfoText() -> std::string
 	return ""s;
 }
 
-auto KeyMapControl::GetValueString() -> std::string
+std::string KeyMapControl::GetValueString() const
 {
 	return InputMap::GetKeyName(GetKeyCode());
 }
 
-auto KeyMapControl::GetFlags() -> SkyUI::Flags
+SkyUI::Flags KeyMapControl::GetFlags() const
 {
 	auto flags = Control::GetFlags();
 	return flags == SkyUI::Flags::None ? SkyUI::Flags::WithUnmap : flags;
 }
 
-auto KeyMapControl::GetKeyCode() -> std::uint32_t
+std::uint32_t KeyMapControl::GetKeyCode() const
 {
 	if (ValueSource) {
 		return static_cast<std::uint32_t>(ValueSource->GetValue());
@@ -519,7 +519,7 @@ auto KeyMapControl::GetKeyCode() -> std::uint32_t
 	}
 }
 
-auto KeyMapControl::GetDescription() -> std::string
+std::string KeyMapControl::GetDescription() const
 {
 	if (!ValueSource) {
 		auto& keybindManager = KeybindManager::GetInstance();
@@ -532,7 +532,7 @@ auto KeyMapControl::GetDescription() -> std::string
 	return Text;
 }
 
-auto InputControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t InputControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
@@ -563,18 +563,17 @@ void InputControl::ResetToDefault()
 	}
 }
 
-auto InputControl::GetValueString() -> std::string
+std::string InputControl::GetValueString() const
 {
 	return GetValue();
 }
 
-auto InputControl::GetValue() -> std::string
+std::string InputControl::GetValue() const
 {
 	return ValueSource ? ValueSource->GetValue() : ""s;
 }
 
-auto HiddenToggleControl::Add([[maybe_unused]] const ScriptObjectPtr& a_configScript)
-	-> std::int32_t
+std::int32_t HiddenToggleControl::Add([[maybe_unused]] const ScriptObjectPtr& a_configScript)
 {
 	return -1;
 }
@@ -585,7 +584,7 @@ void HiddenToggleControl::Refresh(
 {
 }
 
-auto ErrorControl::Add(const ScriptObjectPtr& a_configScript) -> std::int32_t
+std::int32_t ErrorControl::Add(const ScriptObjectPtr& a_configScript)
 {
 	return SkyUI::Config::AddTextOption(
 		a_configScript,

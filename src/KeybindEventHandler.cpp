@@ -1,9 +1,9 @@
 #include "KeybindEventHandler.h"
 #include "KeybindManager.h"
 
-auto KeybindEventHandler::GetInstance() -> KeybindEventHandler&
+KeybindEventHandler& KeybindEventHandler::GetInstance()
 {
-	static KeybindEventHandler instance;
+	static KeybindEventHandler instance{};
 	return instance;
 }
 
@@ -15,9 +15,9 @@ void KeybindEventHandler::Register()
 	}
 }
 
-auto KeybindEventHandler::ProcessEvent(
+RE::BSEventNotifyControl KeybindEventHandler::ProcessEvent(
 	const Event* a_event,
-	[[maybe_unused]] RE::BSTEventSource<Event>* a_eventSource) -> RE::BSEventNotifyControl
+	[[maybe_unused]] RE::BSTEventSource<Event>* a_eventSource)
 {
 	const auto ui = RE::UI::GetSingleton();
 	if (!ui || ui->GameIsPaused())

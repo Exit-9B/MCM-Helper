@@ -7,29 +7,25 @@ namespace Papyrus
 	public:
 		inline static const char* ScriptName = "MCM";
 
-		static auto IsInstalled(RE::StaticFunctionTag*) -> bool;
+		static bool IsInstalled(RE::StaticFunctionTag*);
 
-		static auto GetVersionCode(RE::StaticFunctionTag*) -> std::uint32_t;
+		static std::uint32_t GetVersionCode(RE::StaticFunctionTag*);
 
-		static auto GetModSettingInt(RE::StaticFunctionTag*,
+		static std::int32_t GetModSettingInt(RE::StaticFunctionTag*,
 			std::string_view asModName,
-			std::string_view asSettingName)
-			-> std::int32_t;
+			std::string_view asSettingName);
 
-		static auto GetModSettingBool(RE::StaticFunctionTag*,
+		static bool GetModSettingBool(RE::StaticFunctionTag*,
 			std::string_view asModName,
-			std::string_view asSettingName)
-			-> bool;
+			std::string_view asSettingName);
 
-		static auto GetModSettingFloat(RE::StaticFunctionTag*,
+		static float GetModSettingFloat(RE::StaticFunctionTag*,
 			std::string_view asModName,
-			std::string_view asSettingName)
-			-> float;
+			std::string_view asSettingName);
 
-		static auto GetModSettingString(RE::StaticFunctionTag*,
+		static std::string_view GetModSettingString(RE::StaticFunctionTag*,
 			std::string_view asModName,
-			std::string_view asSettingName)
-			-> std::string_view;
+			std::string_view asSettingName);
 
 		static void SetModSettingInt(RE::StaticFunctionTag*,
 			std::string_view asModName,

@@ -3,18 +3,18 @@
 class TextSource
 {
 public:
-	virtual auto GetValue() -> std::string = 0;
+	[[nodiscard]] virtual std::string GetValue() const = 0;
 	virtual void SetValue(std::string_view a_value) = 0;
-	virtual auto GetDefaultValue() -> std::string = 0;
+	[[nodiscard]] virtual std::string GetDefaultValue() const = 0;
 	virtual void ResetToDefault() = 0;
 };
 
 class PropertyString : public TextSource
 {
 public:
-	auto GetValue() -> std::string override;
+	[[nodiscard]] std::string GetValue() const override;
 	void SetValue(std::string_view a_value) override;
-	auto GetDefaultValue() -> std::string override;
+	[[nodiscard]] std::string GetDefaultValue() const override;
 	void ResetToDefault() override;
 
 	RE::TESForm* SourceForm;
@@ -26,9 +26,9 @@ public:
 class ModSettingString : public TextSource
 {
 public:
-	auto GetValue() -> std::string override;
+	[[nodiscard]] std::string GetValue() const override;
 	void SetValue(std::string_view a_value) override;
-	auto GetDefaultValue() -> std::string override;
+	[[nodiscard]] std::string GetDefaultValue() const override;
 	void ResetToDefault() override;
 
 	std::string ID;

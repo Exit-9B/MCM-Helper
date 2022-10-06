@@ -2,5 +2,5 @@
 
 namespace Translation
 {
-	auto ScaleformTranslate(const std::string& a_key) -> std::string;
+	[[nodiscard]] std::string ScaleformTranslate(const std::string& a_key);
 }

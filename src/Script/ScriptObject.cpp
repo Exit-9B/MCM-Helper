@@ -1,8 +1,7 @@
 #include "Script/ScriptObject.h"
 #include "FormUtil.h"
 
-auto ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName)
-	-> ScriptObjectPtr
+ScriptObjectPtr ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName)
 {
 	ScriptObjectPtr object;
 
@@ -91,7 +90,7 @@ auto ScriptObject::GetVariable(ScriptObjectPtr a_object, std::string_view a_vari
 	return std::addressof(a_object->variables[offset + idx]);
 }
 
-auto ScriptObject::IsType(ScriptObjectPtr a_object, const char* a_scriptName) -> bool
+bool ScriptObject::IsType(ScriptObjectPtr a_object, const char* a_scriptName)
 {
 	for (auto cls = a_object ? a_object->type.get() : nullptr; cls; cls = cls->GetParent()) {
 		if (_stricmp(cls->GetName(), a_scriptName) == 0) {
@@ -102,7 +101,7 @@ auto ScriptObject::IsType(ScriptObjectPtr a_object, const char* a_scriptName) ->
 	return false;
 }
 
-auto ScriptObject::GetBool(ScriptObjectPtr a_object, std::string_view a_variableName) -> bool
+bool ScriptObject::GetBool(ScriptObjectPtr a_object, std::string_view a_variableName)
 {
 	auto variable = GetVariable(a_object, a_variableName);
 	return variable ? variable->GetBool() : false;
@@ -115,8 +114,7 @@ void ScriptObject::SetBool(ScriptObjectPtr a_object, std::string_view a_variable
 		variable->SetBool(a_value);
 }
 
-auto ScriptObject::GetInt(ScriptObjectPtr a_object, std::string_view a_variableName)
-	-> std::int32_t
+std::int32_t ScriptObject::GetInt(ScriptObjectPtr a_object, std::string_view a_variableName)
 {
 	auto variable = GetVariable(a_object, a_variableName);
 	return variable ? variable->GetSInt() : 0;
@@ -132,7 +130,7 @@ void ScriptObject::SetInt(
 		variable->SetSInt(a_value);
 }
 
-auto ScriptObject::GetFloat(ScriptObjectPtr a_object, std::string_view a_variableName) -> float
+float ScriptObject::GetFloat(ScriptObjectPtr a_object, std::string_view a_variableName)
 {
 	auto variable = GetVariable(a_object, a_variableName);
 	return variable ? variable->GetFloat() : 0.0f;
@@ -148,8 +146,7 @@ void ScriptObject::SetFloat(
 		variable->SetFloat(a_value);
 }
 
-auto ScriptObject::GetString(ScriptObjectPtr a_object, std::string_view a_variableName)
-	-> std::string
+std::string ScriptObject::GetString(ScriptObjectPtr a_object, std::string_view a_variableName)
 {
 	auto variable = GetVariable(a_object, a_variableName);
 	return variable ? std::string{ variable->GetString() } : ""s;
@@ -165,8 +162,7 @@ void ScriptObject::SetString(
 		variable->SetString(a_value);
 }
 
-auto ScriptObject::GetArray(ScriptObjectPtr a_object, std::string_view a_variableName)
-	-> ScriptArrayPtr
+ScriptArrayPtr ScriptObject::GetArray(ScriptObjectPtr a_object, std::string_view a_variableName)
 {
 	auto variable = GetVariable(a_object, a_variableName);
 	return variable ? variable->GetArray() : nullptr;

@@ -53,7 +53,7 @@ namespace SkyUI
 	class ConfigManager
 	{
 	public:
-		static auto GetInstance() -> ScriptObjectPtr;
+		static ScriptObjectPtr GetInstance();
 
 		static bool HasConfig(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config);
 
@@ -90,55 +90,55 @@ namespace SkyUI
 
 		static void SetCursorFillMode(ScriptObjectPtr a_object, CursorFillMode a_fillMode);
 
-		static auto AddEmptyOption(ScriptObjectPtr a_object) -> std::int32_t;
+		static std::int32_t AddEmptyOption(ScriptObjectPtr a_object);
 
-		static auto AddHeaderOption(
+		static std::int32_t AddHeaderOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddTextOption(
+		static std::int32_t AddTextOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::string_view a_value,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddToggleOption(
+		static std::int32_t AddToggleOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			bool a_checked,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddSliderOption(
+		static std::int32_t AddSliderOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			float a_value,
 			std::string_view a_formatString = "{0}",
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddMenuOption(
+		static std::int32_t AddMenuOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::string_view a_value,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddColorOption(
+		static std::int32_t AddColorOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::uint32_t a_color,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddKeyMapOption(
+		static std::int32_t AddKeyMapOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::int32_t a_keyCode,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
-		static auto AddInputOption(
+		static std::int32_t AddInputOption(
 			ScriptObjectPtr a_object,
 			std::string_view a_text,
 			std::string_view a_value,
-			Flags a_flags = Flags::None) -> std::int32_t;
+			Flags a_flags = Flags::None);
 
 		static void LoadCustomContent(
 			std::string_view a_source,
@@ -251,13 +251,13 @@ namespace SkyUI
 	private:
 		static void Error(ScriptObjectPtr a_object, std::string_view a_msg);
 
-		static auto AddOption(
+		static std::int32_t AddOption(
 			ScriptObjectPtr a_object,
 			OptionType a_optionType,
 			std::string_view a_text,
 			std::string_view a_strValue,
 			float a_numValue,
-			Flags a_flags) -> std::int32_t;
+			Flags a_flags);
 
 		static void SetOptionStrValue(
 			ScriptObjectPtr a_object,
@@ -280,7 +280,7 @@ namespace SkyUI
 	};
 }
 
-inline static auto operator|(SkyUI::Flags lhs, SkyUI::Flags rhs) -> SkyUI::Flags
+inline static SkyUI::Flags operator|(SkyUI::Flags lhs, SkyUI::Flags rhs)
 {
 	return static_cast<SkyUI::Flags>(
 		static_cast<std::int32_t>(lhs) | static_cast<std::int32_t>(rhs));

@@ -6,9 +6,9 @@
 #include <rapidjson/filewritestream.h>
 #include <rapidjson/prettywriter.h>
 
-auto KeybindManager::GetInstance() -> KeybindManager&
+KeybindManager& KeybindManager::GetInstance()
 {
-	static KeybindManager instance;
+	static KeybindManager instance{};
 	return instance;
 }
 
@@ -158,16 +158,14 @@ void KeybindManager::AddKeybind(
 	}
 }
 
-auto KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
-	-> KeybindInfo
+KeybindInfo KeybindManager::GetKeybind(const std::string& a_modName, const std::string& a_keybindID) const
 {
 	auto key = Keybind{ a_modName, a_keybindID };
 	auto item = _modKeys.find(key);
 	return item != _modKeys.end() ? item->second : KeybindInfo{};
 }
 
-auto KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
-	-> std::uint32_t
+std::uint32_t KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
 {
 	std::scoped_lock lock{ _mutex };
 

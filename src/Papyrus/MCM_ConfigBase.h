@@ -17,25 +17,15 @@ namespace Papyrus
 			std::vector<std::string> a_shortNames);
 
 		// Mod Settings
-		static auto GetModSettingInt(
-			RE::TESQuest* a_self,
-			std::string_view a_settingName)
-			-> std::int32_t;
+		static std::int32_t GetModSettingInt(RE::TESQuest* a_self, std::string_view a_settingName);
 
-		static auto GetModSettingBool(
-			RE::TESQuest* a_self,
-			std::string_view a_settingName)
-			-> bool;
+		static bool GetModSettingBool(RE::TESQuest* a_self, std::string_view a_settingName);
 
-		static auto GetModSettingFloat(
-			RE::TESQuest* a_self,
-			std::string_view a_settingName)
-			-> float;
+		static float GetModSettingFloat(RE::TESQuest* a_self, std::string_view a_settingName);
 
-		static auto GetModSettingString(
+		static std::string GetModSettingString(
 			RE::TESQuest* a_self,
-			std::string_view a_settingName)
-			-> std::string;
+			std::string_view a_settingName);
 
 		static void SetModSettingInt(
 			RE::TESQuest* a_self,
@@ -123,19 +113,19 @@ namespace Papyrus
 			std::int32_t a_option,
 			std::string_view a_input);
 
-		static auto GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode) -> std::string;
+		static std::string GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode);
 
 		// Helpers
 		static void LoadConfig(RE::TESQuest* a_self);
 
 		static void UpdateInfoText(ScriptObjectPtr a_object, bool a_forceUpdate);
 
-		static [[nodiscard]] VMAwaitable SendSettingChangeEvent(
+		[[nodiscard]] static VMAwaitable SendSettingChangeEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,
 			std::string a_ID);
 
-		static [[nodiscard]] VMAwaitable SendPageSelectEvent(
+		[[nodiscard]] static VMAwaitable SendPageSelectEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
 			ScriptObjectPtr a_object,
 			std::string a_page);

@@ -1,6 +1,6 @@
 #include "Translation.h"
 
-auto Translation::ScaleformTranslate(const std::string& a_key) -> std::string
+std::string Translation::ScaleformTranslate(const std::string& a_key)
 {
 	if (!a_key.starts_with('$')) {
 		return a_key;

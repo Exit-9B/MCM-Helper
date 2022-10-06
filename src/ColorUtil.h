@@ -10,12 +10,12 @@ inline constexpr std::uint32_t MakeColor(
 	return ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF) << 0);
 }
 
-inline std::uint32_t PackARGB(const RE::Color& color)
+[[nodiscard]] inline std::uint32_t PackARGB(const RE::Color& color)
 {
 	return MakeColor(color.alpha, color.red, color.green, color.blue);
 }
 
-inline RE::Color UnpackARGB(std::uint32_t a_color)
+[[nodiscard]] inline RE::Color UnpackARGB(std::uint32_t a_color)
 {
 	return RE::Color{
 		(a_color >> 16) & 0xFF,

@@ -39,29 +39,29 @@ namespace Papyrus
 		configPageCache.SetMenuOptions(a_ID, a_options, a_shortNames);
 	}
 
-	auto MCM_ConfigBase::GetModSettingInt(RE::TESQuest* a_self, std::string_view a_settingName)
-		-> std::int32_t
+	std::int32_t MCM_ConfigBase::GetModSettingInt(
+		RE::TESQuest* a_self,
+		std::string_view a_settingName)
 	{
 		auto modName = FormUtil::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingInt(modName, a_settingName);
 	}
 
-	auto MCM_ConfigBase::GetModSettingBool(RE::TESQuest* a_self, std::string_view a_settingName)
-		-> bool
+	bool MCM_ConfigBase::GetModSettingBool(RE::TESQuest* a_self, std::string_view a_settingName)
 	{
 		auto modName = FormUtil::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingBool(modName, a_settingName);
 	}
 
-	auto MCM_ConfigBase::GetModSettingFloat(RE::TESQuest* a_self, std::string_view a_settingName)
-		-> float
+	float MCM_ConfigBase::GetModSettingFloat(RE::TESQuest* a_self, std::string_view a_settingName)
 	{
 		auto modName = FormUtil::GetModName(a_self);
 		return SettingStore::GetInstance().GetModSettingFloat(modName, a_settingName);
 	}
 
-	auto MCM_ConfigBase::GetModSettingString(RE::TESQuest* a_self, std::string_view a_settingName)
-		-> std::string
+	std::string MCM_ConfigBase::GetModSettingString(
+		RE::TESQuest* a_self,
+		std::string_view a_settingName)
 	{
 		auto modName = FormUtil::GetModName(a_self);
 		auto value = SettingStore::GetInstance().GetModSettingString(modName, a_settingName);
@@ -513,8 +513,7 @@ namespace Papyrus
 		}
 	}
 
-	auto MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode)
-		-> std::string
+	std::string MCM_ConfigBase::GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode)
 	{
 		auto config = ConfigStore::GetInstance().GetConfig(a_self);
 		return config ? config->GetCustomControl(a_keyCode) : ""s;

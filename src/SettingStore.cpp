@@ -15,7 +15,7 @@ SettingStore::~SettingStore()
 	}
 }
 
-auto SettingStore::GetInstance() -> SettingStore&
+SettingStore& SettingStore::GetInstance()
 {
 	static SettingStore instance;
 	return instance;
@@ -37,8 +37,9 @@ void SettingStore::ReadSettings()
 		elapsedMs.count());
 }
 
-auto SettingStore::GetModSettingInt(std::string_view a_modName, std::string_view a_settingName)
-	-> std::int32_t
+std::int32_t SettingStore::GetModSettingInt(
+	std::string_view a_modName,
+	std::string_view a_settingName)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
 	if (setting) {
@@ -56,22 +57,21 @@ auto SettingStore::GetModSettingInt(std::string_view a_modName, std::string_view
 	return -1;
 }
 
-auto SettingStore::GetModSettingBool(std::string_view a_modName, std::string_view a_settingName)
-	-> bool
+bool SettingStore::GetModSettingBool(std::string_view a_modName, std::string_view a_settingName)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
 	return setting ? setting->data.b : false;
 }
 
-auto SettingStore::GetModSettingFloat(std::string_view a_modName, std::string_view a_settingName)
-	-> float
+float SettingStore::GetModSettingFloat(std::string_view a_modName, std::string_view a_settingName)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
 	return setting ? setting->data.f : -1;
 }
 
-auto SettingStore::GetModSettingString(std::string_view a_modName, std::string_view a_settingName)
-	-> const char*
+const char* SettingStore::GetModSettingString(
+	std::string_view a_modName,
+	std::string_view a_settingName)
 {
 	auto setting = GetModSetting(a_modName, a_settingName);
 	return setting ? setting->data.s : nullptr;
@@ -270,8 +270,7 @@ bool SettingStore::ReadINI(
 	return true;
 }
 
-auto SettingStore::GetModSetting(std::string_view a_modName, std::string_view a_settingName)
-	-> RE::Setting*
+RE::Setting* SettingStore::GetModSetting(std::string_view a_modName, std::string_view a_settingName)
 {
 	if (a_modName.empty() || a_settingName.empty())
 		return nullptr;
@@ -283,8 +282,7 @@ auto SettingStore::GetModSetting(std::string_view a_modName, std::string_view a_
 	return (it != _settingStore.end()) ? it->second : nullptr;
 }
 
-auto SettingStore::GetDefaultSetting(std::string_view a_modName, std::string_view a_settingName)
-	-> RE::Setting*
+RE::Setting* SettingStore::GetDefaultSetting(std::string_view a_modName, std::string_view a_settingName)
 {
 	if (a_modName.empty() || a_settingName.empty())
 		return nullptr;

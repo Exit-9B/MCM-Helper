@@ -4,47 +4,47 @@
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func)
 #define REGISTER_FUNCTION_ND(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func, true)
 
-auto Papyrus::MCM::IsInstalled(RE::StaticFunctionTag*) -> bool
+bool Papyrus::MCM::IsInstalled(RE::StaticFunctionTag*)
 {
 	return true;
 }
 
-auto Papyrus::MCM::GetVersionCode(RE::StaticFunctionTag*) -> std::uint32_t
+std::uint32_t Papyrus::MCM::GetVersionCode(RE::StaticFunctionTag*)
 {
 	return MCM_VERSION_RELEASE;
 }
 
-auto Papyrus::MCM::GetModSettingInt(
+std::int32_t Papyrus::MCM::GetModSettingInt(
 	RE::StaticFunctionTag*,
 	std::string_view a_modName,
-	std::string_view a_settingName) -> std::int32_t
+	std::string_view a_settingName)
 {
 	return SettingStore::GetInstance().GetModSettingInt(a_modName, a_settingName);
 }
 
-auto Papyrus::MCM::GetModSettingBool(
+bool Papyrus::MCM::GetModSettingBool(
 	RE::StaticFunctionTag*,
 	std::string_view a_modName,
-	std::string_view a_settingName) -> bool
+	std::string_view a_settingName)
 {
 	return SettingStore::GetInstance().GetModSettingBool(a_modName, a_settingName);
 }
 
-auto Papyrus::MCM::GetModSettingFloat(
+float Papyrus::MCM::GetModSettingFloat(
 	RE::StaticFunctionTag*,
 	std::string_view a_modName,
-	std::string_view a_settingName) -> float
+	std::string_view a_settingName)
 {
 	return SettingStore::GetInstance().GetModSettingFloat(a_modName, a_settingName);
 }
 
-auto Papyrus::MCM::GetModSettingString(
+std::string_view Papyrus::MCM::GetModSettingString(
 	RE::StaticFunctionTag*,
 	std::string_view a_modName,
-	std::string_view a_settingName) -> std::string_view
+	std::string_view a_settingName)
 {
 	auto s = SettingStore::GetInstance().GetModSettingString(a_modName, a_settingName);
-	return s ? std::string_view{ s } : ""s;
+	return s ? std::string_view{ s } : ""sv;
 }
 
 void Papyrus::MCM::SetModSettingInt(
