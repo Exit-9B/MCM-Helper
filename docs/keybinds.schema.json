@@ -146,7 +146,7 @@
     "form": {
       "description": "Look up a Form by a plugin file and Form ID (e.g. \"MyMod.esp|D62\")",
       "type": "string",
-      "pattern": "^[\\w\\-. ]+\\.es[lmp]\\|(0[Xx])?[\\dA-Fa-f]{1,8}$"
+      "pattern": "^[^\\\\\\/:*?\"<>|]+\\.es[lmp]\\|(0[Xx])?[\\dA-Fa-f]{1,8}$"
     }
   }
 }
