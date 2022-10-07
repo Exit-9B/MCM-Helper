@@ -38,8 +38,15 @@ std::string FormUtil::GetIdentifierFromForm(const RE::TESForm* a_form)
 
 std::string FormUtil::GetModName(const RE::TESForm* a_form)
 {
-	auto file = a_form ? a_form->GetFile() : nullptr;
-	auto fileName = file ? file->fileName : nullptr;
+	if (!a_form)
+		return ""s;
 
-	return fileName ? std::filesystem::path(fileName).stem().string() : ""s;
+	const auto array = a_form->sourceFiles.array;
+	if (!array || array->empty()) {
+		return ""s;
+	}
+
+	const auto file = array->front();
+	const auto filename = file ? file->GetFilename() : ""sv;
+	return std::filesystem::path(filename).stem().string();
 }
