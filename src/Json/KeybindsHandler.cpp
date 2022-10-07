@@ -2,7 +2,7 @@
 #include "Json/KeybindsArrayHandler.h"
 
 KeybindsHandler::KeybindsHandler(ReaderHandler* master, const std::string& modName) :
-	IHandler{ master },
+	IHandler(master),
 	_modName{ modName }
 {
 }

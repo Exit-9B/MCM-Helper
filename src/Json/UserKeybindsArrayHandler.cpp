@@ -1,6 +1,6 @@
 #include "Json/UserKeybindsArrayHandler.h"
 
-UserKeybindsArrayHandler::UserKeybindsArrayHandler(ReaderHandler* master) : IHandler{ master }
+UserKeybindsArrayHandler::UserKeybindsArrayHandler(ReaderHandler* master) : IHandler(master)
 {
 }
 

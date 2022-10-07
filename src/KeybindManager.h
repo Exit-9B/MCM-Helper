@@ -59,7 +59,7 @@ public:
 
 	void ClearModKeys();
 
-	void ProcessButtonEvent(RE::ButtonEvent* a_event) const;
+	void ProcessButtonEvent(const RE::ButtonEvent* a_event) const;
 
 private:
 	bool _keybindsDirty;

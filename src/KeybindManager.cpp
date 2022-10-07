@@ -17,7 +17,7 @@ void KeybindManager::ReadKeybinds(const std::string& a_modName)
 	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto keybindsLocation = configPath / a_modName / "keybinds.json"sv;
 
-	auto keybindsDirEntry = std::filesystem::directory_entry{ keybindsLocation };
+	std::filesystem::directory_entry keybindsDirEntry{ keybindsLocation };
 	if (!keybindsDirEntry.exists())
 		return;
 
@@ -33,7 +33,7 @@ void KeybindManager::ReadKeybindRegistrations()
 {
 	auto startTime = std::chrono::steady_clock::now();
 
-	auto settingsPath = std::filesystem::path{ "Data/MCM/Settings"sv };
+	std::filesystem::path settingsPath{ "Data/MCM/Settings"sv };
 	auto keybindsLocation = settingsPath / "keybinds.json"sv;
 
 	ReaderHandler handler;
@@ -57,10 +57,10 @@ void KeybindManager::CommitKeybinds()
 	auto startTime = std::chrono::steady_clock::now();
 
 	{
-		std::scoped_lock lock{ _mutex };
+		std::scoped_lock lk{ _mutex };
 
-		auto settingsPath = std::filesystem::path{ "Data/MCM/Settings"sv };
-		auto settingsEntry = std::filesystem::directory_entry{ settingsPath };
+		std::filesystem::path settingsPath{ "Data/MCM/Settings"sv };
+		std::filesystem::directory_entry settingsEntry{ settingsPath };
 		if (!settingsEntry.exists()) {
 			std::filesystem::create_directory(settingsPath);
 		}
@@ -120,7 +120,7 @@ void KeybindManager::Register(
 
 	auto key = Keybind{ a_modName, a_keybindID };
 
-	std::scoped_lock lock{ _mutex };
+	std::scoped_lock lk{ _mutex };
 
 	// Check if keybind has been added yet
 	auto keyIt = _modKeys.find(key);
@@ -167,7 +167,7 @@ KeybindInfo KeybindManager::GetKeybind(const std::string& a_modName, const std::
 
 std::uint32_t KeybindManager::GetRegisteredKey(const std::string& a_modName, const std::string& a_keybindID)
 {
-	std::scoped_lock lock{ _mutex };
+	std::scoped_lock lk{ _mutex };
 
 	auto key = Keybind{ a_modName, a_keybindID };
 	auto item = _modRegs.find(key);
@@ -176,15 +176,13 @@ std::uint32_t KeybindManager::GetRegisteredKey(const std::string& a_modName, con
 
 void KeybindManager::Unregister(const std::string& a_modName, const std::string& a_keybindID)
 {
-	std::scoped_lock lock{ _mutex };
+	std::scoped_lock lk{ _mutex };
 
 	auto key = Keybind{ a_modName, a_keybindID };
-	auto regIt = _modRegs.find(key);
-	auto keyIt = _modKeys.find(key);
-
-	if (regIt != _modRegs.end()) {
+	if (auto regIt = _modRegs.find(key); regIt != _modRegs.end()) {
 		auto& keyCode = regIt->second;
-		if (keyIt != _modKeys.end()) {
+
+		if (auto keyIt = _modKeys.find(key); keyIt != _modKeys.end()) {
 			auto& keyInfo = keyIt->second;
 
 			for (auto [it, end] = _lookup.equal_range(keyCode); it != end; ++it) {
@@ -202,7 +200,7 @@ void KeybindManager::Unregister(const std::string& a_modName, const std::string&
 
 void KeybindManager::Unregister(std::uint32_t a_keyCode)
 {
-	std::scoped_lock lock{ _mutex };
+	std::scoped_lock lk{ _mutex };
 
 	_lookup.erase(a_keyCode);
 
@@ -220,13 +218,13 @@ void KeybindManager::Unregister(std::uint32_t a_keyCode)
 
 void KeybindManager::ClearModKeys()
 {
-	std::scoped_lock lock{ _mutex };
+	std::scoped_lock lk{ _mutex };
 
 	_modKeys.clear();
 	_lookup.clear();
 }
 
-void KeybindManager::ProcessButtonEvent(RE::ButtonEvent* a_event) const
+void KeybindManager::ProcessButtonEvent(const RE::ButtonEvent* a_event) const
 {
 	assert(a_event);
 

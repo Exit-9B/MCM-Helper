@@ -18,9 +18,9 @@ public:
 	[[nodiscard]] static ConfigStore& GetInstance();
 
 	void ReadConfigs();
-	bool ReadConfig(const std::string& a_modName, ScriptObjectPtr a_configScript);
-	[[nodiscard]] auto GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>;
-	[[nodiscard]] auto GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>;
+	bool ReadConfig(const std::string& a_modName, const ScriptObjectPtr a_configScript);
+	[[nodiscard]] std::shared_ptr<Config> GetConfig(const std::string& a_modName) const;
+	[[nodiscard]] std::shared_ptr<Config> GetConfig(const RE::TESQuest* a_configQuest) const;
 
 	void ClearConfigs();
 
@@ -29,12 +29,12 @@ private:
 
 	bool MakeErrorPage(
 		const std::string& a_modName,
-		ScriptObjectPtr& a_configScript,
+		const ScriptObjectPtr& a_configScript,
 		std::shared_ptr<Config> a_config,
 		const std::string& a_error);
 
-	[[nodiscard]] RE::TESQuest* GetFormFromScript(ScriptObjectPtr& a_configScript);
-	[[nodiscard]] std::string GetModName(ScriptObjectPtr& a_configScript);
+	[[nodiscard]] RE::TESQuest* GetFormFromScript(const ScriptObjectPtr& a_configScript);
+	[[nodiscard]] std::string GetModName(const ScriptObjectPtr& a_configScript);
 
 	Storage _configStore;
 };

@@ -66,7 +66,7 @@ Language: Cpp
 MaxEmptyLinesToKeep: 2
 NamespaceIndentation: All
 PenaltyBreakAssignment: 500
-PenaltyIndentedWhitespace: 5
+PenaltyIndentedWhitespace: 15
 PenaltyReturnTypeOnItsOwnLine: 1000
 PointerAlignment: Left
 ReflowComments : 'true'

@@ -7,7 +7,7 @@ std::string PropertyString::GetValue() const
 	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
 	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable && variable->IsString()) {
-		return std::string{ variable->GetString() };
+		return std::string(variable->GetString());
 	}
 
 	return ""s;

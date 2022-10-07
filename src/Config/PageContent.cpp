@@ -3,7 +3,7 @@
 #include "ConfigPageCache.h"
 #include "Script/SkyUI.h"
 
-void PageLayout::Draw(ScriptObjectPtr a_object) const
+void PageLayout::Draw(const ScriptObjectPtr& a_object) const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
 
@@ -25,7 +25,7 @@ void PageLayout::Draw(ScriptObjectPtr a_object) const
 	}
 }
 
-void CustomContent::Draw(ScriptObjectPtr a_object) const
+void CustomContent::Draw([[maybe_unused]] const ScriptObjectPtr& a_object) const
 {
 	SkyUI::Config::LoadCustomContent(Source, X, Y);
 }

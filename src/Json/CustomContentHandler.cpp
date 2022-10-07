@@ -1,7 +1,7 @@
 #include "Json/CustomContentHandler.h"
 
 CustomContentHandler::CustomContentHandler(ReaderHandler* master, CustomContent* customContent) :
-	IHandler{ master },
+	IHandler(master),
 	_customContent{ customContent }
 {
 }

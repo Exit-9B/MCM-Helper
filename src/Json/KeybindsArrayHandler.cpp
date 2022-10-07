@@ -4,7 +4,7 @@
 KeybindsArrayHandler::KeybindsArrayHandler(
 	ReaderHandler* master,
 	std::unordered_map<std::string, KeybindInfo>* modKeys) :
-	IHandler{ master },
+	IHandler(master),
 	_modKeys{ modKeys }
 {
 }

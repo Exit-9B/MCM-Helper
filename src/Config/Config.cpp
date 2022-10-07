@@ -1,7 +1,7 @@
 #include "Config/Config.h"
 #include "ConfigPageCache.h"
 
-void Config::ShowPage(ScriptObjectPtr a_object, const std::string& a_page) const
+void Config::ShowPage(const ScriptObjectPtr& a_object, const std::string& a_page) const
 {
 	if (a_page.empty()) {
 		if (MainPage) {
@@ -20,7 +20,7 @@ void Config::ShowPage(ScriptObjectPtr a_object, const std::string& a_page) const
 	}
 }
 
-void Config::RefreshPage(ScriptObjectPtr a_object) const
+void Config::RefreshPage(const ScriptObjectPtr& a_object) const
 {
 	ConfigPageCache::GetInstance().ForEach(
 		[&a_object](std::int32_t a_ID, std::shared_ptr<Control> a_control)

@@ -14,7 +14,7 @@ void Control::Refresh(
 {
 }
 
-VMAwaitable Control::InvokeAction(VM* a_vm)
+VMAwaitable Control::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -122,7 +122,7 @@ void TextControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable TextControl::InvokeAction(VM* a_vm)
+VMAwaitable TextControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -163,7 +163,7 @@ void ToggleControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable ToggleControl::InvokeAction(VM* a_vm)
+VMAwaitable ToggleControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -204,7 +204,7 @@ void SliderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable SliderControl::InvokeAction(VM* a_vm)
+VMAwaitable SliderControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -253,7 +253,7 @@ void StepperControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable StepperControl::InvokeAction(VM* a_vm)
+VMAwaitable StepperControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -304,7 +304,7 @@ void MenuControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable MenuControl::InvokeAction(VM* a_vm)
+VMAwaitable MenuControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -366,7 +366,7 @@ void EnumControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable EnumControl::InvokeAction(VM* a_vm)
+VMAwaitable EnumControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -426,7 +426,7 @@ void ColorControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable ColorControl::InvokeAction(VM* a_vm)
+VMAwaitable ColorControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -467,7 +467,7 @@ void KeyMapControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable KeyMapControl::InvokeAction(VM* a_vm)
+VMAwaitable KeyMapControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};
@@ -548,7 +548,7 @@ void InputControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable InputControl::InvokeAction(VM* a_vm)
+VMAwaitable InputControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
 	if (!Action)
 		return {};

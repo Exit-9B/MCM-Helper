@@ -78,9 +78,13 @@ auto ConfigPageCache::GetGroups() const -> std::unordered_set<std::uint32_t>
 
 bool ConfigPageCache::IsGroupActive(std::uint32_t a_groupID) const
 {
-	auto it = _groupControls.find(a_groupID);
-	auto control = it != _groupControls.end() ? it->second : nullptr;
-	return control ? control->GetValue() : true;
+	if (auto it = _groupControls.find(a_groupID); it != _groupControls.end()) {
+		if (auto& control = it->second) {
+			return control->GetValue();
+		}
+	}
+
+	return true;
 }
 
 auto ConfigPageCache::GetControl(std::int32_t a_optionID) const -> std::shared_ptr<Control>
@@ -93,7 +97,7 @@ auto ConfigPageCache::GetMenuOptions(const MenuDialogControl* a_control) const
 	-> std::vector<std::string>
 {
 	if (!a_control)
-		return std::vector<std::string>{};
+		return {};
 
 	auto& id = a_control->ID;
 	auto it = _menuOptions.find(id);
@@ -104,7 +108,7 @@ auto ConfigPageCache::GetMenuShortNames(const MenuDialogControl* a_control) cons
 	-> std::vector<std::string>
 {
 	if (!a_control)
-		return std::vector<std::string>{};
+		return {};
 
 	auto& id = a_control->ID;
 	auto it = _menuShortNames.find(id);

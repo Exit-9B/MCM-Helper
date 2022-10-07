@@ -1,6 +1,6 @@
 #include "Json/PluginRequirementsHandler.h"
 
-PluginRequirementsHandler::PluginRequirementsHandler(ReaderHandler* master) : IHandler{ master }
+PluginRequirementsHandler::PluginRequirementsHandler(ReaderHandler* master) : IHandler(master)
 {
 }
 

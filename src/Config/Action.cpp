@@ -3,8 +3,9 @@
 #include "ColorUtil.h"
 #include "Script/ScriptObject.h"
 
-auto Function::FunctionArguments::Make(std::span<std::string> a_params, FunctionParam a_value)
-	-> std::unique_ptr<Function::FunctionArguments>
+auto Function::FunctionArguments::Make(
+	std::span<const std::string> a_params,
+	FunctionParam a_value) -> std::unique_ptr<Function::FunctionArguments>
 {
 	auto args = std::make_unique<FunctionArguments>();
 	args->Args.resize(static_cast<std::uint32_t>(a_params.size()));
@@ -84,7 +85,7 @@ void Function::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)
 	}
 }
 
-VMAwaitable CallFunction::Invoke(VM* a_vm, FunctionParam a_value)
+VMAwaitable CallFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value)
 {
 	if (!a_vm || Function.empty())
 		return {};
@@ -97,7 +98,7 @@ VMAwaitable CallFunction::Invoke(VM* a_vm, FunctionParam a_value)
 	return a_vm->DispatchMethodCall(object, Function, args.get());
 }
 
-VMAwaitable CallGlobalFunction::Invoke(VM* a_vm, FunctionParam a_value)
+VMAwaitable CallGlobalFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value)
 {
 	if (!a_vm || Function.empty() || ScriptName.empty())
 		return {};
@@ -120,7 +121,8 @@ void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
 
 	ScriptArgs args{
 		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))
-		: RE::MakeFunctionArguments(std::move(control)) };
+			 : RE::MakeFunctionArguments(std::move(control))
+	};
 
 	vm->DispatchMethodCall(object, fnName, args.get());
 }
@@ -130,11 +132,10 @@ void RunConsoleCommand::SendControlEvent(bool a_up, [[maybe_unused]] float a_hol
 	if (a_up)
 		return;
 
-	const auto scriptFactory = RE::IFormFactory::GetConcreteFormFactoryByType<RE::Script>();
-	const auto script = scriptFactory ? scriptFactory->Create() : nullptr;
-	if (script) {
-		script->SetCommand(Command);
-		script->CompileAndRun(nullptr);
-		delete script;
+	if (const auto scriptFactory = RE::IFormFactory::GetConcreteFormFactoryByType<RE::Script>()) {
+		if (const std::unique_ptr<RE::Script> script{ scriptFactory->Create() }) {
+			script->SetCommand(Command);
+			script->CompileAndRun(nullptr);
+		}
 	}
 }

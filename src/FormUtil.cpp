@@ -8,12 +8,12 @@ RE::TESForm* FormUtil::GetFormFromIdentifier(const std::string& a_identifier)
 	std::getline(ss, plugin, '|');
 	std::getline(ss, id);
 	RE::FormID relativeID;
-	std::istringstream{ id } >> std::hex >> relativeID;
+	std::istringstream(id) >> std::hex >> relativeID;
 	const auto dataHandler = RE::TESDataHandler::GetSingleton();
 	return dataHandler ? dataHandler->LookupForm(relativeID, plugin) : nullptr;
 }
 
-std::string FormUtil::GetIdentifierFromForm(RE::TESForm* a_form)
+std::string FormUtil::GetIdentifierFromForm(const RE::TESForm* a_form)
 {
 	if (!a_form) {
 		return ""s;
@@ -36,10 +36,10 @@ std::string FormUtil::GetIdentifierFromForm(RE::TESForm* a_form)
 	return ss.str();
 }
 
-std::string FormUtil::GetModName(RE::TESForm* a_form)
+std::string FormUtil::GetModName(const RE::TESForm* a_form)
 {
 	auto file = a_form ? a_form->GetFile() : nullptr;
 	auto fileName = file ? file->fileName : nullptr;
 
-	return fileName ? std::filesystem::path{ fileName }.stem().string() : ""s;
+	return fileName ? std::filesystem::path(fileName).stem().string() : ""s;
 }

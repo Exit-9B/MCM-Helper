@@ -3,7 +3,7 @@
 #include "Json/CustomContentHandler.h"
 
 PagesHandler::PagesHandler(ReaderHandler* master, Config* config, const ScriptObjectPtr& script) :
-	IHandler{ master },
+	IHandler(master),
 	_config{ config },
 	_script{ script }
 {

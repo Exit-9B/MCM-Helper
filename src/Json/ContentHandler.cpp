@@ -7,7 +7,7 @@ ContentHandler::ContentHandler(
 	ReaderHandler* master,
 	PageLayout* pageLayout,
 	const ScriptObjectPtr& script) :
-	IHandler{ master },
+	IHandler(master),
 	_pageLayout{ pageLayout }
 {
 	_form = static_cast<RE::TESForm*>(script->Resolve(0));

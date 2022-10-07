@@ -1,7 +1,7 @@
 #include "Script/ScriptObject.h"
 #include "FormUtil.h"
 
-ScriptObjectPtr ScriptObject::FromForm(RE::TESForm* a_form, const std::string& a_scriptName)
+ScriptObjectPtr ScriptObject::FromForm(const RE::TESForm* a_form, const std::string& a_scriptName)
 {
 	ScriptObjectPtr object;
 

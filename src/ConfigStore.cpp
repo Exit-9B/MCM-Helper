@@ -129,18 +129,13 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 	return true;
 }
 
-auto ConfigStore::GetConfig(const std::string& a_modName) -> std::shared_ptr<Config>
+std::shared_ptr<Config> ConfigStore::GetConfig(const std::string& a_modName) const
 {
 	auto it = _configStore.find(a_modName);
-	if (it != _configStore.end()) {
-		return it->second;
-	}
-	else {
-		return nullptr;
-	}
+	return it != _configStore.end() ? it->second : nullptr;
 }
 
-auto ConfigStore::GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Config>
+std::shared_ptr<Config> ConfigStore::GetConfig(const RE::TESQuest* a_configQuest) const
 {
 	auto modName = FormUtil::GetModName(a_configQuest);
 	return GetConfig(modName);
@@ -148,7 +143,7 @@ auto ConfigStore::GetConfig(RE::TESQuest* a_configQuest) -> std::shared_ptr<Conf
 
 bool ConfigStore::MakeErrorPage(
 	const std::string& a_modName,
-	ScriptObjectPtr& a_configScript,
+	const ScriptObjectPtr& a_configScript,
 	std::shared_ptr<Config> a_config,
 	const std::string& a_error)
 {
@@ -179,14 +174,14 @@ void ConfigStore::ClearConfigs()
 	_configStore.clear();
 }
 
-RE::TESQuest* ConfigStore::GetFormFromScript(ScriptObjectPtr& a_configScript)
+RE::TESQuest* ConfigStore::GetFormFromScript(const ScriptObjectPtr& a_configScript)
 {
 	auto typeID = static_cast<RE::VMTypeID>(RE::TESQuest::FORMTYPE);
 	auto quest = static_cast<RE::TESQuest*>(a_configScript->Resolve(typeID));
 	return quest;
 }
 
-std::string ConfigStore::GetModName(ScriptObjectPtr& a_configScript)
+std::string ConfigStore::GetModName(const ScriptObjectPtr& a_configScript)
 {
 	auto quest = GetFormFromScript(a_configScript);
 	return FormUtil::GetModName(quest);

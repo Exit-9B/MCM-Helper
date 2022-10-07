@@ -8,6 +8,7 @@ namespace Papyrus
 		inline static const char* ScriptName = "MCM_ConfigBase";
 
 		// MCM
+
 		static void RefreshMenu(RE::TESQuest* a_self);
 
 		static void SetMenuOptions(
@@ -17,6 +18,7 @@ namespace Papyrus
 			std::vector<std::string> a_shortNames);
 
 		// Mod Settings
+
 		static std::int32_t GetModSettingInt(RE::TESQuest* a_self, std::string_view a_settingName);
 
 		static bool GetModSettingBool(RE::TESQuest* a_self, std::string_view a_settingName);
@@ -48,6 +50,7 @@ namespace Papyrus
 			std::string_view a_value);
 
 		// SkyUI Overrides
+
 		static LatentResult<> OnPageReset(
 			RE::BSScript::IVirtualMachine* a_vm,
 			RE::VMStackID a_stackID,
@@ -115,19 +118,22 @@ namespace Papyrus
 
 		static std::string GetCustomControl(RE::TESQuest* a_self, std::uint32_t a_keyCode);
 
-		// Helpers
+		// Papyrus Helper
+
 		static void LoadConfig(RE::TESQuest* a_self);
 
-		static void UpdateInfoText(ScriptObjectPtr a_object, bool a_forceUpdate);
+		// Helpers
+
+		static void UpdateInfoText(const ScriptObjectPtr& a_object, bool a_forceUpdate);
 
 		[[nodiscard]] static VMAwaitable SendSettingChangeEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
-			ScriptObjectPtr a_object,
+			ScriptObjectPtr& a_object,
 			std::string a_ID);
 
 		[[nodiscard]] static VMAwaitable SendPageSelectEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
-			ScriptObjectPtr a_object,
+			ScriptObjectPtr& a_object,
 			std::string a_page);
 
 		// Registration delegate

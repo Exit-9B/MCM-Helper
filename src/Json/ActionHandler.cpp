@@ -7,7 +7,7 @@ ActionHandler::ActionHandler(
 	std::shared_ptr<Action>* action,
 	RE::TESForm* sourceForm,
 	const std::string& scriptName) :
-	IHandler{ master },
+	IHandler(master),
 	_action{ action },
 	_sourceForm{ sourceForm },
 	_scriptName{ scriptName }

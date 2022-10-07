@@ -10,6 +10,8 @@
 #define REGISTER_FUNCTION(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func)
 #define REGISTER_FUNCTION_ND(vm, func) vm->RegisterFunction(#func##sv, ScriptName, func, true)
 
+namespace chrono = std::chrono;
+
 namespace Papyrus
 {
 	void MCM_ConfigBase::RefreshMenu(RE::TESQuest* a_self)
@@ -428,7 +430,7 @@ namespace Papyrus
 				a_keyCode != keymap->GetKeyCode() && a_keyCode != static_cast<std::uint32_t>(-1)) {
 
 				auto conflictControl = Translation::ScaleformTranslate(
-					std::string{ a_conflictControl });
+					std::string(a_conflictControl));
 
 				std::string msg;
 				if (!a_conflictName.empty()) {
@@ -538,7 +540,7 @@ namespace Papyrus
 			return;
 		}
 
-		auto startTime = std::chrono::steady_clock::now();
+		auto startTime = chrono::steady_clock::now();
 
 		if (!ConfigStore::GetInstance().ReadConfig(modName, object)) {
 			return;
@@ -550,14 +552,13 @@ namespace Papyrus
 		auto& keybindManager = KeybindManager::GetInstance();
 		keybindManager.ReadKeybinds(modName);
 
-		auto endTime = std::chrono::steady_clock::now();
-		auto elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(
-			endTime - startTime);
+		auto endTime = chrono::steady_clock::now();
+		auto elapsedMs = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
 
 		logger::info("Registered mod config for {} in {} ms."sv, modName, elapsedMs.count());
 	}
 
-	void MCM_ConfigBase::UpdateInfoText(ScriptObjectPtr a_object, bool a_forceUpdate)
+	void MCM_ConfigBase::UpdateInfoText(const ScriptObjectPtr& a_object, bool a_forceUpdate)
 	{
 		auto& configPageCache = ConfigPageCache::GetInstance();
 
@@ -570,7 +571,7 @@ namespace Papyrus
 
 	VMAwaitable MCM_ConfigBase::SendSettingChangeEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
-		ScriptObjectPtr a_object,
+		ScriptObjectPtr& a_object,
 		std::string a_ID)
 	{
 		assert(a_vm);
@@ -587,7 +588,7 @@ namespace Papyrus
 
 	VMAwaitable MCM_ConfigBase::SendPageSelectEvent(
 		RE::BSScript::IVirtualMachine* a_vm,
-		ScriptObjectPtr a_object,
+		ScriptObjectPtr& a_object,
 		std::string a_page)
 	{
 		assert(a_vm);

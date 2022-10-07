@@ -55,22 +55,27 @@ namespace SkyUI
 	public:
 		static ScriptObjectPtr GetInstance();
 
-		static bool HasConfig(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config);
+		static bool HasConfig(
+			const ScriptObjectPtr& a_configManager,
+			const ScriptObjectPtr& a_config);
 
 		static bool HasConfig_Barzing(
-			ScriptObjectPtr a_configManager,
-			ScriptObjectPtr a_config,
+			const ScriptObjectPtr& a_configManager,
+			const ScriptObjectPtr& a_config,
 			std::int32_t a_subPage);
 
-		static void UpdateDisplayName(ScriptObjectPtr a_configManager, ScriptObjectPtr a_config);
+		static void UpdateDisplayName(
+			const ScriptObjectPtr& a_configManager,
+			const ScriptObjectPtr& a_config);
 
 		static void UpdateDisplayName_Barzing(
-			ScriptObjectPtr a_configManager,
-			ScriptObjectPtr a_config,
+			const ScriptObjectPtr& a_configManager,
+			const ScriptObjectPtr& a_config,
 			std::int32_t a_subPage);
 	};
 
-	/* SKI_ConfigBase script functionality reimplemented for efficiency
+	/**
+	 * SKI_ConfigBase script functionality reimplemented for efficiency
 	 */
 	class Config
 	{
@@ -79,63 +84,63 @@ namespace SkyUI
 
 		static void ForcePageReset();
 
-		static void SetTitleText(ScriptObjectPtr a_object, std::string_view a_text);
+		static void SetTitleText(const ScriptObjectPtr& a_object, std::string_view a_text);
 
 		static void SetInfoText(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			bool a_forceUpdate = false);
 
-		static void SetCursorPosition(ScriptObjectPtr a_object, std::int32_t a_position);
+		static void SetCursorPosition(const ScriptObjectPtr& a_object, std::int32_t a_position);
 
-		static void SetCursorFillMode(ScriptObjectPtr a_object, CursorFillMode a_fillMode);
+		static void SetCursorFillMode(const ScriptObjectPtr& a_object, CursorFillMode a_fillMode);
 
-		static std::int32_t AddEmptyOption(ScriptObjectPtr a_object);
+		static std::int32_t AddEmptyOption(const ScriptObjectPtr& a_object);
 
 		static std::int32_t AddHeaderOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddTextOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			std::string_view a_value,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddToggleOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			bool a_checked,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddSliderOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			float a_value,
-			std::string_view a_formatString = "{0}",
+			std::string_view a_formatString = "{0}"sv,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddMenuOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			std::string_view a_value,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddColorOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			std::uint32_t a_color,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddKeyMapOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			std::int32_t a_keyCode,
 			Flags a_flags = Flags::None);
 
 		static std::int32_t AddInputOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_text,
 			std::string_view a_value,
 			Flags a_flags = Flags::None);
@@ -148,111 +153,119 @@ namespace SkyUI
 		static void UnloadCustomContent();
 
 		static void SetOptionFlags(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			Flags a_flags,
 			bool a_noUpdate = false);
 
 		static void SetTextOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			std::string_view a_value,
 			bool a_noUpdate = false);
 
 		static void SetToggleOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			bool a_checked,
 			bool a_noUpdate = false);
 
 		static void SetSliderOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			float a_value,
 			std::string_view a_formatString = "{0}"sv,
 			bool a_noUpdate = false);
 
 		static void SetMenuOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			std::string_view a_value,
 			bool a_noUpdate = false);
 
 		static void SetColorOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			std::uint32_t a_color,
 			bool a_noUpdate = false);
 
 		static void SetKeyMapOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			std::int32_t a_keyCode,
 			bool a_noUpdate = false);
 
 		static void SetInputOptionValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_option,
 			std::string_view a_value,
 			bool a_noUpdate = false);
 
-		static void SetSliderDialogStartValue(ScriptObjectPtr a_object, float a_value);
+		static void SetSliderDialogStartValue(const ScriptObjectPtr& a_object, float a_value);
 
-		static void SetSliderDialogDefaultValue(ScriptObjectPtr a_object, float a_value);
+		static void SetSliderDialogDefaultValue(const ScriptObjectPtr& a_object, float a_value);
 
 		static void SetSliderDialogRange(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			float a_minValue,
 			float a_maxValue);
 
-		static void SetSliderDialogInterval(ScriptObjectPtr a_object, float a_value);
+		static void SetSliderDialogInterval(const ScriptObjectPtr& a_object, float a_value);
 
-		static void SetMenuDialogStartIndex(ScriptObjectPtr a_object, std::int32_t a_value);
+		static void SetMenuDialogStartIndex(const ScriptObjectPtr& a_object, std::int32_t a_value);
 
-		static void SetMenuDialogDefaultIndex(ScriptObjectPtr a_object, std::int32_t a_value);
+		static void SetMenuDialogDefaultIndex(
+			const ScriptObjectPtr& a_object,
+			std::int32_t a_value);
 
 		static void SetMenuDialogOptions(
-			ScriptObjectPtr a_object,
-			std::span<std::string> a_options);
+			const ScriptObjectPtr& a_object,
+			std::span<const std::string> a_options);
 
-		static void SetColorDialogStartColor(ScriptObjectPtr a_object, std::uint32_t a_color);
+		static void SetColorDialogStartColor(
+			const ScriptObjectPtr& a_object,
+			std::uint32_t a_color);
 
-		static void SetColorDialogDefaultColor(ScriptObjectPtr a_object, std::uint32_t a_color);
+		static void SetColorDialogDefaultColor(
+			const ScriptObjectPtr& a_object,
+			std::uint32_t a_color);
 
-		static void SetInputDialogStartText(ScriptObjectPtr a_object, std::string_view a_text);
+		static void SetInputDialogStartText(
+			const ScriptObjectPtr& a_object,
+			std::string_view a_text);
 
 		static Co::Task<bool> ShowMessage(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_message);
 
 		static Co::Task<bool> ShowMessage(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_message,
 			bool a_withCancel);
 
 		static Co::Task<bool> ShowMessage(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_message,
 			std::string_view a_acceptLabel);
 
 		static Co::Task<bool> ShowMessage(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_message,
 			std::string_view a_acceptLabel,
 			std::string_view a_cancelLabel);
 
 		static Co::Task<bool> ShowMessage(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::string_view a_message,
 			bool a_withCancel,
 			std::string_view a_acceptLabel,
 			std::string_view a_cancelLabel);
 
 	private:
-		static void Error(ScriptObjectPtr a_object, std::string_view a_msg);
+		static void Error(const ScriptObjectPtr& a_object, std::string_view a_msg);
 
 		static std::int32_t AddOption(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			OptionType a_optionType,
 			std::string_view a_text,
 			std::string_view a_strValue,
@@ -260,19 +273,19 @@ namespace SkyUI
 			Flags a_flags);
 
 		static void SetOptionStrValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_index,
 			std::string_view a_strValue,
 			bool a_noUpdate);
 
 		static void SetOptionNumValue(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_index,
 			float a_numValue,
 			bool a_noUpdate);
 
 		static void SetOptionValues(
-			ScriptObjectPtr a_object,
+			const ScriptObjectPtr& a_object,
 			std::int32_t a_index,
 			std::string_view a_strValue,
 			float a_numValue,
