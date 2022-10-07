@@ -15,8 +15,8 @@ void ValueSource::ResetToDefault()
 
 float PropertyValue::GetValue() const
 {
-	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
-	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
+	const auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	const auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable) {
 		return GetVariableValue(*variable);
 	}
@@ -26,8 +26,8 @@ float PropertyValue::GetValue() const
 
 void PropertyValue::SetValue(float a_value)
 {
-	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
-	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
+	const auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	const auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable) {
 		SetVariableValue(*variable, a_value);
 	}
@@ -82,7 +82,7 @@ void PropertyValueFloat::SetVariableValue(RE::BSScript::Variable& a_variable, fl
 
 float ModSettingBool::GetValue() const
 {
-	auto boolValue = SettingStore::GetInstance().GetModSettingBool(ModName, ID);
+	const auto boolValue = SettingStore::GetInstance().GetModSettingBool(ModName, ID);
 	return boolValue ? 1.0f : 0.0f;
 }
 
@@ -93,7 +93,7 @@ void ModSettingBool::SetValue(float a_value)
 
 float ModSettingBool::GetDefaultValue() const
 {
-	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
+	const auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting) {
 		return setting->data.b ? 1.0f : 0.0f;
 	}
@@ -104,7 +104,7 @@ float ModSettingBool::GetDefaultValue() const
 
 float ModSettingInt::GetValue() const
 {
-	auto intValue = SettingStore::GetInstance().GetModSettingInt(ModName, ID);
+	const auto intValue = SettingStore::GetInstance().GetModSettingInt(ModName, ID);
 	return static_cast<float>(intValue);
 }
 
@@ -115,7 +115,7 @@ void ModSettingInt::SetValue(float a_value)
 
 float ModSettingInt::GetDefaultValue() const
 {
-	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
+	const auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting) {
 		switch (setting->GetType()) {
 		case RE::Setting::Type::kUnsignedInteger:
@@ -143,7 +143,7 @@ void ModSettingFloat::SetValue(float a_value)
 
 float ModSettingFloat::GetDefaultValue() const
 {
-	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
+	const auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	if (setting) {
 		return setting->data.f;
 	}

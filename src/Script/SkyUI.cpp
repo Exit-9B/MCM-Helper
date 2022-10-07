@@ -10,7 +10,7 @@ namespace SkyUI
 	ScriptObjectPtr ConfigManager::GetInstance()
 	{
 		const auto dataHandler = RE::TESDataHandler::GetSingleton();
-		auto configManagerInstance = dataHandler
+		const auto configManagerInstance = dataHandler
 			? dataHandler->LookupForm(0x00000802, SkyUI::PluginName)
 			: nullptr;
 
@@ -27,7 +27,7 @@ namespace SkyUI
 			return false;
 		}
 
-		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		const auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
 		if (!configIDVar) {
 			return false;
 		}
@@ -38,8 +38,8 @@ namespace SkyUI
 			return false;
 		}
 
-		auto modConfigsVar = ScriptObject::GetVariable(a_configManager, "_modConfigs"sv);
-		auto modConfigsArray = modConfigsVar && modConfigsVar->IsArray()
+		const auto modConfigsVar = ScriptObject::GetVariable(a_configManager, "_modConfigs"sv);
+		const auto modConfigsArray = modConfigsVar && modConfigsVar->IsArray()
 			? modConfigsVar->GetArray()
 			: nullptr;
 
@@ -63,19 +63,19 @@ namespace SkyUI
 			return false;
 		}
 
-		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		const auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
 		if (!configIDVar) {
 			return false;
 		}
 
-		auto index = configIDVar->GetSInt() % 128;
+		const auto index = configIDVar->GetSInt() % 128;
 
-		auto modConfigVarName = a_subPage == 0
+		const auto modConfigVarName = a_subPage == 0
 			? "_MainMenu"s
 			: fmt::format("_modConfigsP{}"sv, a_subPage);
 
-		auto modConfigsVar = ScriptObject::GetVariable(a_configManager, modConfigVarName);
-		auto modConfigsArray = modConfigsVar && modConfigsVar->IsArray()
+		const auto modConfigsVar = ScriptObject::GetVariable(a_configManager, modConfigVarName);
+		const auto modConfigsArray = modConfigsVar && modConfigsVar->IsArray()
 			? modConfigsVar->GetArray()
 			: nullptr;
 
@@ -97,25 +97,25 @@ namespace SkyUI
 		assert(a_configManager);
 		assert(a_config);
 
-		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		const auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
 		if (!configIDVar) {
 			return;
 		}
 
-		auto modNamesVar = ScriptObject::GetVariable(a_configManager, "_modNames"sv);
-		auto modNamesArray = modNamesVar && modNamesVar->IsArray()
+		const auto modNamesVar = ScriptObject::GetVariable(a_configManager, "_modNames"sv);
+		const auto modNamesArray = modNamesVar && modNamesVar->IsArray()
 			? modNamesVar->GetArray()
 			: nullptr;
 
 		if (!modNamesArray) {
-			auto index = configIDVar->GetSInt();
+			const auto index = configIDVar->GetSInt();
 			return UpdateDisplayName_Barzing(a_configManager, a_config, index / 128);
 		}
 
-		auto modNameVar = a_config->GetProperty("ModName"sv);
+		const auto modNameVar = a_config->GetProperty("ModName"sv);
 		if (modNameVar) {
-			auto size = static_cast<std::int32_t>(modNamesArray->size());
-			auto index = configIDVar->GetSInt();
+			const auto size = static_cast<std::int32_t>(modNamesArray->size());
+			const auto index = configIDVar->GetSInt();
 
 			if (index >= 0 && index < size) {
 				auto& registeredName = modNamesVar->GetArray()->data()[index];
@@ -132,17 +132,17 @@ namespace SkyUI
 		assert(a_configManager);
 		assert(a_config);
 
-		auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
+		const auto configIDVar = ScriptObject::GetVariable(a_config, "_configID"sv);
 		if (!configIDVar) {
 			return;
 		}
 
-		auto modNameVarName = a_subPage == 0
+		const auto modNameVarName = a_subPage == 0
 			? "_MainMenuP"s
 			: fmt::format("_modNamesP{}"sv, a_subPage);
 
-		auto modNamesVar = ScriptObject::GetVariable(a_configManager, modNameVarName);
-		auto modNamesArray = modNamesVar && modNamesVar->IsArray()
+		const auto modNamesVar = ScriptObject::GetVariable(a_configManager, modNameVarName);
+		const auto modNamesArray = modNamesVar && modNamesVar->IsArray()
 			? modNamesVar->GetArray()
 			: nullptr;
 
@@ -150,10 +150,10 @@ namespace SkyUI
 			return;
 		}
 
-		auto modNameVar = a_config->GetProperty("ModName"sv);
+		const auto modNameVar = a_config->GetProperty("ModName"sv);
 		if (modNameVar) {
-			auto size = static_cast<std::int32_t>(modNamesArray->size());
-			auto index = configIDVar->GetSInt() % 128;
+			const auto size = static_cast<std::int32_t>(modNamesArray->size());
+			const auto index = configIDVar->GetSInt() % 128;
 
 			if (index >= 0 && index < size) {
 				auto& registeredName = modNamesVar->GetArray()->data()[index];
@@ -166,7 +166,7 @@ namespace SkyUI
 	{
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		auto movie = menu ? menu->uiMovie : nullptr;
+		const auto movie = menu ? menu->uiMovie : nullptr;
 		if (movie) {
 			movie->Invoke(MENU_ROOT ".forcePageReset", nullptr, nullptr, 0);
 		}
@@ -178,9 +178,9 @@ namespace SkyUI
 	{
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-		auto movie = menu ? menu->uiMovie : nullptr;
+		const auto movie = menu ? menu->uiMovie : nullptr;
 		if (movie) {
-			RE::GFxValue args[]{ a_text };
+			const RE::GFxValue args[]{ a_text };
 			movie->Invoke(MENU_ROOT ".setTitleText", nullptr, args, 1);
 		}
 	}
@@ -195,9 +195,9 @@ namespace SkyUI
 		if (a_forceUpdate) {
 			const auto ui = RE::UI::GetSingleton();
 			const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
-			auto movie = menu ? menu->uiMovie : nullptr;
+			const auto movie = menu ? menu->uiMovie : nullptr;
 			if (movie) {
-				RE::GFxValue args[]{ a_text };
+				const RE::GFxValue args[]{ a_text };
 				movie->Invoke(MENU_ROOT ".setInfoText", nullptr, args, 1);
 			}
 		}
@@ -246,7 +246,7 @@ namespace SkyUI
 		bool a_checked,
 		Flags a_flags)
 	{
-		float numValue = a_checked ? 1.0f : 0.0f;
+		const float numValue = a_checked ? 1.0f : 0.0f;
 		return AddOption(a_object, OptionType::Toggle, a_text, ""sv, numValue, a_flags);
 	}
 
@@ -275,7 +275,7 @@ namespace SkyUI
 		std::uint32_t a_color,
 		Flags a_flags)
 	{
-		float numValue = static_cast<float>(a_color);
+		const float numValue = static_cast<float>(a_color);
 		return AddOption(a_object, OptionType::Color, a_text, ""sv, numValue, a_flags);
 	}
 
@@ -285,7 +285,7 @@ namespace SkyUI
 		std::int32_t a_keyCode,
 		Flags a_flags)
 	{
-		float numValue = static_cast<float>(a_keyCode);
+		const float numValue = static_cast<float>(a_keyCode);
 		return AddOption(a_object, OptionType::KeyMap, a_text, ""sv, numValue, a_flags);
 	}
 
@@ -304,10 +304,10 @@ namespace SkyUI
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		const auto movie = menu ? menu->uiMovie : nullptr;
 		if (movie) {
-			RE::GFxValue params[]{ a_x, a_y };
+			const RE::GFxValue params[]{ a_x, a_y };
 			movie->InvokeNoReturn(MENU_ROOT ".setCustomContentParams", params, 2);
 
-			RE::GFxValue source[]{ a_source };
+			const RE::GFxValue source[]{ a_source };
 			movie->InvokeNoReturn(MENU_ROOT ".loadCustomContent", source, 1);
 		}
 	}

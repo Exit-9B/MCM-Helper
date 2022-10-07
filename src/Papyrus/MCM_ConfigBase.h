@@ -128,12 +128,12 @@ namespace Papyrus
 
 		[[nodiscard]] static VMAwaitable SendSettingChangeEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
-			ScriptObjectPtr& a_object,
+			ScriptObjectPtr a_object,
 			std::string a_ID);
 
 		[[nodiscard]] static VMAwaitable SendPageSelectEvent(
 			RE::BSScript::IVirtualMachine* a_vm,
-			ScriptObjectPtr& a_object,
+			ScriptObjectPtr a_object,
 			std::string a_page);
 
 		// Registration delegate

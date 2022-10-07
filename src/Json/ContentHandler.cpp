@@ -173,7 +173,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 	switch (_state) {
 	case State::Control:
 	{
-		if (auto modSetting = std::dynamic_pointer_cast<ModSetting>(
+		if (const auto modSetting = std::dynamic_pointer_cast<ModSetting>(
 				_data.ValueOptions.ValueSource)) {
 			modSetting->ID = _data.ID;
 		}
@@ -181,7 +181,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 		std::shared_ptr<TextSource> textSource;
 		if (!_data.ValueOptions.ValueSource) {
 			if (!_data.ValueOptions.PropertyName.empty()) {
-				auto propertyString = std::make_shared<PropertyString>();
+				const auto propertyString = std::make_shared<PropertyString>();
 				if (_data.ValueOptions.SourceForm) {
 					propertyString->SourceForm = _data.ValueOptions.SourceForm;
 					propertyString->ScriptName = _data.ValueOptions.ScriptName;
@@ -198,7 +198,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 				textSource = propertyString;
 			}
 			else if (!_data.ID.empty()) {
-				auto modSettingString = std::make_shared<ModSettingString>();
+				const auto modSettingString = std::make_shared<ModSettingString>();
 				modSettingString->ID = _data.ID;
 				modSettingString->ModName = _modName;
 				textSource = modSettingString;
@@ -213,25 +213,25 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			control = std::make_shared<HeaderControl>();
 		}
 		else if (_data.Type == "text"s) {
-			auto textOption = std::make_shared<TextControl>();
+			const auto textOption = std::make_shared<TextControl>();
 			textOption->Value = _data.ValueOptions.Value;
 			textOption->ValueSource = textSource;
 			control = textOption;
 		}
 		else if (_data.Type == "toggle"s) {
-			auto toggleOption = std::make_shared<ToggleControl>();
+			const auto toggleOption = std::make_shared<ToggleControl>();
 			toggleOption->GroupControl = _data.GroupControl;
 			toggleOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = toggleOption;
 		}
 		else if (_data.Type == "hiddenToggle"s) {
-			auto hiddenToggleOption = std::make_shared<HiddenToggleControl>();
+			const auto hiddenToggleOption = std::make_shared<HiddenToggleControl>();
 			hiddenToggleOption->GroupControl = _data.GroupControl;
 			hiddenToggleOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = hiddenToggleOption;
 		}
 		else if (_data.Type == "slider"s) {
-			auto sliderOption = std::make_shared<SliderControl>();
+			const auto sliderOption = std::make_shared<SliderControl>();
 			sliderOption->Min = _data.ValueOptions.Min;
 			sliderOption->Max = _data.ValueOptions.Max;
 			sliderOption->Step = _data.ValueOptions.Step;
@@ -240,39 +240,39 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			control = sliderOption;
 		}
 		else if (_data.Type == "stepper"s) {
-			auto stepperOption = std::make_shared<StepperControl>();
+			const auto stepperOption = std::make_shared<StepperControl>();
 			stepperOption->Options = _data.ValueOptions.Options;
 			stepperOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = stepperOption;
 		}
 		else if (_data.Type == "menu"s) {
-			auto menuOption = std::make_shared<MenuControl>();
+			const auto menuOption = std::make_shared<MenuControl>();
 			menuOption->Options = _data.ValueOptions.Options;
 			menuOption->ShortNames = _data.ValueOptions.ShortNames;
 			menuOption->ValueSource = textSource;
 			control = menuOption;
 		}
 		else if (_data.Type == "enum"s) {
-			auto enumOption = std::make_shared<EnumControl>();
+			const auto enumOption = std::make_shared<EnumControl>();
 			enumOption->Options = _data.ValueOptions.Options;
 			enumOption->ShortNames = _data.ValueOptions.ShortNames;
 			enumOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = enumOption;
 		}
 		else if (_data.Type == "color"s) {
-			auto colorOption = std::make_shared<ColorControl>();
+			const auto colorOption = std::make_shared<ColorControl>();
 			colorOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = colorOption;
 		}
 		else if (_data.Type == "keymap"s) {
-			auto keymapOption = std::make_shared<KeyMapControl>();
+			const auto keymapOption = std::make_shared<KeyMapControl>();
 			keymapOption->ModName = _modName;
 			keymapOption->IgnoreConflicts = _data.IgnoreConflicts;
 			keymapOption->ValueSource = _data.ValueOptions.ValueSource;
 			control = keymapOption;
 		}
 		else if (_data.Type == "input"s) {
-			auto inputOption = std::make_shared<InputControl>();
+			const auto inputOption = std::make_shared<InputControl>();
 			inputOption->ValueSource = textSource;
 			control = inputOption;
 		}
@@ -286,7 +286,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 			control->GroupBehavior = _data.GroupBehavior;
 
 			if (_data.Action) {
-				auto function = std::dynamic_pointer_cast<Function>(_data.Action);
+				const auto function = std::dynamic_pointer_cast<Function>(_data.Action);
 				if (!function) {
 					return ReportError("Unsupported action type"sv);
 				}
@@ -296,7 +296,7 @@ bool ContentHandler::EndObject(SizeType memberCount)
 
 			_pageLayout->Controls.push_back(control);
 
-			if (auto toggle = std::dynamic_pointer_cast<ToggleControl>(control)) {
+			if (const auto toggle = std::dynamic_pointer_cast<ToggleControl>(control)) {
 				if (toggle->GroupControl > 0) {
 					_pageLayout->GroupControls[toggle->GroupControl] = toggle;
 				}

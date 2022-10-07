@@ -47,7 +47,7 @@ bool ConfigHandler::String(const Ch* str, SizeType length, bool copy)
 	case State::DisplayName:
 	{
 		_hasDisplayName = true;
-		auto variable = _script->GetProperty("ModName"sv);
+		const auto variable = _script->GetProperty("ModName"sv);
 		if (variable) {
 			variable->SetString(str);
 		}
@@ -109,13 +109,13 @@ bool ConfigHandler::Key(const Ch* str, SizeType length, bool copy)
 			return true;
 		}
 		else if (strcmp(str, "content") == 0) {
-			auto pageLayout = std::make_shared<PageLayout>();
+			const auto pageLayout = std::make_shared<PageLayout>();
 			_config->MainPage = pageLayout;
 			_master->PushHandler<ContentHandler>(pageLayout.get(), _script);
 			return true;
 		}
 		else if (strcmp(str, "customContent") == 0) {
-			auto customContent = std::make_shared<CustomContent>();
+			const auto customContent = std::make_shared<CustomContent>();
 			_config->MainPage = customContent;
 			_master->PushHandler<CustomContentHandler>(customContent.get());
 			return true;
@@ -140,7 +140,7 @@ bool ConfigHandler::EndObject(SizeType memberCount)
 {
 	switch (_state) {
 	case State::Main:
-		if (auto pageLayout = std::dynamic_pointer_cast<PageLayout>(_config->MainPage)) {
+		if (const auto pageLayout = std::dynamic_pointer_cast<PageLayout>(_config->MainPage)) {
 			pageLayout->CursorFillMode = _cursorFillMode;
 		}
 

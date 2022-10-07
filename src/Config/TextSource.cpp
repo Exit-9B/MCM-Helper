@@ -4,8 +4,8 @@
 
 std::string PropertyString::GetValue() const
 {
-	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
-	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
+	const auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	const auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable && variable->IsString()) {
 		return std::string(variable->GetString());
 	}
@@ -15,8 +15,8 @@ std::string PropertyString::GetValue() const
 
 void PropertyString::SetValue(std::string_view a_value)
 {
-	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
-	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
+	const auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	const auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 
 	if (variable) {
 		variable->SetString(a_value);
@@ -30,8 +30,8 @@ std::string PropertyString::GetDefaultValue() const
 
 void PropertyString::ResetToDefault()
 {
-	auto script = ScriptObject::FromForm(SourceForm, ScriptName);
-	auto variable = script ? script->GetProperty(PropertyName) : nullptr;
+	const auto script = ScriptObject::FromForm(SourceForm, ScriptName);
+	const auto variable = script ? script->GetProperty(PropertyName) : nullptr;
 	if (variable) {
 		variable->SetString(DefaultValue);
 	}
@@ -50,7 +50,7 @@ void ModSettingString::SetValue(std::string_view a_value)
 
 std::string ModSettingString::GetDefaultValue() const
 {
-	auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
+	const auto setting = SettingStore::GetInstance().GetDefaultSetting(ModName, ID);
 	return setting ? setting->GetString() : ""s;
 }
 

@@ -43,7 +43,7 @@ std::string_view Papyrus::MCM::GetModSettingString(
 	std::string_view a_modName,
 	std::string_view a_settingName)
 {
-	auto s = SettingStore::GetInstance().GetModSettingString(a_modName, a_settingName);
+	const auto s = SettingStore::GetInstance().GetModSettingString(a_modName, a_settingName);
 	return s ? std::string_view(s) : ""sv;
 }
 

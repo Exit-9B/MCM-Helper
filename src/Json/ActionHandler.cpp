@@ -106,7 +106,7 @@ bool ActionHandler::EndObject(SizeType memberCount)
 				return ReportError(ErrorType::MissingRequiredField, "function"sv);
 			}
 
-			auto callFunction = std::make_shared<CallFunction>();
+			const auto callFunction = std::make_shared<CallFunction>();
 			*_action = callFunction;
 			if (_data.Form) {
 				callFunction->Form = _data.Form;
@@ -124,7 +124,7 @@ bool ActionHandler::EndObject(SizeType memberCount)
 				return ReportError(ErrorType::MissingRequiredField, "function"sv);
 			}
 
-			auto callGlobalFunction = std::make_shared<CallGlobalFunction>();
+			const auto callGlobalFunction = std::make_shared<CallGlobalFunction>();
 			*_action = callGlobalFunction;
 			callGlobalFunction->ScriptName = !_data.Script.empty() ? _data.Script : _scriptName;
 			callGlobalFunction->Params = _data.Params;
@@ -135,7 +135,7 @@ bool ActionHandler::EndObject(SizeType memberCount)
 				return ReportError(ErrorType::MissingRequiredField, "command"sv);
 			}
 
-			auto runConsoleCommand = std::make_shared<RunConsoleCommand>();
+			const auto runConsoleCommand = std::make_shared<RunConsoleCommand>();
 			*_action = runConsoleCommand;
 			runConsoleCommand->Command = _data.Command;
 		}
@@ -144,7 +144,7 @@ bool ActionHandler::EndObject(SizeType memberCount)
 				return ReportError(ErrorType::MissingRequiredField, "form"sv);
 			}
 
-			auto sendEvent = std::make_shared<SendEvent>();
+			const auto sendEvent = std::make_shared<SendEvent>();
 			*_action = sendEvent;
 			sendEvent->Form = _data.Form;
 			sendEvent->ScriptName = _data.ScriptName;

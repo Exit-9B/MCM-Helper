@@ -11,7 +11,7 @@ auto Function::FunctionArguments::Make(
 	args->Args.resize(static_cast<std::uint32_t>(a_params.size()));
 	for (std::uint32_t i = 0; i < a_params.size(); i++) {
 		auto& var = args->Args[i];
-		auto& param = a_params[i];
+		const auto& param = a_params[i];
 		if (param == "{value}") {
 			if (std::holds_alternative<std::int32_t>(a_value)) {
 				var.SetSInt(std::get<std::int32_t>(a_value));
@@ -110,14 +110,14 @@ VMAwaitable CallGlobalFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, Func
 void SendEvent::SendControlEvent(bool a_up, float a_holdTime)
 {
 	const auto skyrimVM = RE::SkyrimVM::GetSingleton();
-	auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+	const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 	auto object = ScriptObject::FromForm(Form, ScriptName);
 
 	if (!vm || !object)
 		return;
 
 	RE::BSFixedString control{ Control };
-	auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
+	const auto fnName = a_up ? "OnControlUp"sv : "OnControlDown"sv;
 
 	ScriptArgs args{
 		a_up ? RE::MakeFunctionArguments(std::move(control), std::move(a_holdTime))

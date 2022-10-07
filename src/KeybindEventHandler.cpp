@@ -23,12 +23,11 @@ RE::BSEventNotifyControl KeybindEventHandler::ProcessEvent(
 	if (!ui || ui->GameIsPaused())
 		return RE::BSEventNotifyControl::kContinue;
 
-	auto inputEvent = a_event ? *a_event : nullptr;
-	auto buttonEvent = inputEvent ? inputEvent->AsButtonEvent() : nullptr;
+	const auto inputEvent = a_event ? *a_event : nullptr;
+	const auto buttonEvent = inputEvent ? inputEvent->AsButtonEvent() : nullptr;
 
 	if (buttonEvent) {
-		auto idCode = buttonEvent->GetIDCode();
-		auto deviceType = buttonEvent->device;
+		const auto idCode = buttonEvent->GetIDCode();
 
 		if (idCode == 0) {
 			return RE::BSEventNotifyControl::kContinue;

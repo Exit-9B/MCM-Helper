@@ -14,7 +14,7 @@ bool GroupConditionTree::GetIsActive() const
 			}
 		}
 
-		for (auto& subtree : SubTrees) {
+		for (const auto& subtree : SubTrees) {
 			if (!subtree || subtree->GetIsActive()) {
 				return true;
 			}
@@ -31,7 +31,7 @@ bool GroupConditionTree::GetIsActive() const
 			}
 		}
 
-		for (auto& subtree : SubTrees) {
+		for (const auto& subtree : SubTrees) {
 			if (!subtree)
 				continue;
 
@@ -76,7 +76,7 @@ bool GroupConditionTree::GetIsActive() const
 			}
 		}
 
-		for (auto& subtree : SubTrees) {
+		for (const auto& subtree : SubTrees) {
 			if (!subtree)
 				continue;
 

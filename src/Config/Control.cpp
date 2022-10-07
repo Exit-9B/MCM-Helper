@@ -30,7 +30,7 @@ void Control::ResetToDefault()
 std::string Control::GetInfoText() const
 {
 	std::string text = Help;
-	std::string value = Translation::ScaleformTranslate(GetValueString());
+	const std::string value = Translation::ScaleformTranslate(GetValueString());
 
 	constexpr auto valueToken = "{value}"sv;
 	constexpr auto length = valueToken.length();
@@ -111,13 +111,13 @@ std::int32_t TextControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto value = GetValue();
+	const auto value = GetValue();
 	return SkyUI::Config::AddTextOption(a_configScript, Text, value, GetFlags());
 }
 
 void TextControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto value = GetValue();
+	const auto value = GetValue();
 	SkyUI::Config::SetTextOptionValue(a_configScript, a_optionID, value);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -152,13 +152,13 @@ std::int32_t ToggleControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto checked = GetValue();
+	const auto checked = GetValue();
 	return SkyUI::Config::AddToggleOption(a_configScript, Text, checked, GetFlags());
 }
 
 void ToggleControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto checked = GetValue();
+	const auto checked = GetValue();
 	SkyUI::Config::SetToggleOptionValue(a_configScript, a_optionID, checked);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -193,13 +193,13 @@ std::int32_t SliderControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto value = GetValue();
+	const auto value = GetValue();
 	return SkyUI::Config::AddSliderOption(a_configScript, Text, value, FormatString, GetFlags());
 }
 
 void SliderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto value = GetValue();
+	const auto value = GetValue();
 	SkyUI::Config::SetSliderOptionValue(a_configScript, a_optionID, value, FormatString);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -221,12 +221,12 @@ void SliderControl::ResetToDefault()
 
 std::string SliderControl::GetValueString() const
 {
-	auto stepStr = std::to_string(Step);
-	auto precision = stepStr.find_last_not_of('0') - stepStr.find('.');
-	auto decimalOffset = precision > 0 ? 1 : 0;
+	const auto stepStr = std::to_string(Step);
+	const auto precision = stepStr.find_last_not_of('0') - stepStr.find('.');
+	const auto decimalOffset = precision > 0 ? 1 : 0;
 
 	auto valueStr = std::to_string(GetValue());
-	auto newLength = valueStr.find('.') + precision + decimalOffset;
+	const auto newLength = valueStr.find('.') + precision + decimalOffset;
 	valueStr = valueStr.substr(0, newLength);
 
 	return valueStr;
@@ -242,13 +242,13 @@ std::int32_t StepperControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto text = GetText();
+	const auto text = GetText();
 	return SkyUI::Config::AddTextOption(a_configScript, Text, text, GetFlags());
 }
 
 void StepperControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto text = GetText();
+	const auto text = GetText();
 	SkyUI::Config::SetTextOptionValue(a_configScript, a_optionID, text);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -280,7 +280,7 @@ std::int32_t StepperControl::GetValue() const
 
 std::string StepperControl::GetText() const
 {
-	auto value = GetValue();
+	const auto value = GetValue();
 	if (value >= 0 && value < Options.size()) {
 		return Options[value];
 	}
@@ -293,13 +293,13 @@ std::int32_t MenuControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto value = GetShortText();
+	const auto value = GetShortText();
 	return SkyUI::Config::AddMenuOption(a_configScript, Text, value, GetFlags());
 }
 
 void MenuControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto value = GetShortText();
+	const auto value = GetShortText();
 	SkyUI::Config::SetMenuOptionValue(a_configScript, a_optionID, value);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -337,15 +337,15 @@ std::string MenuControl::GetDefaultValue() const
 std::string MenuControl::GetShortText() const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
-	auto options = configPageCache.GetMenuOptions(this);
-	auto shortNames = configPageCache.GetMenuShortNames(this);
+	const auto options = configPageCache.GetMenuOptions(this);
+	const auto shortNames = configPageCache.GetMenuShortNames(this);
 
 	if (options.size() != shortNames.size())
 		return GetValue();
 
-	auto value = GetValue();
-	auto item = std::find(options.begin(), options.end(), value);
-	auto index = static_cast<std::int32_t>(item - options.begin());
+	const auto value = GetValue();
+	const auto item = std::ranges::find(options, value);
+	const auto index = std::distance(options.begin(), item);
 
 	return shortNames[index];
 }
@@ -355,13 +355,13 @@ std::int32_t EnumControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto text = GetShortText();
+	const auto text = GetShortText();
 	return SkyUI::Config::AddMenuOption(a_configScript, Text, text, GetFlags());
 }
 
 void EnumControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto text = GetShortText();
+	const auto text = GetShortText();
 	SkyUI::Config::SetMenuOptionValue(a_configScript, a_optionID, text);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -394,10 +394,10 @@ std::int32_t EnumControl::GetValue() const
 std::string EnumControl::GetShortText() const
 {
 	auto& configPageCache = ConfigPageCache::GetInstance();
-	auto options = configPageCache.GetMenuOptions(this);
-	auto shortNames = configPageCache.GetMenuShortNames(this);
+	const auto options = configPageCache.GetMenuOptions(this);
+	const auto shortNames = configPageCache.GetMenuShortNames(this);
 
-	auto index = GetValue();
+	const auto index = GetValue();
 
 	if (index < 0 || index >= options.size()) {
 		return ""s;
@@ -415,13 +415,13 @@ std::int32_t ColorControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto value = GetColor();
+	const auto value = GetColor();
 	return SkyUI::Config::AddColorOption(a_configScript, Text, value, GetFlags());
 }
 
 void ColorControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto value = GetColor();
+	const auto value = GetColor();
 	SkyUI::Config::SetColorOptionValue(a_configScript, a_optionID, value);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -456,13 +456,13 @@ std::int32_t KeyMapControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto keyCode = GetKeyCode();
+	const auto keyCode = GetKeyCode();
 	return SkyUI::Config::AddKeyMapOption(a_configScript, Text, keyCode, GetFlags());
 }
 
 void KeyMapControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto keyCode = GetKeyCode();
+	const auto keyCode = GetKeyCode();
 	SkyUI::Config::SetKeyMapOptionValue(a_configScript, a_optionID, keyCode);
 	RefreshFlags(a_configScript, a_optionID);
 }
@@ -484,13 +484,13 @@ void KeyMapControl::ResetToDefault()
 
 std::string KeyMapControl::GetInfoText() const
 {
-	auto text = Control::GetInfoText();
+	const auto text = Control::GetInfoText();
 	if (!text.empty()) {
 		return text;
 	}
 
 	if (!ValueSource && !ID.empty()) {
-		auto& keybindManager = KeybindManager::GetInstance();
+		const auto& keybindManager = KeybindManager::GetInstance();
 		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
 		return desc;
 	}
@@ -505,7 +505,7 @@ std::string KeyMapControl::GetValueString() const
 
 SkyUI::Flags KeyMapControl::GetFlags() const
 {
-	auto flags = Control::GetFlags();
+	const auto flags = Control::GetFlags();
 	return flags == SkyUI::Flags::None ? SkyUI::Flags::WithUnmap : flags;
 }
 
@@ -522,7 +522,7 @@ std::uint32_t KeyMapControl::GetKeyCode() const
 std::string KeyMapControl::GetDescription() const
 {
 	if (!ValueSource) {
-		auto& keybindManager = KeybindManager::GetInstance();
+		const auto& keybindManager = KeybindManager::GetInstance();
 		const auto& desc = keybindManager.GetKeybind(ModName, ID).KeybindDesc;
 		if (!desc.empty()) {
 			return desc;
@@ -537,13 +537,13 @@ std::int32_t InputControl::Add(const ScriptObjectPtr& a_configScript)
 	if (GetDesiredBehavior() == Behavior::Skip)
 		return -1;
 
-	auto value = GetValue();
+	const auto value = GetValue();
 	return SkyUI::Config::AddInputOption(a_configScript, Text, value, GetFlags());
 }
 
 void InputControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID)
 {
-	auto value = GetValue();
+	const auto value = GetValue();
 	SkyUI::Config::SetInputOptionValue(a_configScript, a_optionID, value);
 	RefreshFlags(a_configScript, a_optionID);
 }
