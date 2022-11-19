@@ -8,6 +8,7 @@
 
 #include "RE/Skyrim.h"
 #include "SKSE/SKSE.h"
+#include <MergeMapperPluginAPI.h>
 
 #ifdef NDEBUG
 #include <spdlog/sinks/basic_file_sink.h>

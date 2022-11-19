@@ -21,6 +21,7 @@ include(Papyrus)
 include(BSArchive)
 
 set(SKSE_SUPPORT_VR ON)
+find_path(MERGEMAPPER_INCLUDE_DIRS "MergeMapperPluginAPI.h")
 
 SKSEPlugin_Add(
 	${PROJECT_NAME}
@@ -30,6 +31,7 @@ SKSEPlugin_Add(
 		.editorconfig
 		README.md
 		vcpkg.json
+		${MERGEMAPPER_INCLUDE_DIRS}/MergeMapperPluginAPI.cpp
 	PRECOMPILE_HEADERS
 		src/PCH/PCH.h
 )
@@ -56,6 +58,7 @@ target_include_directories(
 	${PROJECT_NAME}
 	PRIVATE
 		${SIMPLEINI_INCLUDE_DIRS}
+		${MERGEMAPPER_INCLUDE_DIRS}
 )
 
 Papyrus_Add(

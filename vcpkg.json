@@ -4,10 +4,18 @@
   "version": "1",
   "dependencies": [
     "boost-stl-interfaces",
+    "mergemapper",
     "rsm-binary-io",
     "spdlog",
     "simpleini",
     "rapidjson",
     "tsl-ordered-map"
+  ],
+  "builtin-baseline": "6f7ffeb18f99796233b958aaaf14ec7bd4fb64b2",
+  "overrides": [
+    {
+      "name": "fmt",
+      "version": "8.0.1"
+    }
   ]
 }

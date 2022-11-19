@@ -18,6 +18,8 @@ public:
 	[[nodiscard]] static ConfigStore& GetInstance();
 
 	void ReadConfigs();
+	void findMergedModName(std::string& modName);
+	void CheckMerges();
 	bool ReadConfig(const std::string& a_modName, const ScriptObjectPtr a_configScript);
 	[[nodiscard]] std::shared_ptr<Config> GetConfig(const std::string& a_modName) const;
 	[[nodiscard]] std::shared_ptr<Config> GetConfig(const RE::TESQuest* a_configQuest) const;
@@ -38,4 +40,6 @@ private:
 
 	Storage _configStore;
 	std::filesystem::path configPath{ "Data/MCM/Config"sv };
+	std::map<std::string, std::string> reverseMergeMap{};
+	const std::vector<std::string> extensions{ ".esp", ".esm", ".esl" };
 };

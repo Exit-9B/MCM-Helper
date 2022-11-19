@@ -84,6 +84,64 @@ void ConfigStore::ReadConfigs()
 
 	logger::info("Registered {} mod configs in {} ms."sv, _configStore.size(), elapsedMs.count());
 }
+void ConfigStore::findMergedModName(std::string& modName)
+{
+	if (g_mergeMapperInterface && !reverseMergeMap.empty()) {
+		for (const auto& extension : extensions) {
+			auto modConfigFullName = modName + extension;
+			std::transform(
+				modConfigFullName.begin(),
+				modConfigFullName.end(),
+				modConfigFullName.begin(),
+				[](auto ch)
+				{
+					return static_cast<char>(std::tolower(ch));
+				});
+			if (auto search = reverseMergeMap.find(modConfigFullName);
+				search != reverseMergeMap.end()) {
+				const auto& mergedModName = search->second;
+				logger::debug("\t\tUsing default merged {} for {} using reverseMergeMap", mergedModName, modName);
+				modName = mergedModName.substr(0, mergedModName.find(extension));
+			}
+		}
+	}
+}
+void ConfigStore::CheckMerges()
+{
+	logger::debug("Searching for MCM Config files within {}", configPath.string());
+
+	for (const auto& entry : std::filesystem::directory_iterator(configPath)) {
+		if (entry.exists() && entry.is_directory()) {
+			auto modPath{ entry.path().generic_string() };
+			logger::debug("Found potential mod {}", modPath);
+			auto file = modPath + "\\config.json";
+			if (std::filesystem::exists(file)) {
+				auto modConfigName = modPath.substr(configPath.generic_string().size() + 1);
+				logger::debug("\tConfirmed config {} for {}", file, modConfigName);
+				if (g_mergeMapperInterface) {
+					for (const auto& extension : extensions) {
+						auto modConfigFullName = modConfigName + extension;
+						const auto mergePair = g_mergeMapperInterface->GetNewFormID(
+							modConfigFullName.c_str(),
+							0);
+						if (std::strcmp(mergePair.first, modConfigFullName.c_str())) {
+							logger::debug(
+								"\tFound default merged {} for {}",
+								mergePair.first,
+								modConfigFullName);
+							reverseMergeMap.emplace(mergePair.first, modConfigFullName);
+						}
+					}
+				}
+			}
+			else {
+				logger::warn("\tMCM missing config file {}", file);
+			}
+		}
+	}
+	if (!reverseMergeMap.empty())
+		logger::info("ReverseMergeMap has {} entries.", reverseMergeMap.size());
+}
 
 bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_configScript)
 {
