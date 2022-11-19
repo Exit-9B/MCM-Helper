@@ -167,7 +167,7 @@ void SettingStore::ReloadDefault(std::string_view a_modName, std::string_view a_
 		logger::warn("Failed to parse file: {}"sv, iniLocation.string());
 		return;
 	}
-
+	logger::info("Parsing file: {}"sv, iniLocation.string());
 	std::string modSettingName{ a_settingName };
 	auto delimiter = modSettingName.find_first_of(':');
 	if (delimiter != std::string::npos) {
@@ -244,6 +244,7 @@ bool SettingStore::ReadINI(
 		return false;
 	}
 
+	logger::info("Parsing file: {}"sv, a_iniLocation.string());
 	std::list<CSimpleIniA::Entry> sections;
 	ini.GetAllSections(sections);
 
