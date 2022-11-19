@@ -82,4 +82,5 @@ private:
 	Storage _defaults;
 	Storage _settingStore;
 	std::mutex _mutex;
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 };

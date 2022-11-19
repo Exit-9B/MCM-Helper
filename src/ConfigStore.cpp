@@ -89,7 +89,6 @@ bool ConfigStore::ReadConfig(const std::string& a_modName, ScriptObjectPtr a_con
 {
 	assert(a_configScript);
 
-	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto configLocation = configPath / a_modName / "config.json"sv;
 
 	ReaderHandler handler;

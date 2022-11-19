@@ -37,4 +37,5 @@ private:
 	[[nodiscard]] std::string GetModName(const ScriptObjectPtr& a_configScript);
 
 	Storage _configStore;
+	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 };

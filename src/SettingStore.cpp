@@ -156,7 +156,6 @@ void SettingStore::SetModSettingString(
 
 void SettingStore::ReloadDefault(std::string_view a_modName, std::string_view a_settingName)
 {
-	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	auto iniLocation = configPath / a_modName / "settings.ini"sv;
 
 	CSimpleIniA ini;
@@ -297,7 +296,6 @@ RE::Setting* SettingStore::GetDefaultSetting(std::string_view a_modName, std::st
 
 void SettingStore::LoadDefaults()
 {
-	std::filesystem::path configPath{ "Data/MCM/Config"sv };
 	std::filesystem::directory_entry configDirectory{ configPath };
 	if (!configDirectory.exists() || !configDirectory.is_directory())
 		return;
