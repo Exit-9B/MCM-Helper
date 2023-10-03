@@ -345,9 +345,9 @@ std::string MenuControl::GetShortText() const
 
 	const auto value = GetValue();
 	const auto item = std::ranges::find(options, value);
-	const auto index = std::distance(options.begin(), item);
+	const size_t index = std::distance(options.begin(), item);
 
-	return shortNames[index];
+	return index < shortNames.size() ? shortNames[index] : ""s;
 }
 
 std::int32_t EnumControl::Add(const ScriptObjectPtr& a_configScript)
