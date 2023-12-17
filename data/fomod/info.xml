@@ -1,0 +1,9 @@
+<fomod> 
+	<Name>MCM Helper</Name> 
+	<Author>Parapets</Author> 
+	<Website>https://www.nexusmods.com/skyrimspecialedition/mods/53000</Website> 
+	<Description>Simplifies the creation of Mod Configuration Menus and extends them with powerful new features, such as persistent INI settings and hotkey registration.</Description> 
+	<Groups>
+		<element>Utilities</element>
+	</Groups> 
+</fomod> 

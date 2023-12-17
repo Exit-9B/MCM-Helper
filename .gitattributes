@@ -1,2 +1,5 @@
 # Scaleform translations as UTF-16 LE BOM
-dist/Data/Interface/Translations/*.txt text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+**/Interface/Translations/*.txt text working-tree-encoding=UTF-16LE-BOM eol=CRLF
+
+# FOMOD files as UTF-16 LE BOM
+**/fomod/*.xml text working-tree-encoding=UTF-16LE-BOM eol=LF

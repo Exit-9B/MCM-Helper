@@ -1,0 +1,148 @@
+<!-- Created with FOMOD Creation Tool 1.7.0.37 [http://www.nexusmods.com/fallout4/mods/6821] --> 
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd"> 
+	<moduleName>MCM Helper</moduleName> 
+	<moduleImage path="fomod\images\mcmhelper.jpg" /> 
+	<requiredInstallFiles> 
+		<file source="Data\MCM\Config\SkyUI_SE\config.json" destination="MCM\Config\SkyUI_SE\config.json" /> 
+		<file source="Data\MCM\Config\SkyUI_SE\settings.ini" destination="MCM\Config\SkyUI_SE\settings.ini" /> 
+		<file source="Data\MCM\Settings\readme.txt" destination="MCM\Settings\readme.txt" /> 
+		<file source="Data\Source\Scripts\SKI_ConfigMenu.psc" destination="Source\Scripts\SKI_ConfigMenu.psc" /> 
+	</requiredInstallFiles> 
+	<installSteps order="Explicit"> 
+		<installStep name="Game Version"> 
+			<optionalFileGroups order="Explicit"> 
+				<group name="Game Version" type="SelectExactlyOne"> 
+					<plugins order="Explicit"> 
+						<plugin name="Skyrim Special Edition"> 
+							<description>Choose this if you are playing Skyrim Special Edition.</description> 
+							<image path="fomod\images\skyrim_se.jpg" /> 
+							<conditionFlags> 
+								<flag name="SkyrimSE">On</flag> 
+							</conditionFlags> 
+							<files> 
+								<file source="SkyrimSE\SKSE\Plugins\MCMHelper.dll" destination="SKSE\Plugins\MCMHelper.dll" priority="0" /> 
+								<file source="SkyrimSE\SKSE\Plugins\MCMHelper.pdb" destination="SKSE\Plugins\MCMHelper.pdb" priority="0" /> 
+							</files> 
+							<typeDescriptor> 
+								<type name="Optional"/> 
+							</typeDescriptor> 
+						</plugin> 
+						<plugin name="Skyrim VR"> 
+							<description>Choose this if you are playing Skyrim VR.</description> 
+							<image path="fomod\images\skyrim_vr.jpg" /> 
+							<conditionFlags> 
+								<flag name="SkyrimVR">On</flag> 
+							</conditionFlags> 
+							<files> 
+								<file source="SkyrimVR\SKSE\Plugins\MCMHelper.dll" destination="SKSE\Plugins\MCMHelper.dll" priority="0" /> 
+								<file source="SkyrimVR\SKSE\Plugins\MCMHelper.pdb" destination="SKSE\Plugins\MCMHelper.pdb" priority="0" /> 
+							</files> 
+							<typeDescriptor> 
+								<dependencyType> 
+									<defaultType name="Optional"/> 
+									<patterns> 
+										<pattern> 
+											<dependencies operator="And"> 
+												<fileDependency file="SkyrimVR.esm" state="Active"/> 
+											</dependencies> 
+											<type name="Recommended"/> 
+										</pattern> 
+									</patterns> 
+								</dependencyType> 
+							</typeDescriptor> 
+						</plugin> 
+					</plugins> 
+				</group> 
+			</optionalFileGroups> 
+		</installStep> 
+		<installStep name="Mod Files"> 
+			<optionalFileGroups order="Explicit"> 
+				<group name="Plugin" type="SelectExactlyOne"> 
+					<plugins order="Explicit"> 
+						<plugin name="ESP"> 
+							<description>Install a standard ESP, which uses one of the 255 normal plugin slots.</description> 
+							<files> 
+								<file source="ESP\MCMHelper.esp" destination="MCMHelper.esp" priority="0" /> 
+							</files> 
+							<typeDescriptor> 
+								<dependencyType> 
+									<defaultType name="Optional"/> 
+									<patterns> 
+										<pattern> 
+											<dependencies operator="And"> 
+												<flagDependency flag="SkyrimVR" value="On"/> 
+											</dependencies> 
+											<type name="Recommended"/> 
+										</pattern> 
+									</patterns> 
+								</dependencyType> 
+							</typeDescriptor> 
+						</plugin> 
+						<plugin name="ESL"> 
+							<description>Install an ESL-flagged ESP, which uses one of the 4096 light plugin slots.</description> 
+							<files> 
+								<file source="ESL\MCMHelper.esp" destination="MCMHelper.esp" priority="0" /> 
+							</files> 
+							<typeDescriptor> 
+								<dependencyType> 
+									<defaultType name="Optional"/> 
+									<patterns> 
+										<pattern> 
+											<dependencies operator="And"> 
+												<flagDependency flag="SkyrimSE" value="On"/> 
+											</dependencies> 
+											<type name="Recommended"/> 
+										</pattern> 
+									</patterns> 
+								</dependencyType> 
+							</typeDescriptor> 
+						</plugin> 
+					</plugins> 
+				</group> 
+				<group name="Resources" type="SelectExactlyOne"> 
+					<plugins order="Explicit"> 
+						<plugin name="BSA"> 
+							<description>Install resources as a BSA archive.</description> 
+							<files> 
+								<file source="BSA\MCMHelper.bsa" destination="MCMHelper.bsa" priority="0" /> 
+							</files> 
+							<typeDescriptor> 
+								<type name="Optional"/> 
+							</typeDescriptor> 
+						</plugin> 
+						<plugin name="Loose"> 
+							<description>Install resources as loose files.</description> 
+							<files> 
+								<file source="Loose\Interface\Translations\MCMHelper_CZECH.txt" destination="Interface\Translations\MCMHelper_CZECH.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_ENGLISH.txt" destination="Interface\Translations\MCMHelper_ENGLISH.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_FRENCH.txt" destination="Interface\Translations\MCMHelper_FRENCH.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_GERMAN.txt" destination="Interface\Translations\MCMHelper_GERMAN.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_ITALIAN.txt" destination="Interface\Translations\MCMHelper_ITALIAN.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_JAPANESE.txt" destination="Interface\Translations\MCMHelper_JAPANESE.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_POLISH.txt" destination="Interface\Translations\MCMHelper_POLISH.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_RUSSIAN.txt" destination="Interface\Translations\MCMHelper_RUSSIAN.txt" priority="0" /> 
+								<file source="Loose\Interface\Translations\MCMHelper_SPANISH.txt" destination="Interface\Translations\MCMHelper_SPANISH.txt" priority="0" /> 
+								<file source="Loose\Scripts\MCM.pex" destination="Scripts\MCM.pex" priority="0" /> 
+								<file source="Loose\Scripts\MCM_ConfigBase.pex" destination="Scripts\MCM_ConfigBase.pex" priority="0" /> 
+								<file source="Loose\Scripts\SKI_ConfigMenu.pex" destination="Scripts\SKI_ConfigMenu.pex" priority="0" /> 
+							</files> 
+							<typeDescriptor> 
+								<dependencyType> 
+									<defaultType name="Optional"/> 
+									<patterns> 
+										<pattern> 
+											<dependencies operator="And"> 
+												<flagDependency flag="SkyrimVR" value="On"/> 
+											</dependencies> 
+											<type name="Recommended"/> 
+										</pattern> 
+									</patterns> 
+								</dependencyType> 
+							</typeDescriptor> 
+						</plugin> 
+					</plugins> 
+				</group> 
+			</optionalFileGroups> 
+		</installStep> 
+	</installSteps> 
+</config>

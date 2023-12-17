@@ -62,15 +62,27 @@ Papyrus_Add(
 	"Papyrus"
 	GAME ${SkyrimSE_PATH}
 	IMPORTS
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts"
+		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private"
+		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public"
 		"$ENV{SKSE64Path}/Scripts/Source"
 	SOURCES
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/MCM.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Source/Scripts/SKI_ConfigMenu.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Detail/Source/Scripts/MCM_ConfigBase.psc"
+		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
+		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
+		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private/MCM_ConfigBase.psc"
 	OPTIMIZE
 	ANONYMIZE
+)
+
+set(TRANSLATION_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_CZECH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ENGLISH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_FRENCH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_GERMAN.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ITALIAN.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_JAPANESE.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_POLISH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_RUSSIAN.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_SPANISH.txt"
 )
 
 BSArchive_Add(
@@ -79,17 +91,9 @@ BSArchive_Add(
 	FORMAT SSE
 	FILES
 		${Papyrus_OUTPUT}
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_CZECH.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_ENGLISH.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_FRENCH.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_GERMAN.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_ITALIAN.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_JAPANESE.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_POLISH.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_RUSSIAN.txt"
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data/Interface/Translations/MCMHelper_SPANISH.txt"
+		${TRANSLATION_FILES}
 	PREFIX
-		"${CMAKE_CURRENT_SOURCE_DIR}/dist/Data"
+		"${CMAKE_CURRENT_SOURCE_DIR}/data"
 )
 
 add_dependencies("BSA" "Papyrus")
