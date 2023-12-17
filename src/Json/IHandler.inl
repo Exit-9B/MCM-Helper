@@ -38,7 +38,7 @@ inline bool IHandler::ReportError(ErrorType errType, Args&&... args)
 template <typename... Args>
 inline bool IHandler::ReportError(std::string_view message, Args&&... args)
 {
-	std::string error = fmt::vformat(message, fmt::make_format_args(std::forward<Args>(args)...));
+	std::string error = fmt::vformat(message, fmt::make_format_args(args...));
 	_master->SetError(error);
 	logger::warn("{}"sv, error);
 

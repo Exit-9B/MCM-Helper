@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.24)
 
 project(
 	MCMHelper
-	VERSION 1.4.0
+	VERSION 1.5.0
 	LANGUAGES CXX
 )
 
 # MCM Helper public release number
-set(PLUGIN_VERSION 13)
+set(PLUGIN_VERSION 14)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -43,7 +43,7 @@ target_compile_definitions(
 find_package(tsl-ordered-map CONFIG REQUIRED)
 find_package(RapidJSON CONFIG REQUIRED)
 
-find_path(SIMPLEINI_INCLUDE_DIRS "ConvertUTF.c")
+find_path(SIMPLEINI_INCLUDE_DIRS "SimpleIni.h")
 
 target_link_libraries(
 	${PROJECT_NAME}

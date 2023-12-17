@@ -25,11 +25,9 @@ std::string FormUtil::GetIdentifierFromForm(const RE::TESForm* a_form)
 	RE::FormID formID = a_form->GetFormID();
 	RE::FormID relativeID = formID & 0x00FFFFFF;
 
-#ifndef SKYRIMVR
-	if (file && file->recordFlags.all(RE::TESFile::RecordFlag::kSmallFile)) {
+	if (file && file->IsLight()) {
 		relativeID &= 0x00000FFF;
 	}
-#endif
 
 	std::ostringstream ss;
 	ss << plugin << "|" << std::hex << relativeID;
@@ -47,6 +45,12 @@ std::string FormUtil::GetModName(const RE::TESForm* a_form)
 	}
 
 	const auto file = array->front();
-	const auto filename = file ? file->GetFilename() : ""sv;
+	auto filename = file ? file->GetFilename() : ""sv;
+
+	if (const auto mergeMapper = SKSE::GetMergeMapperInterface()) {
+		auto formID = a_form->GetFormID() & 0xFFFFFF;
+		std::tie(filename, formID) = mergeMapper->GetOriginalFormID(filename.data(), formID);
+	}
+
 	return std::filesystem::path(filename).stem().string();
 }
