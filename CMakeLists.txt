@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.24)
 
 project(
 	MCMHelper
-	VERSION 1.5.0
+	VERSION 1.6.0
 	LANGUAGES CXX
 )
 
 # MCM Helper public release number
-set(PLUGIN_VERSION 14)
+set(PLUGIN_VERSION 15)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 

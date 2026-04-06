@@ -15,7 +15,9 @@ string[]	_alignmentValues
 
 ; Internal
 float		_itemXBase
+float		_itemYBase
 float		_itemXBaseW
+float		_itemYBaseW
 
 
 ; -- Version 2 --
@@ -197,7 +199,7 @@ event OnSettingChange(string a_ID)
 	elseif a_ID == "bHelpEnabled:FavoritesMenu"
 		SKI_FavoritesManagerInstance.ButtonHelpEnabled = GetModSettingBool(a_ID)
 
-	; SWFVersionCheck
+	;/ SWFVersionCheck
 	elseif a_ID == "bMapMenu:SWFVersionCheck"
 		SKI_MainInstance.MapMenuCheckEnabled = GetModSettingBool(a_ID)
 	elseif a_ID == "bFavoritesMenu:SWFVersionCheck"
@@ -214,6 +216,7 @@ event OnSettingChange(string a_ID)
 		SKI_MainInstance.CraftingMenuCheckEnabled = GetModSettingBool(a_ID)
 	elseif a_ID == "bGiftMenu:SWFVersionCheck"
 		SKI_MainInstance.GiftMenuCheckEnabled = GetModSettingBool(a_ID)
+	/;
 
 	; Controls
 	elseif a_ID == "iSearchKey:Controls"
@@ -319,10 +322,10 @@ function Apply3DItemYOffset(float a_value)
 		Utility.SetINIFloat("fMagic3DItemPosZWide:Interface", _fMagic3DItemPosZWide)
 		Utility.SetINIFloat("fMagic3DItemPosZ:Interface", _fMagic3DItemPosZ)
 	else
-		Utility.SetINIFloat("fInventory3DItemPosZWide:Interface", (12 + a_value))
-		Utility.SetINIFloat("fInventory3DItemPosZ:Interface", (16 + a_value))
-		Utility.SetINIFloat("fMagic3DItemPosZWide:Interface", (12 + a_value))
-		Utility.SetINIFloat("fMagic3DItemPosZ:Interface", (16 + a_value))
+		Utility.SetINIFloat("fInventory3DItemPosZWide:Interface", (_itemYBaseW + a_value))
+		Utility.SetINIFloat("fInventory3DItemPosZ:Interface", (_itemYBase + a_value))
+		Utility.SetINIFloat("fMagic3DItemPosZWide:Interface", (_itemYBaseW + a_value))
+		Utility.SetINIFloat("fMagic3DItemPosZ:Interface", (_itemYBase + a_value))
 	endIf
 endFunction
 
@@ -423,7 +426,7 @@ function LoadSettings()
 		GroupIdx += 1
 	endWhile
 
-	; SWFVersionCheck
+	;/ SWFVersionCheck
 	SKI_MainInstance.MapMenuCheckEnabled = GetModSettingBool("bMapMenu:SWFVersionCheck")
 	SKI_MainInstance.FavoritesMenuCheckEnabled = GetModSettingBool("bFavoritesMenu:SWFVersionCheck")
 	SKI_MainInstance.InventoryMenuCheckEnabled = GetModSettingBool("bInventoryMenu:SWFVersionCheck")
@@ -432,6 +435,7 @@ function LoadSettings()
 	SKI_MainInstance.ContainerMenuCheckEnabled = GetModSettingBool("bContainerMenu:SWFVersionCheck")
 	SKI_MainInstance.CraftingMenuCheckEnabled = GetModSettingBool("bCraftingMenu:SWFVersionCheck")
 	SKI_MainInstance.GiftMenuCheckEnabled = GetModSettingBool("bGiftMenu:SWFVersionCheck")
+	/;
 
 	; Controls
 	SKI_SettingsManagerInstance.SetOverride("Input$controls$pc$search", GetModSettingInt("iSearchKey:Controls"))
@@ -477,23 +481,33 @@ function ApplySettings()
 	_fInventory3DItemPosScale		= Utility.GetINIFloat("fInventory3DItemPosScale:Interface")
 	_fMagic3DItemPosScale			= Utility.GetINIFloat("fMagic3DItemPosScale:Interface")
 
-	float h = Utility.GetINIInt("iSize H:Display")
-	float w = Utility.GetINIInt("iSize W:Display")
-	float ar = w / h
+	float fStageCenterX      = 640.0	; Stage Center X (1280 / 2)
+	float fStageCenterY      = 360.0	; Stage Center Y (720 / 2)
+	float fStageUnitsPerUnit = 8.0		; 1 unit 3DItemPos = 8px in 1280x720
+	float fTargetX						; ItemCard Center X
+	float fTargetY						; ItemCard Center Y
 
-	; Widescreen
-	if (ar == 1.6) ; 16:10, 1920×1200
-		_itemXBaseW = -32.458335876465
-	else
-		_itemXBaseW = -29.122497558594
-	endIf
+	float fWidth  = Utility.GetINIInt("iSize W:Display") as float
+	float fHeight = Utility.GetINIInt("iSize H:Display") as float
 
-	; Non-widescreen
-	if (ar == 1.25) ; 5:4, 1280x1024
-		_itemXBase = -41.622497558594
-	else
-		_itemXBase = -39.122497558594
-	endIf
+	float fAspect = fWidth / fHeight
+
+	if (fAspect > 3.0)		; 32:9 (Super Ultrawide)
+		fTargetX = 785.5
+		fTargetY = 300.0
+	elseif (fAspect > 2.0)	; 21:9 (Ultrawide)
+		fTargetX = 858.0
+		fTargetY = 275.0
+	else					; 16:9 / 16:10 / 4:3 (Standard)
+		fTargetX = 931.225
+		fTargetY = 250.0
+	endif
+
+	_itemXBaseW = -(fTargetX - fStageCenterX) / fStageUnitsPerUnit
+	_itemXBase  = _itemXBaseW
+
+	_itemYBaseW = -(fTargetY - fStageCenterY) / fStageUnitsPerUnit
+	_itemYBase  = _itemYBaseW
 
 	Apply3DItemXOffset(GetModSettingFloat("fXOffset:3DItem"))
 	Apply3DItemYOffset(GetModSettingFloat("fYOffset:3DItem"))
