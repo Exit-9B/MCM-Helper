@@ -58,6 +58,18 @@ target_include_directories(
 		${SIMPLEINI_INCLUDE_DIRS}
 )
 
+set(TRANSLATION_FILES
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_CZECH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ENGLISH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_FRENCH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_GERMAN.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ITALIAN.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_JAPANESE.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_POLISH.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_RUSSIAN.txt"
+	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_SPANISH.txt"
+)
+
 if(SkyrimSE_PATH)
 	Papyrus_Add(
 		"Papyrus"
@@ -73,32 +85,20 @@ if(SkyrimSE_PATH)
 		OPTIMIZE
 		ANONYMIZE
 	)
+
+	BSArchive_Add(
+		"BSA"
+		OUTPUT "MCMHelper.bsa"
+		FORMAT SSE
+		FILES
+			${Papyrus_OUTPUT}
+			${TRANSLATION_FILES}
+		PREFIX
+			"${CMAKE_CURRENT_SOURCE_DIR}/data"
+	)
+
+	add_dependencies("BSA" "Papyrus")
 endif()
-
-set(TRANSLATION_FILES
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_CZECH.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ENGLISH.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_FRENCH.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_GERMAN.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ITALIAN.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_JAPANESE.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_POLISH.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_RUSSIAN.txt"
-	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_SPANISH.txt"
-)
-
-BSArchive_Add(
-	"BSA"
-	OUTPUT "MCMHelper.bsa"
-	FORMAT SSE
-	FILES
-		${Papyrus_OUTPUT}
-		${TRANSLATION_FILES}
-	PREFIX
-		"${CMAKE_CURRENT_SOURCE_DIR}/data"
-)
-
-add_dependencies("BSA" "Papyrus")
 
 include(install_files.cmake)
 
