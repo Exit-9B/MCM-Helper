@@ -58,20 +58,22 @@ target_include_directories(
 		${SIMPLEINI_INCLUDE_DIRS}
 )
 
-Papyrus_Add(
-	"Papyrus"
-	GAME ${SkyrimSE_PATH}
-	IMPORTS
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public"
-		"$ENV{SKSE64Path}/Scripts/Source"
-	SOURCES
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private/MCM_ConfigBase.psc"
-	OPTIMIZE
-	ANONYMIZE
-)
+if(SkyrimSE_PATH)
+	Papyrus_Add(
+		"Papyrus"
+		GAME ${SkyrimSE_PATH}
+		IMPORTS
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public"
+			"$ENV{SKSE64Path}/Scripts/Source"
+		SOURCES
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private/MCM_ConfigBase.psc"
+		OPTIMIZE
+		ANONYMIZE
+	)
+endif()
 
 set(TRANSLATION_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_CZECH.txt"
