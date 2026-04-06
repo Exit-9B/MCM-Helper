@@ -99,3 +99,8 @@ BSArchive_Add(
 add_dependencies("BSA" "Papyrus")
 
 include(install_files.cmake)
+
+if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  file(WRITE "${CMAKE_BINARY_DIR}/.gitignore" "*")
+  file(WRITE "${CMAKE_BINARY_DIR}/.hgignore" "syntax: glob\n**/*")
+endif()
