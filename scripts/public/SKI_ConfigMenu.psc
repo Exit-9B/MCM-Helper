@@ -122,8 +122,12 @@ event OnConfigInit()
 	_vertAlignmentBaseOffsets[1] = 720.0
 	_vertAlignmentBaseOffsets[2] = 360.0
 
-	; Give SKI_FavoritesManager time to initialize
-	Utility.Wait(5)
+	; Wait for SKI_FavoritesManager to initialize
+	int wait_for = 10
+	while wait_for && SKI_FavoritesManagerInstance.GetGroupHotkeys()[7] == 0
+		Utility.Wait(0.5)
+		wait_for -= 1
+	endWhile
 
 	LoadSettings()
 endEvent
