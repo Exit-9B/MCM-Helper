@@ -85,26 +85,30 @@ void Function::SendControlEvent(bool a_up, [[maybe_unused]] float a_holdTime)
 	}
 }
 
-VMAwaitable CallFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value)
+void CallFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value)
 {
 	if (!a_vm || Function.empty())
-		return {};
+		return;
 
 	auto object = ScriptObject::FromForm(Form, ScriptName);
 	if (!object)
-		return {};
+		return;
 
 	auto args = FunctionArguments::Make(Params, a_value);
-	return a_vm->DispatchMethodCall(object, Function, args.get());
+
+	ScriptCallbackPtr nullCallback;
+	a_vm->DispatchMethodCall(object, Function, args.get(), nullCallback);
 }
 
-VMAwaitable CallGlobalFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value)
+void CallGlobalFunction::Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value)
 {
 	if (!a_vm || Function.empty() || ScriptName.empty())
-		return {};
+		return;
 
 	auto args = FunctionArguments::Make(Params, a_value);
-	return a_vm->DispatchStaticCall(ScriptName, Function, args.get());
+
+	ScriptCallbackPtr nullCallback;
+	a_vm->DispatchStaticCall(ScriptName, Function, args.get(), nullCallback);
 }
 
 void SendEvent::SendControlEvent(bool a_up, float a_holdTime)

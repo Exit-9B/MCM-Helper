@@ -19,7 +19,7 @@ public:
 
 	[[nodiscard]] virtual std::int32_t Add(const ScriptObjectPtr& a_configScript) = 0;
 	virtual void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID);
-	virtual VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm);
+	virtual void InvokeAction(RE::BSScript::IVirtualMachine* a_vm);
 	virtual void ResetToDefault();
 	[[nodiscard]] virtual std::string GetInfoText() const;
 	[[nodiscard]] virtual std::string GetValueString() const;
@@ -62,7 +62,7 @@ class TextControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 	[[nodiscard]] std::string GetValueString() const override;
 
@@ -77,7 +77,7 @@ class ToggleControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 	[[nodiscard]] std::string GetValueString() const override;
 
@@ -92,7 +92,7 @@ class SliderControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 
 	[[nodiscard]] std::string GetValueString() const override;
@@ -111,7 +111,7 @@ class StepperControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 
 	[[nodiscard]] std::string GetValueString() const override;
@@ -128,7 +128,7 @@ class MenuControl : public MenuDialogControl
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 
 	[[nodiscard]] std::string GetValueString() const override;
@@ -145,7 +145,7 @@ class EnumControl : public MenuDialogControl
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 
 	[[nodiscard]] std::string GetValueString() const override;
@@ -161,7 +161,7 @@ class ColorControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 	[[nodiscard]] std::string GetValueString() const override;
 
@@ -175,7 +175,7 @@ class KeyMapControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 	[[nodiscard]] std::string GetInfoText() const override;
 	[[nodiscard]] std::string GetValueString() const override;
@@ -194,7 +194,7 @@ class InputControl : public Control
 public:
 	[[nodiscard]] std::int32_t Add(const ScriptObjectPtr& a_configScript) override;
 	void Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_optionID) override;
-	VMAwaitable InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
+	void InvokeAction(RE::BSScript::IVirtualMachine* a_vm) override;
 	void ResetToDefault() override;
 
 	[[nodiscard]] std::string GetValueString() const override;

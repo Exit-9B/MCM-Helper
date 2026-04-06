@@ -14,12 +14,11 @@ void Control::Refresh(
 {
 }
 
-VMAwaitable Control::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void Control::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm);
+	if (Action) {
+		Action->Invoke(a_vm);
+	}
 }
 
 void Control::ResetToDefault()
@@ -122,12 +121,11 @@ void TextControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable TextControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void TextControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void TextControl::ResetToDefault()
@@ -163,12 +161,11 @@ void ToggleControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable ToggleControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void ToggleControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void ToggleControl::ResetToDefault()
@@ -204,12 +201,11 @@ void SliderControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable SliderControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void SliderControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void SliderControl::ResetToDefault()
@@ -253,12 +249,11 @@ void StepperControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable StepperControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void StepperControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void StepperControl::ResetToDefault()
@@ -304,12 +299,11 @@ void MenuControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable MenuControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void MenuControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void MenuControl::ResetToDefault()
@@ -366,12 +360,11 @@ void EnumControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a_
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable EnumControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void EnumControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void EnumControl::ResetToDefault()
@@ -426,12 +419,11 @@ void ColorControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable ColorControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void ColorControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, static_cast<std::int32_t>(GetColor()));
+	if (Action) {
+		Action->Invoke(a_vm, static_cast<std::int32_t>(GetColor()));
+	}
 }
 
 void ColorControl::ResetToDefault()
@@ -467,12 +459,11 @@ void KeyMapControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t 
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable KeyMapControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void KeyMapControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
+	if (Action) {
+		Action->Invoke(a_vm, static_cast<std::int32_t>(GetKeyCode()));
+	}
 }
 
 void KeyMapControl::ResetToDefault()
@@ -548,12 +539,11 @@ void InputControl::Refresh(const ScriptObjectPtr& a_configScript, std::int32_t a
 	RefreshFlags(a_configScript, a_optionID);
 }
 
-VMAwaitable InputControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
+void InputControl::InvokeAction(RE::BSScript::IVirtualMachine* a_vm)
 {
-	if (!Action)
-		return {};
-
-	return Action->Invoke(a_vm, GetValue());
+	if (Action) {
+		Action->Invoke(a_vm, GetValue());
+	}
 }
 
 void InputControl::ResetToDefault()
