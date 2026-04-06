@@ -1,0 +1,53 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+  VCPKG_DEFAULT_BINARY_CACHE: ${{ github.workspace }}/vcpkg-cache
+  VCPKG_ROOT: C:\vcpkg
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v6
+      with:
+        submodules: recursive
+
+    - name: Setup vcpkg
+      run: |
+        mkdir -p ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}
+        cd $env:VCPKG_INSTALLATION_ROOT
+        ./bootstrap-vcpkg.bat
+        ./vcpkg --version > ${{ github.workspace }}/vcpkg-version.txt
+
+    - name: Cache vcpkg
+      uses: actions/cache@v5
+      id: vcpkg-cache
+      env:
+        cache-name: vcpkg-cache
+      with:
+        path: ${{ env.VCPKG_DEFAULT_BINARY_CACHE }}/*
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('main/**/vcpkg.json', 'vcpkg-version.txt') }}
+
+    - name: Configure CMake
+      run: cmake --preset vs2022-windows -Wno-deprecated
+
+    - name: Build
+      run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --parallel
+
+    - name: Install
+      run: cmake --install ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }} --prefix ${{ github.workspace }}/install
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v6
+      with:
+        name: ${{ github.event.repository.name }}
+        path: ${{ github.workspace }}/install
