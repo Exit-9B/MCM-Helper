@@ -13,12 +13,14 @@ install(
 	COMPONENT ESL
 )
 
-install(
-	FILES
-		"${CMAKE_CURRENT_BINARY_DIR}/MCMHelper.bsa"
-	DESTINATION "."
-	COMPONENT BSA
-)
+if(TARGET BSA)
+	install(
+		FILES
+			"${CMAKE_CURRENT_BINARY_DIR}/MCMHelper.bsa"
+		DESTINATION "."
+		COMPONENT BSA
+	)
+endif()
 
 install(
 	FILES ${TRANSLATION_FILES}
@@ -27,12 +29,14 @@ install(
 	EXCLUDE_FROM_ALL
 )
 
-install(
-	FILES ${Papyrus_OUTPUT}
-	DESTINATION "Scripts"
-	COMPONENT Loose
-	EXCLUDE_FROM_ALL
-)
+if(TARGET Papyrus)
+	install(
+		FILES ${Papyrus_OUTPUT}
+		DESTINATION "Scripts"
+		COMPONENT Loose
+		EXCLUDE_FROM_ALL
+	)
+endif()
 
 install(
 	FILES
@@ -51,37 +55,39 @@ install(
 	COMPONENT Data
 )
 
-install(
-	FILES
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
-	DESTINATION
-		"Source/Scripts"
-	COMPONENT Data
-)
+if(TARGET Papyrus)
+	install(
+		FILES
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
+		DESTINATION
+			"Source/Scripts"
+		COMPONENT Data
+	)
 
-install(
-	FILES
-		"${CMAKE_CURRENT_BINARY_DIR}/Scripts/MCM.pex"
-		"${CMAKE_CURRENT_BINARY_DIR}/Scripts/MCM_ConfigBase.pex"
-		"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_ConfigBase.pex"
-		"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_ConfigManager.pex"
-		"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_PlayerLoadGameAlias.pex"
-		"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_QuestBase.pex"
-	DESTINATION "Scripts"
-	COMPONENT SDK
-	EXCLUDE_FROM_ALL
-)
+	install(
+		FILES
+			"${CMAKE_CURRENT_BINARY_DIR}/Scripts/MCM.pex"
+			"${CMAKE_CURRENT_BINARY_DIR}/Scripts/MCM_ConfigBase.pex"
+			"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_ConfigBase.pex"
+			"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_ConfigManager.pex"
+			"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_PlayerLoadGameAlias.pex"
+			"${CMAKE_CURRENT_SOURCE_DIR}/data/SDK/Scripts/SKI_QuestBase.pex"
+		DESTINATION "Scripts"
+		COMPONENT SDK
+		EXCLUDE_FROM_ALL
+	)
 
-install(
-	FILES
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM_ConfigBase.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigBase.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_QuestBase.psc"
-	DESTINATION "Source/Scripts"
-	COMPONENT SDK
-	EXCLUDE_FROM_ALL
-)
+	install(
+		FILES
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM_ConfigBase.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigBase.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_QuestBase.psc"
+		DESTINATION "Source/Scripts"
+		COMPONENT SDK
+		EXCLUDE_FROM_ALL
+	)
+endif()
 
 install(
 	FILES
