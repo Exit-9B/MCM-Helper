@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.24)
 
 project(
 	MCMHelper
-	VERSION 1.6.0
+	VERSION 1.6.1
 	LANGUAGES CXX
 )
 
