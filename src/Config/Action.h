@@ -21,7 +21,7 @@ public:
 	};
 
 	virtual void SendControlEvent(bool a_up, float a_holdTime) override;
-	virtual VMAwaitable Invoke(
+	virtual void Invoke(
 		RE::BSScript::IVirtualMachine* a_vm,
 		FunctionParam a_value = "{value}"s) = 0;
 
@@ -33,7 +33,7 @@ public:
 class CallFunction : public Function
 {
 public:
-	VMAwaitable Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value) override;
+	void Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value) override;
 
 	RE::TESForm* Form;
 };
@@ -41,7 +41,7 @@ public:
 class CallGlobalFunction : public Function
 {
 public:
-	VMAwaitable Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value) override;
+	void Invoke(RE::BSScript::IVirtualMachine* a_vm, FunctionParam a_value) override;
 };
 
 class SendEvent : public Action

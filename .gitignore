@@ -1,4 +1,2 @@
-build/
-buildVR/
-package/
+package*/
 *.7z

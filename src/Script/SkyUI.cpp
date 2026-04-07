@@ -663,58 +663,67 @@ namespace SkyUI
 		SetString(a_object, "_inputStartText"sv, a_text);
 	}
 
-	Co::Task<bool> Config::ShowMessage(const ScriptObjectPtr& a_object, std::string_view a_message)
-	{
-		return ShowMessage(a_object, a_message, true, "$Accept"sv, "$Cancel"sv);
-	}
-
-	Co::Task<bool> Config::ShowMessage(
+	void Config::ShowMessage(
 		const ScriptObjectPtr& a_object,
 		std::string_view a_message,
-		bool a_withCancel)
+		std::function<void(bool)> a_callback)
 	{
-		return ShowMessage(a_object, a_message, a_withCancel, "$Accept"sv, "$Cancel"sv);
+		ShowMessage(a_object, a_message, true, "$Accept"sv, "$Cancel"sv, a_callback);
 	}
 
-	Co::Task<bool> Config::ShowMessage(
+	void Config::ShowMessage(
 		const ScriptObjectPtr& a_object,
 		std::string_view a_message,
-		std::string_view a_acceptLabel)
+		bool a_withCancel,
+		std::function<void(bool)> a_callback)
 	{
-		return ShowMessage(a_object, a_message, false, a_acceptLabel, ""sv);
+		ShowMessage(a_object, a_message, a_withCancel, "$Accept"sv, "$Cancel"sv, a_callback);
 	}
 
-	Co::Task<bool> Config::ShowMessage(
+	void Config::ShowMessage(
 		const ScriptObjectPtr& a_object,
 		std::string_view a_message,
 		std::string_view a_acceptLabel,
-		std::string_view a_cancelLabel)
+		std::function<void(bool)> a_callback)
 	{
-		return ShowMessage(a_object, a_message, true, a_acceptLabel, a_cancelLabel);
+		ShowMessage(a_object, a_message, false, a_acceptLabel, ""sv, a_callback);
 	}
 
-	Co::Task<bool> Config::ShowMessage(
+	void Config::ShowMessage(
+		const ScriptObjectPtr& a_object,
+		std::string_view a_message,
+		std::string_view a_acceptLabel,
+		std::string_view a_cancelLabel,
+		std::function<void(bool)> a_callback)
+	{
+		ShowMessage(a_object, a_message, true, a_acceptLabel, a_cancelLabel, a_callback);
+	}
+
+	void Config::ShowMessage(
 		const ScriptObjectPtr& a_object,
 		std::string_view a_message,
 		bool a_withCancel,
 		std::string_view a_acceptLabel,
-		std::string_view a_cancelLabel)
+		std::string_view a_cancelLabel,
+		std::function<void(bool)> a_callback)
 	{
 		if (GetBool(a_object, "_waitForMessage"sv)) {
 			Error(a_object, "Called ShowMessage() while another message was already open"sv);
-			co_return false;
+			if (a_callback)
+				a_callback(false);
+			return;
 		}
 
 		const auto skyrimVM = RE::SkyrimVM::GetSingleton();
 		const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
 		if (!vm)
-			co_return false;
+			return;
 
 		const auto ui = RE::UI::GetSingleton();
 		const auto menu = ui ? ui->GetMenu<RE::JournalMenu>() : nullptr;
 		auto movie = menu ? menu->uiMovie : nullptr;
 		if (!movie)
-			co_return false;
+			return;
 
 		SetBool(a_object, "_waitForMessage"sv, true);
 		SetBool(a_object, "_messageResult"sv, false);
@@ -724,13 +733,46 @@ namespace SkyUI
 		RE::GFxValue params[]{ a_message, a_acceptLabel, a_withCancel ? a_cancelLabel : ""sv };
 		movie->Invoke(MENU_ROOT ".showMessageDialog", nullptr, params, 3);
 
-		while (GetBool(a_object, "_waitForMessage"sv)) {
-			ScriptArgs args{ RE::MakeFunctionArguments(0.1f) };
-			co_await vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args.get());
-		}
+		struct Awaiter : RE::BSScript::IStackCallbackFunctor
+		{
+			ScriptObjectPtr self;
+			std::function<void(bool)> callback;
 
-		UnregisterForModEvent(a_object, "SKICP_messageDialogClosed"sv);
-		co_return GetBool(a_object, "_messageResult"sv);
+			Awaiter(ScriptObjectPtr a_self, std::function<void(bool)> a_callback) :
+				self(a_self),
+				callback(a_callback)
+			{}
+
+			virtual void operator()([[maybe_unused]] RE::BSScript::Variable a_result) override
+			{
+				const auto skyrimVM = RE::SkyrimVM::GetSingleton();
+				const auto vm = skyrimVM ? skyrimVM->impl : nullptr;
+
+				if (!GetBool(self, "_waitForMessage"sv)) {
+					UnregisterForModEvent(self, "SKICP_messageDialogClosed"sv);
+					if (callback)
+						callback(GetBool(self, "_messageResult"sv));
+					return;
+				}
+
+				auto loopCallback = ScriptCallbackPtr{ new Awaiter{ self, callback } };
+
+				if (vm) {
+					ScriptArgs args{ RE::MakeFunctionArguments(0.1f) };
+					vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args.get(), loopCallback);
+				}
+			}
+
+			virtual void SetObject([[maybe_unused]] const ScriptObjectPtr& a_object) override
+			{}
+		};
+
+		auto waitCallback = ScriptCallbackPtr{ new Awaiter{ a_object, a_callback } };
+
+		if (vm) {
+			ScriptArgs args{ RE::MakeFunctionArguments(0.1f) };
+			vm->DispatchStaticCall("Utility"sv, "WaitMenuMode"sv, args.get(), waitCallback);
+		}
 	}
 
 	void Config::Error(const ScriptObjectPtr& a_object, std::string_view a_msg)

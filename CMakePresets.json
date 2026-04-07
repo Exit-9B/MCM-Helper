@@ -32,11 +32,11 @@
       "cacheVariables": {
         "CMAKE_MSVC_RUNTIME_LIBRARY": {
           "type": "STRING",
-          "value": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL"
+          "value": "MultiThreaded$<$<CONFIG:Debug>:Debug>"
         },
         "VCPKG_TARGET_TRIPLET": {
           "type": "STRING",
-          "value": "x64-windows-static-md"
+          "value": "x64-windows-static"
         }
       },
       "hidden": true,

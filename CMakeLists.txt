@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.24)
 
 project(
 	MCMHelper
-	VERSION 1.5.0
+	VERSION 1.6.0
 	LANGUAGES CXX
 )
 
 # MCM Helper public release number
-set(PLUGIN_VERSION 14)
+set(PLUGIN_VERSION 15)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -58,21 +58,6 @@ target_include_directories(
 		${SIMPLEINI_INCLUDE_DIRS}
 )
 
-Papyrus_Add(
-	"Papyrus"
-	GAME ${SkyrimSE_PATH}
-	IMPORTS
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public"
-		"$ENV{SKSE64Path}/Scripts/Source"
-	SOURCES
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
-		"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private/MCM_ConfigBase.psc"
-	OPTIMIZE
-	ANONYMIZE
-)
-
 set(TRANSLATION_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_CZECH.txt"
 	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_ENGLISH.txt"
@@ -85,17 +70,39 @@ set(TRANSLATION_FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/data/Interface/Translations/MCMHelper_SPANISH.txt"
 )
 
-BSArchive_Add(
-	"BSA"
-	OUTPUT "MCMHelper.bsa"
-	FORMAT SSE
-	FILES
-		${Papyrus_OUTPUT}
-		${TRANSLATION_FILES}
-	PREFIX
-		"${CMAKE_CURRENT_SOURCE_DIR}/data"
-)
+if(SkyrimSE_PATH)
+	Papyrus_Add(
+		"Papyrus"
+		GAME ${SkyrimSE_PATH}
+		IMPORTS
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public"
+			"$ENV{SKSE64Path}/Scripts/Source"
+		SOURCES
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/MCM.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/public/SKI_ConfigMenu.psc"
+			"${CMAKE_CURRENT_SOURCE_DIR}/scripts/private/MCM_ConfigBase.psc"
+		OPTIMIZE
+		ANONYMIZE
+	)
 
-add_dependencies("BSA" "Papyrus")
+	BSArchive_Add(
+		"BSA"
+		OUTPUT "MCMHelper.bsa"
+		FORMAT SSE
+		FILES
+			${Papyrus_OUTPUT}
+			${TRANSLATION_FILES}
+		PREFIX
+			"${CMAKE_CURRENT_SOURCE_DIR}/data"
+	)
+
+	add_dependencies("BSA" "Papyrus")
+endif()
 
 include(install_files.cmake)
+
+if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  file(WRITE "${CMAKE_BINARY_DIR}/.gitignore" "*")
+  file(WRITE "${CMAKE_BINARY_DIR}/.hgignore" "syntax: glob\n**/*")
+endif()

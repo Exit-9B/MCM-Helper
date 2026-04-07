@@ -60,7 +60,7 @@
 				<group name="Plugin" type="SelectExactlyOne"> 
 					<plugins order="Explicit"> 
 						<plugin name="ESP"> 
-							<description>Install a standard ESP, which uses one of the 255 normal plugin slots.</description> 
+							<description>Install a standard ESP, which uses one of the 254 normal plugin slots.</description> 
 							<files> 
 								<file source="ESP\MCMHelper.esp" destination="MCMHelper.esp" priority="0" /> 
 							</files> 
