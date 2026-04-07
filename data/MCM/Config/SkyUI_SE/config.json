@@ -227,7 +227,7 @@
           "help": "$SKI_INFO1{Shift}",
           "type": "keymap",
           "ignoreConflicts": true,
-          "groupCondition": 1,
+          "groupCondition": {"NOT": 1},
           "groupBehavior": "skip",
           "valueOptions": {
             "sourceType": "ModSettingInt"
