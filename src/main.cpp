@@ -36,7 +36,6 @@ namespace
 }
 
 #ifndef SKYRIMVR
-
 extern "C" DLLEXPORT constinit auto SKSEPlugin_Version =
 []() {
 	SKSE::PluginVersionData v{};
@@ -52,8 +51,7 @@ extern "C" DLLEXPORT constinit auto SKSEPlugin_Version =
 
 	return v;
 }();
-
-#else
+#endif
 
 extern "C" DLLEXPORT bool SKSEAPI
 	SKSEPlugin_Query(const SKSE::QueryInterface* a_skse, SKSE::PluginInfo* a_info)
@@ -67,14 +65,18 @@ extern "C" DLLEXPORT bool SKSEAPI
 	}
 
 	const auto ver = a_skse->RuntimeVersion();
+#ifndef SKYRIMVR
+	if (ver < SKSE::RUNTIME_1_6_317) {
+		return false;
+	}
+#else
 	if (ver != SKSE::RUNTIME_VR_1_4_15_1) {
 		return false;
 	}
+#endif
 
 	return true;
 }
-
-#endif
 
 
 extern "C" DLLEXPORT bool SKSEAPI SKSEPlugin_Load(const SKSE::LoadInterface* a_skse)
