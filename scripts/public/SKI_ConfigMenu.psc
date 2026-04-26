@@ -124,9 +124,14 @@ event OnConfigInit()
 
 	; Wait for SKI_FavoritesManager to initialize
 	int wait_for = 10
-	while wait_for && SKI_FavoritesManagerInstance.GetGroupHotkeys()[7] == 0
-		Utility.Wait(0.5)
-		wait_for -= 1
+	while wait_for
+		int[] hotkeys = SKI_FavoritesManagerInstance.GetGroupHotkeys()
+		if hotkeys && hotkeys[7]
+			wait_for = 0
+		else
+			Utility.Wait(0.5)
+			wait_for -= 1
+		endif
 	endWhile
 
 	LoadSettings()
