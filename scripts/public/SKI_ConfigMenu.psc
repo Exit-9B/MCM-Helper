@@ -80,6 +80,7 @@ bool property						IsGamepad auto
 int property						FavoriteCurrentGroup auto
 bool property						UnequipArmor auto
 bool property						UnequipHands auto
+bool 								firstruncomplete = FALSE
 
 
 ; INITIALIZATION ----------------------------------------------------------------------------------
@@ -121,26 +122,24 @@ event OnConfigInit()
 	_vertAlignmentBaseOffsets[0] = 0.0
 	_vertAlignmentBaseOffsets[1] = 720.0
 	_vertAlignmentBaseOffsets[2] = 360.0
+endEvent
 
-	; Wait for SKI_FavoritesManager to initialize
-	int wait_for = 10
-	while wait_for
-		int[] hotkeys = SKI_FavoritesManagerInstance.GetGroupHotkeys()
-		if hotkeys && hotkeys[7]
-			wait_for = 0
-		else
-			Utility.Wait(0.5)
-			wait_for -= 1
-		endif
-	endWhile
-
+event OnConfigRegister()
+	; If we wait for ConfigRegister rather than ConfigInit, we might not need to do loop-de-loops
+	; OnConfigRegister appears to run after all other SkyUI scripts have completed their inits
 	LoadSettings()
+	firstruncomplete = TRUE
 endEvent
 
 ; @implements SKI_QuestBase
 event OnGameReload()
 	parent.OnGameReload()
-	LoadSettings()
+	; If we don't do condition check, LoadSettings() ends up running twice on new game.
+	; This is a waste of resources and a vector for papy errors since OnGameReload fires close to OnConfigInit,
+	; and before OnConfigRegister
+	if firstruncomplete 
+		LoadSettings()
+	endIf
 endEvent
 
 ; @implements SKI_QuestBase
