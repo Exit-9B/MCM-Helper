@@ -132,11 +132,11 @@ endEvent
 
 ; @implements SKI_QuestBase
 event OnGameReload()
+	parent.OnGameReload()
 	; If we don't do condition check, LoadSettings() ends up running twice on new game.
 	; This is a waste of resources and a vector for papy errors since OnGameReload fires close to OnConfigInit,
 	; and before OnConfigRegister
 	if firstruncomplete 
-		parent.OnGameReload()
 		LoadSettings()
 	endIf
 endEvent
