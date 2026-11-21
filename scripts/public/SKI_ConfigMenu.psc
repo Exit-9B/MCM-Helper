@@ -86,7 +86,7 @@ bool 								firstruncomplete = FALSE
 ; INITIALIZATION ----------------------------------------------------------------------------------
 
 ; @overrides SKI_ConfigBase
-event OnConfigRegister()
+event OnConfigInit()
 	; Strings used as variable values
 	_alignmentValues = new string[3]
 	_alignmentValues[0] = "left"
@@ -122,10 +122,11 @@ event OnConfigRegister()
 	_vertAlignmentBaseOffsets[0] = 0.0
 	_vertAlignmentBaseOffsets[1] = 720.0
 	_vertAlignmentBaseOffsets[2] = 360.0
+endEvent
 
+event OnConfigRegister()
 	; If we wait for ConfigRegister rather than ConfigInit, we might not need to do loop-de-loops
-	int[] hotkeys = SKI_FavoritesManagerInstance.GetGroupHotkeys()
-
+	; OnConfigRegister appears to run after all other SkyUI scripts have completed their inits
 	LoadSettings()
 	firstruncomplete = TRUE
 endEvent
